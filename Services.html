@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services &amp; Pricing — Marshmallows Nail Spa</title>
+  <meta name="description" content="Full services menu and pricing for Marshmallows Nail Spa, Kuwait — Salon, Home Service and Party Booth." />
+  <link rel="icon" type="image/webp" href="uploads/mm-favicon.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="marshmallows.css" />
+
+<style>
+/* ── Page Hero ─────────────────────────────────────────── */
+.sp-hero {
+  background: var(--dark);
+  padding: clamp(130px,15vw,170px) 0 clamp(52px,7vw,84px);
+  position: relative; overflow: hidden;
+}
+.sp-hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(176,106,119,.38), transparent);
+}
+.sp-back {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-sans-en); font-size: 11px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(176,106,119,.65); text-decoration: none;
+  margin-bottom: 36px; transition: color 300ms;
+}
+.sp-back:hover { color: var(--base); }
+.sp-back svg { transition: transform 300ms; }
+.sp-back:hover svg { transform: translateX(-3px); }
+.sp-hero-eyebrow { color: var(--gold); margin-bottom: 14px; }
+.sp-hero-title { font-size: clamp(44px,6vw,82px); color: var(--base); margin-bottom: 18px; }
+.sp-hero-sub {
+  font-family: var(--font-sans-en); font-size: 14px;
+  color: rgba(250,248,244,.4); letter-spacing: .05em;
+}
+
+/* ── Sticky tab strip ──────────────────────────────────── */
+.sp-tab-strip {
+  position: sticky; top: 80px; z-index: 200;
+  background: var(--cream);
+  border-bottom: 1px solid var(--cream-deep);
+}
+
+/* ── Panel shell ───────────────────────────────────────── */
+.sp-panel { background: var(--base); }
+.sp-panel-party { background: var(--cream); }
+
+/* ── Two-col layout ────────────────────────────────────── */
+.sp-layout {
+  display: grid; grid-template-columns: 216px 1fr; align-items: start;
+}
+
+/* ── Sidebar ───────────────────────────────────────────── */
+.sp-sidebar {
+  position: sticky; top: calc(80px + 53px);
+  height: calc(100vh - 133px); overflow-y: auto;
+  padding: 48px 0; border-right: 1px solid var(--cream-deep);
+  scrollbar-width: none;
+}
+.sp-sidebar::-webkit-scrollbar { display: none; }
+.sp-sidebar-link {
+  display: block; padding: 9px 28px 9px 0;
+  font-family: var(--font-sans-en); font-size: 10.5px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--light); text-decoration: none;
+  border-right: 2px solid transparent;
+  transition: color 250ms, border-color 250ms;
+  white-space: nowrap; cursor: pointer;
+}
+.sp-sidebar-link:hover { color: var(--espresso); }
+.sp-sidebar-link.is-active { color: var(--espresso); border-right-color: var(--gold); }
+
+/* ── Menu content ──────────────────────────────────────── */
+.sp-content { padding: 0 0 80px clamp(24px,4vw,64px); }
+
+.sp-cat {
+  padding: 44px 0;
+  border-bottom: 1px solid var(--cream-deep);
+}
+.sp-cat:last-child { border-bottom: none; }
+
+.sp-cat-header { display: flex; align-items: baseline; gap: 20px; margin-bottom: 22px; }
+.sp-cat-name {
+  font-family: var(--font-serif-en); font-size: clamp(20px,2.2vw,28px);
+  font-weight: 300; color: var(--espresso); line-height: 1;
+}
+.sp-cat-rule { flex: 1; height: 1px; background: var(--cream-deep); }
+
+.sp-item {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(233,210,213,.5);
+}
+.sp-item:last-child { border-bottom: none; }
+.sp-item-name {
+  font-family: var(--font-sans-en); font-size: 13.5px;
+  color: var(--mid); line-height: 1.4; flex-shrink: 0;
+}
+.sp-item-dots {
+  flex: 1; overflow: hidden; position: relative; top: -2px;
+  background-image: repeating-linear-gradient(
+    to right, var(--cream-deep) 0, var(--cream-deep) 3px, transparent 3px, transparent 9px
+  );
+  height: 1px; min-width: 24px;
+}
+.sp-item-price {
+  font-family: var(--font-serif-en); font-size: 15px; font-weight: 400;
+  color: var(--espresso); white-space: nowrap; flex-shrink: 0;
+}
+
+/* ── Party packages ────────────────────────────────────── */
+.sp-party-intro {
+  padding: clamp(48px,7vw,80px) 0 clamp(36px,4vw,52px);
+  text-align: center;
+}
+.sp-party-intro-title {
+  font-family: var(--font-serif-en); font-size: clamp(28px,3.5vw,44px);
+  font-weight: 300; color: var(--espresso); margin-bottom: 12px;
+}
+.sp-party-intro-sub {
+  font-family: var(--font-sans-en); font-size: 14px;
+  color: var(--mid); max-width: 480px; margin: 0 auto;
+}
+.sp-pkg-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr));
+  gap: 2px; background: var(--cream-deep);
+  margin-bottom: 80px;
+}
+.sp-pkg {
+  background: var(--base);
+  padding: clamp(28px,3.5vw,44px) clamp(28px,3.5vw,44px);
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  transition: background 300ms;
+}
+.sp-pkg:hover { background: #fdf9f9; }
+.sp-pkg::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: transparent; transition: background 350ms;
+}
+.sp-pkg:hover::before { background: var(--gold); }
+.sp-pkg-num {
+  font-family: var(--font-serif-en); font-size: 72px; font-weight: 300;
+  color: var(--cream-deep); line-height: 1;
+  position: absolute; top: 12px; right: 20px;
+  pointer-events: none; user-select: none;
+}
+.sp-pkg-name {
+  font-family: var(--font-serif-en); font-size: clamp(18px,2vw,24px); font-weight: 300;
+  color: var(--espresso); margin-bottom: 16px; line-height: 1.25;
+  max-width: 260px; position: relative;
+}
+.sp-pkg-theme {
+  display: inline-block; padding: 3px 12px; margin-bottom: 14px;
+  background: var(--cream); font-family: var(--font-sans-en);
+  font-size: 9.5px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gold);
+}
+.sp-pkg-includes { list-style: none; margin-bottom: 22px; }
+.sp-pkg-includes li {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans-en); font-size: 13px; color: var(--mid);
+  padding: 5px 0;
+}
+.sp-pkg-includes li::before {
+  content: ''; display: block; width: 14px; height: 1px;
+  background: var(--gold); flex-shrink: 0;
+}
+.sp-pkg-pricing {
+  margin-top: auto; padding-top: 20px;
+  border-top: 1px solid var(--cream-deep);
+}
+.sp-pkg-cap {
+  display: block; font-family: var(--font-sans-en); font-size: 10px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--light); margin-bottom: 10px;
+}
+.sp-pkg-price-row { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.sp-pkg-price {
+  font-family: var(--font-serif-en); font-size: clamp(26px,3vw,36px); font-weight: 300;
+  color: var(--espresso); line-height: 1;
+}
+.sp-pkg-price-sub {
+  font-family: var(--font-sans-en); font-size: 10px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--light);
+}
+.sp-pkg-price-alt {
+  font-family: var(--font-serif-en); font-size: 20px; font-weight: 300;
+  color: var(--mid); line-height: 1;
+}
+.sp-pkg-extras { list-style: none; margin-top: 16px; }
+.sp-pkg-extras li {
+  font-family: var(--font-sans-en); font-size: 12px; color: var(--mid);
+  padding: 3px 0; padding-left: 12px; position: relative;
+}
+.sp-pkg-extras li::before {
+  content: '+'; position: absolute; left: 0;
+  color: var(--gold-light); font-size: 10px; top: 4px;
+}
+.sp-pkg-note {
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--cream-deep);
+  font-family: var(--font-sans-en); font-size: 11px; font-style: italic;
+  color: var(--light); line-height: 1.6;
+}
+
+/* ── CTA band ──────────────────────────────────────────── */
+.sp-cta {
+  background: var(--espresso);
+  padding: clamp(56px,8vw,100px) 0; text-align: center;
+}
+.sp-cta-eyebrow { color: var(--gold); margin-bottom: 16px; }
+.sp-cta-title {
+  font-family: var(--font-serif-en); font-size: clamp(28px,4vw,52px); font-weight: 300;
+  color: var(--base); margin-bottom: 36px;
+}
+.sp-cta .btn-primary { background: var(--base); color: var(--espresso); }
+.sp-cta .btn-primary:hover { background: var(--cream); }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sp-layout { grid-template-columns: 1fr; }
+  .sp-sidebar {
+    position: sticky;
+    top: calc(80px + 53px);
+    z-index: 150;
+    height: auto;
+    display: flex; flex-direction: row; flex-wrap: nowrap;
+    overflow-x: auto; overflow-y: hidden;
+    padding: 0; border-right: none;
+    border-bottom: 1px solid var(--cream-deep);
+    background: var(--cream);
+  }
+  .sp-sidebar-link {
+    padding: 13px 18px; border-right: none;
+    border-bottom: 2px solid transparent; flex-shrink: 0;
+  }
+  .sp-sidebar-link.is-active { border-bottom-color: var(--gold); border-right-color: transparent; }
+  .sp-content { padding: 0 var(--px) 56px; }
+}
+@media (max-width: 600px) {
+  .sp-pkg-grid { grid-template-columns: 1fr; }
+}
+
+/* ── RTL layout ────────────────────────────────────────── */
+[dir="rtl"] .sp-layout { grid-template-columns: 216px 1fr; column-gap: clamp(28px,4vw,64px); }
+[dir="rtl"] .sp-sidebar {
+  grid-column: 1; border-right: none;
+  border-left: 1px solid var(--cream-deep);
+}
+[dir="rtl"] .sp-content {
+  grid-column: 2; padding: 0 clamp(24px,4vw,64px) 80px 0;
+}
+[dir="rtl"] .sp-sidebar-link {
+  padding: 9px 0 9px 28px; border-right: none;
+  border-left: 2px solid transparent; text-align: right;
+}
+[dir="rtl"] .sp-sidebar-link.is-active {
+  border-left-color: var(--gold); border-right-color: transparent;
+}
+[dir="rtl"] .sp-item-name { font-family: var(--font-sans-ar); font-size: 14px; }
+[dir="rtl"] .sp-item-price { font-family: var(--font-serif-ar); }
+[dir="rtl"] .sp-cat-name { font-family: var(--font-serif-ar); }
+[dir="rtl"] .sp-pkg-name { font-family: var(--font-serif-ar); }
+[dir="rtl"] .sp-party-intro-title { font-family: var(--font-serif-ar); }
+[dir="rtl"] .sp-pkg-includes li,
+[dir="rtl"] .sp-pkg-extras li,
+[dir="rtl"] .sp-pkg-cap,
+[dir="rtl"] .sp-pkg-note,
+[dir="rtl"] .sp-party-intro-sub { font-family: var(--font-sans-ar); }
+[dir="rtl"] .sp-hero-sub { font-family: var(--font-sans-ar); }
+@media (max-width: 900px) {
+  [dir="rtl"] .sp-layout { grid-template-columns: 1fr; }
+  [dir="rtl"] .sp-sidebar { grid-column: auto; border-left: none; border-bottom: 1px solid var(--cream-deep); }
+  [dir="rtl"] .sp-sidebar-link { padding: 13px 18px; border-left: none; border-bottom: 2px solid transparent; text-align: center; }
+  [dir="rtl"] .sp-sidebar-link.is-active { border-bottom-color: var(--gold); }
+  [dir="rtl"] .sp-content { grid-column: auto; padding: 0 var(--px) 56px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Marshmallows Nail Spa">
+      <img src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="Services.html" style="color:var(--gold)">Services</a></li>
+      <li><a href="Gallery.html" data-key="nav.gallery">Gallery</a></li>
+      <li><a href="index.html#about" data-key="nav.about">About</a></li>
+      <li><a href="index.html#locations" data-key="nav.locations">Locations</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language selector">
+        <button class="lang-btn active" data-l="en">EN</button>
+        <button class="lang-btn" data-l="ar">عربي</button>
+      </div>
+      <a href="Booking.html" class="btn-primary nav-book" data-key="nav.book">Book Appointment</a>
+      <button id="nav-burger" class="nav-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="nav-mobile" role="dialog" aria-label="Mobile navigation">
+  <a href="index.html">Home</a>
+  <a href="Services.html" style="color:var(--gold)">Services</a>
+  <a href="Gallery.html" data-key="nav.gallery">Gallery</a>
+  <a href="index.html#about" data-key="nav.about">About</a>
+  <a href="index.html#locations" data-key="nav.locations">Locations</a>
+  <a href="Booking.html" class="btn-primary" data-key="nav.book.m">Book Now</a>
+  <div class="lang-toggle" style="margin-top:12px">
+    <button class="lang-btn active" data-l="en">EN</button>
+    <button class="lang-btn" data-l="ar">عربي</button>
+  </div>
+</div>
+
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="sp-hero" data-screen-label="Services Hero">
+  <div class="container">
+    <a href="index.html" class="sp-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span data-key="sp.back">Back to Home</span>
+    </a>
+    <span class="eyebrow sp-hero-eyebrow" data-key="sp.eyebrow">The Services Suite</span>
+    <h1 class="serif-heading sp-hero-title" data-key="sp.title">Services &amp; Pricing</h1>
+    <p class="sp-hero-sub" data-key="sp.sub">Agaila Branch · Salmiya Branch · Home Service</p>
+  </div>
+</section>
+
+
+<!-- ══ TABS ══════════════════════════════════════════════ -->
+<div class="sp-tab-strip">
+  <div class="container">
+    <div class="services-tabs" role="tablist">
+      <button class="svc-tab active" role="tab" aria-selected="true" data-key="sp.tab1">Salon Service</button>
+      <button class="svc-tab" role="tab" aria-selected="false" data-key="sp.tab2">Home Service</button>
+      <button class="svc-tab" role="tab" aria-selected="false" data-key="sp.tab3">Party Booth</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ PANEL 1: SALON ════════════════════════════════════ -->
+<div class="svc-panel sp-panel active" role="tabpanel" data-screen-label="Salon Service Panel">
+  <div class="sp-layout container">
+    <aside class="sp-sidebar" id="sidebar-salon" aria-label="Salon categories"></aside>
+    <div class="sp-content" id="content-salon"></div>
+  </div>
+</div>
+
+
+<!-- ══ PANEL 2: HOME ═════════════════════════════════════ -->
+<div class="svc-panel sp-panel" role="tabpanel" data-screen-label="Home Service Panel">
+  <div class="sp-layout container">
+    <aside class="sp-sidebar" id="sidebar-home" aria-label="Home service categories"></aside>
+    <div class="sp-content" id="content-home"></div>
+  </div>
+</div>
+
+
+<!-- ══ PANEL 3: PARTY ════════════════════════════════════ -->
+<div class="svc-panel sp-panel sp-panel-party" role="tabpanel" data-screen-label="Party Booth Panel">
+  <div class="container">
+    <div class="sp-party-intro reveal">
+      <span class="eyebrow" style="margin-bottom:14px;display:block" data-key="sp.party.eyebrow">Celebrate with Us</span>
+      <h2 class="sp-party-intro-title" data-key="sp.party.title">Party Booth Packages</h2>
+      <p class="sp-party-intro-sub" data-key="sp.party.sub">Bespoke party experiences for girls of all ages — we bring the magic to your event.</p>
+    </div>
+    <div class="sp-pkg-grid" id="content-party"></div>
+  </div>
+</div>
+
+
+<!-- ══ BOOK CTA ═══════════════════════════════════════════ -->
+<section class="sp-cta">
+  <div class="container">
+    <span class="eyebrow sp-cta-eyebrow" data-key="sp.cta.eyebrow">Ready?</span>
+    <h2 class="sp-cta-title" data-key="sp.cta.title">Book Your Appointment Today</h2>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="tel:+96522209072" class="btn-primary" data-key="sp.cta.call">Call +965 2220 9072</a>
+      <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="btn-ghost" style="color:var(--base);border-color:rgba(250,248,244,.25)" data-key="sp.cta.wa">WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer id="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand-logo" src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+        <p class="footer-tagline sans-text" data-key="foot.tagline">Where luxury meets artistry — since 2013.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-social-link" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.nav.head">Navigation</span>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="Services.html">Services</a></li>
+          <li><a href="index.html#about" data-key="foot.n2">About</a></li>
+          <li><a href="index.html#locations" data-key="foot.n3">Locations</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.con.head">Contact</span>
+        <ul>
+          <li><a href="tel:+96522209072" data-key="foot.phone">+965 2220 9072</a></li>
+          <li>
+            <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-wa" data-key="foot.wa">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+              WhatsApp Us
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.fol.head">Follow</span>
+        <ul>
+          <li><a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" data-key="foot.ig">Instagram</a></li>
+          <li><a href="https://www.snapchat.com/add/marshmallowsnaill" target="_blank" rel="noopener" data-key="foot.snap">Snapchat</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy sans-text" data-key="foot.copy">© 2025 Marshmallows Nail Spa. All rights reserved.</p>
+      <p class="footer-license sans-text" data-key="foot.lic">Commercial License: 2015/3739</p>
+    </div>
+  </div>
+</footer>
+
+
+<script src="marshmallows.js"></script>
+<script>
+/* ── Extend marshmallows.js translations ─────────────── */
+Object.assign(T.en, {
+  'sp.back':'Back to Home','sp.eyebrow':'The Services Suite',
+  'sp.title':'Services & Pricing','sp.sub':'Agaila Branch · Salmiya Branch · Home Service',
+  'sp.tab1':'Salon Service','sp.tab2':'Home Service','sp.tab3':'Party Booth',
+  'sp.party.eyebrow':'Celebrate with Us','sp.party.title':'Party Booth Packages',
+  'sp.party.sub':'Bespoke party experiences for girls of all ages — we bring the magic to your event.',
+  'sp.cta.eyebrow':'Ready?','sp.cta.title':'Book Your Appointment Today',
+  'sp.cta.call':'Call +965 2220 9072','sp.cta.wa':'WhatsApp Us'
+});
+Object.assign(T.ar, {
+  'sp.back':'العودة للرئيسية','sp.eyebrow':'مجموعة الخدمات',
+  'sp.title':'الخدمات والأسعار','sp.sub':'فرع العقيلة · فرع السالمية · خدمة المنزل',
+  'sp.tab1':'خدمة الصالون','sp.tab2':'خدمة المنزل','sp.tab3':'بوث الحفلات',
+  'sp.party.eyebrow':'احتفلي معنا','sp.party.title':'باقات بوث الحفلات',
+  'sp.party.sub':'تجارب حفلات مخصصة للفتيات من جميع الأعمار — نحن نحضر السحر إلى مناسبتك.',
+  'sp.cta.eyebrow':'هل أنتِ مستعدة؟','sp.cta.title':'احجزي موعدك اليوم',
+  'sp.cta.call':'اتصلي +965 2220 9072','sp.cta.wa':'تواصلي عبر واتساب'
+});
+
+/* ── Arabic dictionaries ──────────────────────────────── */
+const AR_CATS = {
+  'Nails':'الأظافر','Scrubs Treatment':'علاج السكراب','Gel Polish':'طلاء الجل',
+  'Nail Art':'رسم الأظافر','Nail Extensions':'تمديد الأظافر','Hair':'الشعر',
+  'Hair Treatment':'علاج الشعر','Hair Care':'العناية بالشعر','Massage':'المساج',
+  'Face':'الوجه','Hair Color':'صباغة الشعر','Little Princess':'الأميرة الصغيرة'
+};
+
+const AR = {
+  'Manicure Pedicure':'مانيكير وباديكير',
+  'Manicure Pedicure with Footlogic':'مانيكير وباديكير مع فوتلوجيك',
+  'Marshmallow Mani Pedi':'ماني بيدي مارشمالوز',
+  'Collagen Mani Pedi':'ماني بيدي بالكولاجين',
+  'Nail Polish Only':'طلاء أظافر فقط',
+  'Nail Polish Removal':'إزالة طلاء الأظافر',
+  'French Tip':'فرنش تيب',
+  'File Only':'برد فقط',
+  'Cut and File':'قص وبرد',
+  'Russian Manicure':'مانيكير روسي',
+  'Russian Full Set Manicure':'مجموعة مانيكير روسي كاملة',
+  'Manicure':'مانيكير',
+  'Pedicure':'باديكير',
+  'Marshmallow Manicure':'مانيكير مارشمالوز',
+  'Marshmallow Pedicure':'باديكير مارشمالوز',
+  'Quick Fix Hand':'كيوك فيكس يدين',
+  'Quick Fix Feet':'كيوك فيكس قدمين',
+  'Regular Scrubs Hand or Feet':'سكراب عادي يدين أو قدمين',
+  'Marshmallow Scrubs Hands or Feet':'سكراب مارشمالوز يدين أو قدمين',
+  'Footlogic':'فوتلوجيك',
+  'Gel Polish':'طلاء الجل',
+  'Gel Polish Removal':'إزالة طلاء الجل',
+  'Bubble Gel':'بابل جل',
+  'Bubble Gel Removal':'إزالة بابل جل',
+  'Gel Polish with Chrome Nails':'جل مع كروم',
+  'Gel Polish with Chrome':'جل مع كروم',
+  'Gel Polish with Ombre Nails':'جل مع أومبري',
+  'Gel Polish with Cat Eye Nails':'جل مع عين القطة',
+  'Gel Polish with Cat Eye Nail':'جل مع عين القطة',
+  'Gel Polish with Ombre & Chrome':'جل مع أومبري وكروم',
+  'Gel Polish with French & Chrome':'جل مع فرنش وكروم',
+  'Gel Polish with Ombre & Cat Eye':'جل مع أومبري وعين القطة',
+  'Gel Polish with French & Cat Eye':'جل مع فرنش وعين القطة',
+  'Cat Eye per Finger':'عين القطة للإصبع',
+  'Chrome per Finger':'كروم للإصبع',
+  'Nail Art per Finger':'رسم أظافر للإصبع',
+  'Deep French per Finger':'ديب فرنش للإصبع',
+  'Blooming Gel Art per Finger':'بلومنج جل للإصبع',
+  'Party Nails':'أظافر الحفلات',
+  'Party Nails Removal':'إزالة أظافر الحفلات',
+  'Party Nails per Finger':'أظافر الحفلات للإصبع',
+  'Attach Party Nails':'تركيب أظافر الحفلات',
+  'Soft Gel':'سوفت جل',
+  'Soft Gel per Finger':'سوفت جل للإصبع',
+  'Permanent Nail Extension':'تمديد أظافر دائم',
+  'Nail Extension Removal':'إزالة تمديد الأظافر',
+  'Permanent Nail Extension per Finger':'تمديد دائم للإصبع',
+  'Permanent Nail Extensions per Finger':'تمديد دائم للإصبع',
+  'Nail Extensions Maintenance':'صيانة تمديد الأظافر',
+  'Regular Hair Wash':'غسيل شعر عادي',
+  'Blowdry':'بلو دراي',
+  'Wavy':'ويفي',
+  'Hairstyle':'تسريحة شعر',
+  'Hair Braid':'ضفيرة شعر',
+  'Bangs Cut':'قص فرنجة',
+  'Hair Trim':'قص أطراف',
+  'Machine Hair Cut':'قصة بالآلة',
+  'Full Haircut':'قصة كاملة',
+  'Straightening Prime':'فرد برايم',
+  'Prime Roots':'برايم جذور',
+  'Straightening Bio Smooth':'فرد بيو سموث',
+  'Bio Smooth Roots':'بيو سموث جذور',
+  'Regular Hair Mask':'ماسك شعر عادي',
+  'Fresh Aloe Vera':'ألوفيرا طازج',
+  'Fresh Aloe Vera with Mask':'ألوفيرا طازج مع ماسك',
+  'Natural Herbs Blend with Mask':'خلطة أعشاب طبيعية مع ماسك',
+  'Natural Herbal Blend with Mask':'خلطة أعشاب طبيعية مع ماسك',
+  'Deep Cleansing Moisturizing Mask':'ماسك تنظيف عميق ومرطب',
+  'Deep Cleansing Moisturizing Hair Mask':'ماسك تنظيف عميق ومرطب',
+  'Filler Hair Treatment':'علاج فيلر للشعر',
+  'Hair Scalp Treatment':'علاج فروة الرأس',
+  'Scalp Hair Treatment':'علاج فروة الرأس',
+  'Regular Massage Hand or Feet — 15 mins':'مساج عادي يدين أو قدمين — ١٥ دقيقة',
+  'Neck or Shoulder Massage — 15 mins':'مساج رقبة أو كتف — ١٥ دقيقة',
+  'Candle Massage Hand or Feet — 15 mins':'مساج بالشموع يدين أو قدمين — ١٥ دقيقة',
+  'Candle Massage Hands or Feet — 15 mins':'مساج بالشموع يدين أو قدمين — ١٥ دقيقة',
+  'Head Massage — 15 mins':'مساج الرأس — ١٥ دقيقة',
+  'Massager Chair':'كرسي المساج',
+  'Eyebrows':'حواجب',
+  'Upper Lip Threading / Wax':'خيط / شمع الشفة العليا',
+  'Full-Face Threading Only':'خيط الوجه الكامل فقط',
+  'Full-Face Threading with Eyebrows':'خيط الوجه الكامل مع الحواجب',
+  'Full-Face Wax':'شمع الوجه الكامل',
+  'Full-Face Wax with Eyebrows':'شمع الوجه الكامل مع الحواجب',
+  'Half Face Wax':'شمع نصف الوجه',
+  'Half Face Threading':'خيط نصف الوجه',
+  'Inner Nose Wax':'شمع داخل الأنف',
+  'Hair Color 1 Color':'صبغة شعر لون واحد',
+  'Hair Color 1 Color Only':'صبغة شعر لون واحد',
+  'Hair Color Labor':'عمالة صبغة الشعر',
+  'Roots':'جذور',
+  'Roots Labor':'عمالة الجذور',
+  'Princess Manicure Pedicure':'ماني بيدي الأميرة',
+  'Princess Manicure':'مانيكير الأميرة',
+  'Princess Pedicure':'باديكير الأميرة',
+  'Princess Nail Polish':'طلاء أظافر الأميرة',
+  'Princess Remove Polish':'إزالة طلاء الأميرة',
+  'Princess Hair Wash':'غسيل شعر الأميرة',
+  'Princess Blowdry':'بلو دراي الأميرة',
+  'Princess Wavy':'ويفي الأميرة',
+  'Princess Trim or Cut':'قص الأميرة',
+  'Princess Hair Treatment Prime':'علاج شعر الأميرة برايم',
+  'Princess Haircut':'قصة شعر الأميرة',
+  'Princess Wavy or Blowdry':'ويفي أو بلو دراي الأميرة'
+};
+
+function ar(en) { return AR[en] || en; }
+function arCat(en) { return AR_CATS[en] || en; }
+
+/* ── Price → Arabic numerals + currency ──────────────── */
+const AR_PRICE_MAP = {
+  'per booking':'لكل حجز', '& up':'فأكثر',
+  '2 hours':'ساعتان', '3 hours':'٣ ساعات', '1.5 hours':'ساعة ونصف',
+  'Call for pricing':'اتصلي للتسعير'
+};
+function toArPrice(p) {
+  let s = p;
+  for (const [k, v] of Object.entries(AR_PRICE_MAP)) s = s.replace(k, v);
+  s = s.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  s = s.replace(/KD/g, 'د.ك').replace(/fils/g, 'فلس');
+  return s;
+}
+
+/* ── Arabic Party data ────────────────────────────────── */
+const AR_PARTY = [
+  {n:'عالم مارشمالوز المبهر', i:['تسريحة شعر مع جليتر','كريستال الوجه','وشم الأطفال'], cap:'٨–١٥ طفلاً', e:['طفل إضافي: ٧ د.ك','إضافة فانكي هير: ٥ د.ك / شخص','طوابع جليتر: ٢.٥ د.ك / طفل'], note:'البوثات والبارات غير متاحة للطابق السفلي وأرضية الدخول.'},
+  {n:'طلاء ورسم الأظافر', i:['طلاء الأظافر','برد الأظافر','رسم أظافر أساسي'], cap:'٢٠ طفلاً', e:['طفل إضافي: ٧ د.ك'], note:'البوثات والبارات غير متاحة للطابق السفلي وأرضية الدخول.'},
+  {n:'أضيفي البريق — دازل بار', i:['كريستال الوجه','جليتر الوجه'], cap:'٢٠ طفلاً', e:['إضافة لكل طفل: ٢.٥ د.ك','جواهر شعر: ٢.٥ د.ك / طفل'], note:'البوثات والبارات غير متاحة للطابق السفلي وأرضية الدخول.'},
+  {n:'تسريحة الشعر والأظافر', i:['طلاء الأظافر','برد الأظافر','بلو دراي – ويفي'], cap:'١٥ طفلاً', e:['طفل إضافي: ١٠ د.ك','إضافة فانكي هير: ٥ د.ك / طفل'], note:'البوثات والبارات غير متاحة للطابق السفلي وأرضية الدخول.'},
+  {n:'حفلة سبا بثيم', i:['مانيكير','باديكير'], cap:'٢ طفلين', theme:'يونيكورن / أميرة', e:['إضافة لكل طفل: ٨ د.ك'], note:'البوث غير مشمول.'},
+  {n:'باقة دازل للشعر', i:['إكسسوارات الشعر','أسلاك شعر مضيئة','جليتر الشعر'], cap:'٢٠ طفلاً', e:['إضافة لكل طفل: ٥ د.ك'], note:'البوثات والبارات غير متاحة للطابق السفلي وأرضية الدخول.'},
+  {n:'حفلة سبا مع الشعر', i:['مانيكير','باديكير','ويفي / بلو دراي','ضفائر وأشرطة'], cap:'٢ طفلين', e:['إضافة لكل طفل: ١٢ د.ك'], note:'البوث غير مشمول.'},
+  {n:'شعر وأظافر مع كريستال الوجه', i:['مانيكير','باديكير','ويفي / بلو دراي','ضفائر وأشرطة'], cap:'٢ طفلين', e:['إضافة لكل طفل: ١٥ د.ك'], note:'البوث غير مشمول.'},
+  {n:'حفلة خاصة في الصالون', i:['مانيكير','باديكير','بلو دراي','ويفي'], cap:'٨ فتيات كحد أقصى', e:['إضافة كيك وبالونات: ٥٠ د.ك','إضافة لكل شخص: ١٠ د.ك'], note:''}
+];
+
+/* ── Menu data ────────────────────────────────────────── */
+const SALON = [
+  {id:'s-nails', cat:'Nails', items:[
+    ['Manicure Pedicure','12 KD'],
+    ['Manicure Pedicure with Footlogic','18 KD'],
+    ['Marshmallow Mani Pedi','18 KD'],
+    ['Collagen Mani Pedi','20 KD'],
+    ['Nail Polish Only','2 KD'],
+    ['Nail Polish Removal','1 KD'],
+    ['French Tip','2–5 KD'],
+    ['File Only','1 KD'],
+    ['Cut and File','2 KD'],
+    ['Russian Manicure','8 KD'],
+    ['Russian Full Set Manicure','20 KD']
+  ]},
+  {id:'s-scrubs', cat:'Scrubs Treatment', items:[
+    ['Regular Scrubs Hand or Feet','3 KD'],
+    ['Marshmallow Scrubs Hands or Feet','4 KD'],
+    ['Footlogic','6 KD']
+  ]},
+  {id:'s-gel', cat:'Gel Polish', items:[
+    ['Gel Polish','8 KD'],
+    ['Gel Polish Removal','3 KD'],
+    ['Bubble Gel','12 KD'],
+    ['Bubble Gel Removal','5 KD'],
+    ['Gel Polish with Chrome Nails','13 KD'],
+    ['Gel Polish with Ombre Nails','13 KD'],
+    ['Gel Polish with Cat Eye Nails','13 KD'],
+    ['Gel Polish with Ombre & Chrome','15 KD'],
+    ['Gel Polish with French & Chrome','15 KD'],
+    ['Gel Polish with Ombre & Cat Eye','15 KD'],
+    ['Gel Polish with French & Cat Eye','15 KD'],
+    ['Cat Eye per Finger','1 KD'],
+    ['French Tip','2–5 KD']
+  ]},
+  {id:'s-art', cat:'Nail Art', items:[
+    ['Nail Art per Finger','500 fils – 3 KD'],
+    ['Deep French per Finger','500 fils'],
+    ['Blooming Gel Art per Finger','1–3 KD']
+  ]},
+  {id:'s-ext', cat:'Nail Extensions', items:[
+    ['Party Nails','10 KD'],
+    ['Party Nails Removal','5 KD'],
+    ['Party Nails per Finger','1 KD'],
+    ['Attach Party Nails','3 KD'],
+    ['Soft Gel','20 KD'],
+    ['Soft Gel per Finger','2 KD'],
+    ['Permanent Nail Extension','25 KD'],
+    ['Nail Extension Removal','8 KD'],
+    ['Permanent Nail Extension per Finger','2.5 KD']
+  ]},
+  {id:'s-hair', cat:'Hair', items:[
+    ['Regular Hair Wash','2 KD'],
+    ['Blowdry','7 KD & up'],
+    ['Wavy','10 KD & up'],
+    ['Hairstyle','20 KD & up'],
+    ['Hair Braid','2–10 KD'],
+    ['Bangs Cut','2–3 KD'],
+    ['Hair Trim','7 KD'],
+    ['Machine Hair Cut','10 KD'],
+    ['Full Haircut','10 KD']
+  ]},
+  {id:'s-htrt', cat:'Hair Treatment', items:[
+    ['Straightening Prime','50 KD & up'],
+    ['Prime Roots','40 KD'],
+    ['Straightening Bio Smooth','50 KD & up'],
+    ['Bio Smooth Roots','40 KD']
+  ]},
+  {id:'s-hcare', cat:'Hair Care', items:[
+    ['Regular Hair Mask','5 KD'],
+    ['Fresh Aloe Vera','5 KD'],
+    ['Fresh Aloe Vera with Mask','7 KD'],
+    ['Natural Herbs Blend with Mask','7 KD'],
+    ['Deep Cleansing Moisturizing Mask','10 KD'],
+    ['Filler Hair Treatment','15 KD'],
+    ['Hair Scalp Treatment','15 KD']
+  ]},
+  {id:'s-massage', cat:'Massage', items:[
+    ['Regular Massage Hand or Feet — 15 mins','3 KD'],
+    ['Neck or Shoulder Massage — 15 mins','3 KD'],
+    ['Candle Massage Hand or Feet — 15 mins','5 KD'],
+    ['Head Massage — 15 mins','3 KD']
+  ]},
+  {id:'s-face', cat:'Face', items:[
+    ['Eyebrows','3 KD'],
+    ['Upper Lip Threading / Wax','2 KD'],
+    ['Full-Face Threading Only','5 KD'],
+    ['Full-Face Threading with Eyebrows','7 KD'],
+    ['Full-Face Wax','7 KD'],
+    ['Full-Face Wax with Eyebrows','10 KD'],
+    ['Half Face Wax','5 KD'],
+    ['Half Face Threading','4 KD'],
+    ['Inner Nose Wax','2 KD']
+  ]},
+  {id:'s-color', cat:'Hair Color', items:[
+    ['Hair Color 1 Color','30 KD & up'],
+    ['Hair Color Labor','15 KD & up'],
+    ['Roots','15 KD'],
+    ['Roots Labor','10 KD']
+  ]},
+  {id:'s-princess', cat:'Little Princess', items:[
+    ['Princess Manicure Pedicure','6 KD'],
+    ['Princess Nail Polish','1 KD'],
+    ['Princess Hair Wash','2 KD'],
+    ['Princess Blowdry','5 KD & up'],
+    ['Princess Wavy','7 KD'],
+    ['Princess Trim or Cut','5 KD & up'],
+    ['Princess Hair Treatment Prime','50 KD']
+  ]}
+];
+
+const HOME = [
+  {id:'h-nails', cat:'Nails', items:[
+    ['Manicure','7.5 KD'],
+    ['Pedicure','7.5 KD'],
+    ['Marshmallow Manicure','10 KD'],
+    ['Marshmallow Pedicure','10 KD'],
+    ['Collagen Mani Pedi','22 KD'],
+    ['Quick Fix Hand','5 KD'],
+    ['Quick Fix Feet','5 KD'],
+    ['Nail Polish Only','2 KD'],
+    ['Nail Polish Removal','1 KD'],
+    ['French Tip','2–5 KD'],
+    ['Cut and File','3 KD'],
+    ['Russian Manicure','8 KD'],
+    ['Russian Full Set Manicure','20 KD']
+  ]},
+  {id:'h-gel', cat:'Gel Polish', items:[
+    ['Gel Polish','9 KD'],
+    ['Gel Polish Removal','4 KD'],
+    ['Bubble Gel','14 KD'],
+    ['Bubble Gel Removal','7 KD'],
+    ['Gel Polish with Chrome','14 KD'],
+    ['Chrome per Finger','2 KD'],
+    ['Gel Polish with Ombre Nails','14 KD'],
+    ['Gel Polish with Cat Eye Nail','14 KD'],
+    ['Cat Eye per Finger','2 KD'],
+    ['French Tip','2–5 KD'],
+    ['Gel Polish with Ombre & Chrome','18 KD'],
+    ['Gel Polish with French & Chrome','18 KD'],
+    ['Gel Polish with Ombre & Cat Eye','18 KD']
+  ]},
+  {id:'h-art', cat:'Nail Art', items:[
+    ['Nail Art per Finger','500 fils – 3 KD'],
+    ['Deep French per Finger','500 fils'],
+    ['Blooming Gel Art per Finger','1–3 KD']
+  ]},
+  {id:'h-ext', cat:'Nail Extensions', items:[
+    ['Party Nails','12 KD'],
+    ['Party Nails Removal','5 KD'],
+    ['Party Nails per Finger','1 KD'],
+    ['Attach Party Nails','3 KD'],
+    ['Soft Gel','25 KD'],
+    ['Permanent Nail Extension','27 KD'],
+    ['Permanent Nail Extensions per Finger','3 KD'],
+    ['Nail Extension Removal','8 KD'],
+    ['Nail Extensions Maintenance','17 KD']
+  ]},
+  {id:'h-hair', cat:'Hair', items:[
+    ['Regular Hair Wash','3 KD'],
+    ['Blowdry','10 KD & up'],
+    ['Wavy','12 KD & up'],
+    ['Hair Trim','7 KD'],
+    ['Full Haircut','10 KD'],
+    ['Machine Hair Cut','10 KD'],
+    ['Bangs Cut','2–3 KD'],
+    ['Hair Braid','2–10 KD'],
+    ['Hairstyle','25 KD & up']
+  ]},
+  {id:'h-hcare', cat:'Hair Care', items:[
+    ['Regular Hair Mask','7 KD & up'],
+    ['Fresh Aloe Vera','7 KD'],
+    ['Fresh Aloe Vera with Mask','10 KD'],
+    ['Natural Herbal Blend with Mask','12 KD'],
+    ['Deep Cleansing Moisturizing Hair Mask','12 KD'],
+    ['Filler Hair Treatment','17 KD'],
+    ['Scalp Hair Treatment','17 KD']
+  ]},
+  {id:'h-color', cat:'Hair Color', items:[
+    ['Hair Color 1 Color Only','35 KD & up'],
+    ['Hair Color Labor','20 KD & up'],
+    ['Roots','17 KD'],
+    ['Roots Labor','12 KD']
+  ]},
+  {id:'h-htrt', cat:'Hair Treatment', items:[
+    ['Straightening Prime','75 KD & up'],
+    ['Prime Roots','45 KD'],
+    ['Straightening Bio Smooth','75 KD & up'],
+    ['Bio Smooth Roots','45 KD']
+  ]},
+  {id:'h-massage', cat:'Massage', items:[
+    ['Regular Massage Hand or Feet — 15 mins','5 KD'],
+    ['Candle Massage Hands or Feet — 15 mins','7 KD'],
+    ['Head Massage — 15 mins','5 KD'],
+    ['Neck or Shoulder Massage — 15 mins','5 KD'],
+    ['Massager Chair','2 KD']
+  ]},
+  {id:'h-face', cat:'Face', items:[
+    ['Eyebrows','3 KD'],
+    ['Upper Lip Threading / Wax','2 KD'],
+    ['Full-Face Threading Only','5 KD'],
+    ['Full-Face Threading with Eyebrows','7 KD'],
+    ['Full-Face Wax','7 KD'],
+    ['Full-Face Wax with Eyebrows','10 KD'],
+    ['Half Face Wax','5 KD'],
+    ['Half Face Threading','4 KD'],
+    ['Inner Nose Wax','2 KD']
+  ]},
+  {id:'h-princess', cat:'Little Princess', items:[
+    ['Princess Manicure','4 KD'],
+    ['Princess Pedicure','4 KD'],
+    ['Princess Nail Polish','1 KD'],
+    ['Princess Remove Polish','1 KD'],
+    ['Princess Haircut','5–10 KD'],
+    ['Princess Wavy or Blowdry','5–10 KD']
+  ]}
+];
+
+const PARTY = [
+  {name:'Marshmallows Dazzling World', includes:['Hair Style with Glitters','Face Crystals','Kids Tattoos'], capacity:'8–15 kids', price:'75 KD', sub:'2 hours', alt:'85 KD', altSub:'3 hours', extras:['Extra kid: 7 KD','Funky hair add-on: 5 KD / person','Glitter stamps: 2.5 KD / kid'], note:'Booths & Bars unavailable for Basement and Upper Ground.'},
+  {name:'Nail Polish & Nail Art', includes:['Nail Polish','Filing','Basic Nail Art'], capacity:'20 kids', price:'70 KD', sub:'per booking', extras:['Extra kid: 7 KD'], note:'Booths & Bars unavailable for Basement and Upper Ground.'},
+  {name:'Sparkle Your Kids Party — Dazzle Bar', includes:['Face Crystals','Face Glitters'], capacity:'20 kids', price:'45 KD', sub:'1.5 hours', extras:['Additional per kid: 2.5 KD','Hair gems per kid: 2.5 KD'], note:'Booths & Bars unavailable for Basement and Upper Ground.'},
+  {name:'Hair Style & Nails', includes:['Nail Polish','Filing','Blow Dry – Wavy'], capacity:'15 kids', price:'120 KD', sub:'per booking', extras:['Extra kid: 10 KD','Funky hair add-on: 5 KD / kid'], note:'Booths & Bars unavailable for Basement and Upper Ground.'},
+  {name:'Spa Party with Theme', includes:['Manicure','Pedicure'], capacity:'2 kids', price:'20 KD', sub:'per booking', theme:'Unicorn / Princess', extras:['Additional kids: 8 KD each'], note:'Booth not included.'},
+  {name:'Dazzle Hair Package', includes:['Hair Accessories','Hair Tinsel','Hair Glitters'], capacity:'20 kids', price:'70 KD', sub:'2 hours', extras:['Additional kids: 5 KD each'], note:'Booths & Bars unavailable for Basement and Upper Ground.'},
+  {name:'Spa Party with Hair', includes:['Manicure','Pedicure','Hair Wavy / Blow Dry','Hair Braids & Ribbons'], capacity:'2 kids', price:'50 KD', sub:'per booking', extras:['Additional kids: 12 KD each'], note:'Booth not included.'},
+  {name:'Hair & Nails with Face Crystal Party', includes:['Manicure','Pedicure','Hair Wavy / Blow Dry','Hair Braids & Ribbons'], capacity:'2 kids', price:'70 KD', sub:'per booking', extras:['Additional kids: 15 KD each'], note:'Booth not included.'},
+  {name:'In-Salon Private Party', includes:['Manicure','Pedicure','Blow Dry','Wavy'], capacity:'8 girls max', price:'Call for pricing', sub:'2 hours', extras:['Cakes & Balloons add-on: 50 KD','Additional per person: 10 KD'], note:''}
+];
+
+/* ── Render helpers ───────────────────────────────────── */
+let menuLang = document.documentElement.getAttribute('data-lang') || 'en';
+
+function renderMenu(categories, sidebarEl, contentEl, lg) {
+  lg = lg || menuLang;
+  let sidebarHTML = '';
+  let contentHTML = '';
+  categories.forEach(cat => {
+    const catName = lg === 'ar' ? arCat(cat.cat) : cat.cat;
+    sidebarHTML += '<a class="sp-sidebar-link" data-target="' + cat.id + '" href="#' + cat.id + '">' + catName + '</a>';
+    const items = cat.items.map(([n, p]) => {
+      const name = lg === 'ar' ? ar(n) : n;
+      const price = lg === 'ar' ? toArPrice(p) : p;
+      return '<div class="sp-item"><span class="sp-item-name">' + name + '</span><span class="sp-item-dots" aria-hidden="true"></span><span class="sp-item-price">' + price + '</span></div>';
+    }).join('');
+    contentHTML += '<div class="sp-cat reveal" id="' + cat.id + '"><div class="sp-cat-header"><h2 class="sp-cat-name">' + catName + '</h2><div class="sp-cat-rule" aria-hidden="true"></div></div>' + items + '</div>';
+  });
+  sidebarEl.innerHTML = sidebarHTML;
+  contentEl.innerHTML = contentHTML;
+}
+
+function renderParty(packages, gridEl, lg) {
+  lg = lg || menuLang;
+  gridEl.innerHTML = packages.map((pkg, i) => {
+    const arp = lg === 'ar' ? AR_PARTY[i] : null;
+    const name     = arp ? arp.n     : pkg.name;
+    const includes = arp ? arp.i     : pkg.includes;
+    const capacity = arp ? arp.cap   : pkg.capacity;
+    const extras   = arp ? arp.e     : pkg.extras;
+    const note     = arp ? arp.note  : pkg.note;
+    const theme    = arp ? (arp.theme || '') : (pkg.theme || '');
+    const incList  = includes.map(inc => '<li>' + inc + '</li>').join('');
+    const extList  = extras   ? extras.map(e => '<li>' + e + '</li>').join('') : '';
+    const pkgPrice = lg === 'ar' ? toArPrice(pkg.price) : pkg.price;
+    const pkgSub   = lg === 'ar' ? toArPrice(pkg.sub)   : pkg.sub;
+    const altPrice = pkg.alt ? '<span class="sp-pkg-price-alt">&thinsp;/&thinsp;' + (lg==='ar'?toArPrice(pkg.alt):pkg.alt) + ' <span class="sp-pkg-price-sub">' + (lg==='ar'?toArPrice(pkg.altSub):pkg.altSub) + '</span></span>' : '';
+    const themeBadge = theme ? '<span class="sp-pkg-theme">' + theme + '</span>' : '';
+    const noteHtml = note ? '<p class="sp-pkg-note">' + note + '</p>' : '';
+    return '<div class="sp-pkg reveal reveal-d' + (i % 4 === 0 ? '0' : i % 4) + '">' +
+      '<span class="sp-pkg-num" aria-hidden="true">0' + (i+1) + '</span>' +
+      '<h3 class="sp-pkg-name">' + name + '</h3>' + themeBadge +
+      '<ul class="sp-pkg-includes">' + incList + '</ul>' +
+      '<div class="sp-pkg-pricing">' +
+        '<span class="sp-pkg-cap">' + capacity + '</span>' +
+        '<div class="sp-pkg-price-row"><span class="sp-pkg-price">' + pkgPrice + '</span><span class="sp-pkg-price-sub">' + pkgSub + '</span>' + altPrice + '</div>' +
+        (extList ? '<ul class="sp-pkg-extras">' + extList + '</ul>' : '') +
+        noteHtml +
+      '</div></div>';
+  }).join('');
+}
+
+/* ── Scrollspy (scroll-event based — reliable across all section sizes) ── */
+const _spyCleanup = new Map();
+
+function initScrollspy(sidebarEl, contentEl) {
+  const key = sidebarEl.id;
+
+  // Remove previous scroll listener for this sidebar (avoids accumulation on re-render)
+  if (_spyCleanup.has(key)) {
+    window.removeEventListener('scroll', _spyCleanup.get(key));
+    _spyCleanup.delete(key);
+  }
+
+  const sections = Array.from(contentEl.querySelectorAll('.sp-cat[id]'));
+  const links    = Array.from(sidebarEl.querySelectorAll('.sp-sidebar-link'));
+  if (!sections.length) return;
+
+  function updateActive() {
+    // Only update when this panel is the visible one
+    if (!contentEl.closest('.svc-panel')?.classList.contains('active')) return;
+
+    const nav   = document.getElementById('nav');
+    const strip = document.querySelector('.sp-tab-strip');
+    const navH  = nav   ? nav.offsetHeight  : 80;
+    const tabH  = strip ? strip.offsetHeight : 53;
+    const sideH = window.innerWidth <= 900 ? sidebarEl.offsetHeight : 0;
+    // Trigger line: section is "active" once its top scrolls above this point
+    const trigger = navH + tabH + sideH + 24;
+
+    // Last section whose top edge has passed the trigger line
+    let activeId = sections[0].id;
+    for (const sec of sections) {
+      if (sec.getBoundingClientRect().top < trigger) activeId = sec.id;
+    }
+
+    links.forEach(l => l.classList.toggle('is-active', l.dataset.target === activeId));
+
+    const active = sidebarEl.querySelector('.is-active');
+    if (!active) return;
+    if (window.innerWidth <= 900) {
+      sidebarEl.scrollLeft = active.offsetLeft - sidebarEl.clientWidth / 2 + active.offsetWidth / 2;
+    } else {
+      sidebarEl.scrollTop  = active.offsetTop  - sidebarEl.clientHeight / 2 + active.offsetHeight / 2;
+    }
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  _spyCleanup.set(key, updateActive);
+
+  // Sidebar link click → smooth scroll to section with correct offset
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.target);
+      if (!target) return;
+      const nav   = document.getElementById('nav');
+      const strip = document.querySelector('.sp-tab-strip');
+      const navH  = nav   ? nav.offsetHeight  : 80;
+      const tabH  = strip ? strip.offsetHeight : 53;
+      const sideH = window.innerWidth <= 900 ? sidebarEl.offsetHeight : 0;
+      const offset = navH + tabH + sideH + 8;
+      const y = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+
+  // Run once immediately to set correct initial active state
+  updateActive();
+}
+
+/* ── Sync sidebar top to nav + tab strip ──────────────── */
+function fixSidebarTop() {
+  const nav   = document.getElementById('nav');
+  const strip = document.querySelector('.sp-tab-strip');
+  if (!nav || !strip) return;
+  const top = nav.getBoundingClientRect().height + strip.getBoundingClientRect().height;
+  document.querySelectorAll('.sp-sidebar').forEach(s => {
+    s.style.top = top + 'px';
+    s.style.height = window.innerWidth > 900 ? 'calc(100vh - ' + top + 'px)' : 'auto';
+  });
+}
+
+/* ── Full re-render (used on language change) ─────────── */
+function reRenderAll(lg) {
+  renderMenu(SALON, document.getElementById('sidebar-salon'), document.getElementById('content-salon'), lg);
+  renderMenu(HOME,  document.getElementById('sidebar-home'),  document.getElementById('content-home'),  lg);
+  renderParty(PARTY, document.getElementById('content-party'), lg);
+  document.querySelectorAll('.sp-sidebar .sp-sidebar-link:first-child').forEach(l => l.classList.add('is-active'));
+  initScrollspy(document.getElementById('sidebar-salon'), document.getElementById('content-salon'));
+  initScrollspy(document.getElementById('sidebar-home'),  document.getElementById('content-home'));
+  if (typeof initReveals === 'function') initReveals();
+  fixSidebarTop();
+}
+
+/* ── Language change observer ─────────────────────────── */
+new MutationObserver(() => {
+  const newLang = document.documentElement.getAttribute('data-lang');
+  if (newLang !== menuLang) { menuLang = newLang; reRenderAll(newLang); }
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+
+/* ── Boot ─────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  reRenderAll(menuLang);
+  window.addEventListener('resize', fixSidebarTop);
+
+  // Tab switch → scroll so panel content starts at the top (below nav + strip)
+  document.querySelectorAll('.svc-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      // rAF lets initTabs() (from marshmallows.js) switch the active class first
+      requestAnimationFrame(() => {
+        const nav    = document.getElementById('nav');
+        const strip  = document.querySelector('.sp-tab-strip');
+        const navH   = nav   ? nav.offsetHeight   : 80;
+        const stripH = strip ? strip.offsetHeight  : 53;
+        const panel  = document.querySelector('.svc-panel.active');
+        if (!panel) return;
+        // Panel's top position in the document
+        const panelDocTop = panel.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: Math.max(0, panelDocTop - navH - stripH), behavior: 'smooth' });
+        fixSidebarTop();
+      });
+    });
+  });
+});
+</script>
+
+</body>
+</html>
