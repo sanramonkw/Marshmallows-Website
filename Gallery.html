@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Marshmallows Nail Spa</title>
+  <meta name="description" content="Gallery of nail artistry and spa experiences at Marshmallows Nail Spa, Kuwait." />
+  <link rel="icon" type="image/webp" href="uploads/mm-favicon.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="marshmallows.css" />
+
+<style>
+/* ── Hero ─────────────────────────────────────────────── */
+.gl-hero {
+  background: var(--dark);
+  padding: clamp(130px,15vw,170px) 0 clamp(52px,7vw,84px);
+  position: relative; overflow: hidden;
+}
+.gl-hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(176,106,119,.38), transparent);
+}
+.gl-back {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-sans-en); font-size: 11px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(176,106,119,.65); text-decoration: none;
+  margin-bottom: 36px; transition: color 300ms;
+}
+.gl-back:hover { color: var(--base); }
+.gl-back svg { transition: transform 300ms; }
+.gl-back:hover svg { transform: translateX(-3px); }
+[dir="rtl"] .gl-back { flex-direction: row-reverse; }
+[dir="rtl"] .gl-back:hover svg { transform: translateX(3px); }
+.gl-hero-eyebrow { color: var(--gold); margin-bottom: 14px; }
+.gl-hero-title {
+  font-size: clamp(44px,6vw,82px); color: var(--base); margin-bottom: 18px;
+}
+.gl-hero-sub {
+  font-family: var(--font-sans-en); font-size: 14px;
+  color: rgba(250,248,244,.4); letter-spacing: .05em;
+}
+[dir="rtl"] .gl-hero-sub { font-family: var(--font-sans-ar); }
+
+/* ── Gallery section ──────────────────────────────────── */
+.gl-section {
+  background: var(--dark);
+  padding: clamp(60px,8vw,100px) 0 clamp(80px,10vw,120px);
+}
+
+/* Masonry columns */
+.gl-grid {
+  columns: 3;
+  column-gap: 24px;
+}
+@media (max-width: 960px) { .gl-grid { columns: 2; column-gap: 18px; } }
+@media (max-width: 560px) { .gl-grid { columns: 1; } }
+
+/* Each item */
+.gl-item {
+  break-inside: avoid;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+/* The matted print frame */
+.gl-frame {
+  background: #fce8ed;
+  padding: 10px 10px 52px;
+  box-shadow:
+    0 2px 8px rgba(36,14,22,.18),
+    0 6px 32px rgba(36,14,22,.22);
+  transition:
+    transform 450ms cubic-bezier(.25,.46,.45,.94),
+    box-shadow 450ms cubic-bezier(.25,.46,.45,.94);
+  position: relative;
+}
+.gl-frame:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 4px 16px rgba(36,14,22,.22),
+    0 20px 56px rgba(36,14,22,.40);
+}
+
+/* Thin inner border (mat window) */
+.gl-frame::before {
+  content: '';
+  position: absolute;
+  inset: 10px 10px 52px;
+  border: 1px solid rgba(233,210,213,.35);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gl-frame img {
+  width: 100%;
+  display: block;
+  position: relative;
+}
+
+/* Caption in the matte area — logo */
+.gl-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 14px;
+}
+.gl-frame-logo {
+  height: 16px; width: auto; max-width: 110px;
+  display: block; flex-shrink: 0; object-fit: contain;
+  opacity: 0.3;
+  filter: saturate(0.2) brightness(0.6);
+}
+/* Lightbox caption logo */
+#lb-logo {
+  height: 16px; width: auto; max-width: 110px;
+  display: block; flex-shrink: 0; object-fit: contain;
+  opacity: 0.32;
+  filter: saturate(0.2) brightness(0.6);
+}
+
+/* Hover overlay — subtle gold shimmer */
+.gl-frame-img {
+  position: relative; overflow: hidden;
+}
+.gl-frame-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(176,106,119,0) 60%, rgba(176,106,119,.12));
+  opacity: 0; transition: opacity 450ms;
+}
+.gl-frame:hover .gl-frame-img::after { opacity: 1; }
+
+/* View icon on hover */
+.gl-view-icon {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(.7);
+  width: 44px; height: 44px;
+  background: rgba(36,14,22,.55);
+  border: 1px solid rgba(176,106,119,.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 350ms, transform 350ms;
+  pointer-events: none; z-index: 2;
+}
+.gl-frame:hover .gl-view-icon {
+  opacity: 1; transform: translate(-50%,-50%) scale(1);
+}
+.gl-view-icon svg { color: var(--base); }
+
+/* ── Lightbox ─────────────────────────────────────────── */
+.gl-lightbox {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(20,6,12,.96);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 350ms;
+}
+.gl-lightbox.open {
+  opacity: 1; pointer-events: all;
+}
+
+.gl-lb-img-wrap {
+  position: relative;
+  max-width: min(90vw, 900px);
+  max-height: 75vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.gl-lb-frame {
+  background: #fce8ed;
+  padding: 10px 10px 52px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.6);
+  position: relative;
+  max-width: 100%;
+  max-height: calc(75vh - 0px);
+  display: flex; flex-direction: column;
+}
+.gl-lb-frame::before {
+  content: '';
+  position: absolute;
+  inset: 10px 10px 52px;
+  border: 1px solid rgba(233,210,213,.35);
+  pointer-events: none; z-index: 1;
+}
+#lb-img {
+  display: block;
+  max-width: min(80vw, 860px);
+  max-height: calc(75vh - 62px);
+  width: auto; height: auto;
+  object-fit: contain;
+}
+.gl-lb-caption-area {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+}
+#lb-caption {
+  font-family: var(--font-serif-en); font-style: italic; font-weight: 300;
+  font-size: 14px; color: var(--mid); letter-spacing: .04em;
+}
+[dir="rtl"] #lb-caption {
+  font-family: var(--font-serif-ar); font-style: normal; letter-spacing: 0; font-size: 15px;
+}
+#lb-counter {
+  font-family: var(--font-sans-en); font-size: 10px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--light);
+}
+
+/* Lightbox controls */
+.gl-lb-close {
+  position: fixed; top: 24px; right: 28px;
+  width: 44px; height: 44px;
+  background: none; border: 1px solid rgba(176,106,119,.3);
+  color: rgba(250,248,244,.6); font-size: 22px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: border-color 250ms, color 250ms;
+}
+.gl-lb-close:hover { border-color: var(--gold); color: var(--base); }
+
+.gl-lb-prev,
+.gl-lb-next {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px;
+  background: none; border: 1px solid rgba(176,106,119,.25);
+  color: rgba(250,248,244,.55); font-size: 24px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: border-color 250ms, color 250ms, background 250ms;
+}
+.gl-lb-prev:hover, .gl-lb-next:hover {
+  border-color: var(--gold); color: var(--base);
+  background: rgba(176,106,119,.08);
+}
+.gl-lb-prev { left: 20px; }
+.gl-lb-next { right: 20px; }
+
+/* ── Mobile swipe arrows ─────────────────────────────── */
+.gl-swipe-arrow {
+  display: none;
+  position: absolute; top: 0; bottom: 0;
+  width: 52px; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 5;
+}
+.gl-swipe-arrow.left  { left: 0;  background: linear-gradient(to right, rgba(20,6,12,.38), transparent); }
+.gl-swipe-arrow.right { right: 0; background: linear-gradient(to left,  rgba(20,6,12,.38), transparent); }
+.gl-swipe-arrow svg { color: rgba(250,248,244,.75); }
+@media (hover: none) and (pointer: coarse) {
+  .gl-swipe-arrow { display: flex; animation: swipe-pulse 1.8s ease-in-out 0.5s 3; }
+}
+@keyframes swipe-pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+/* ── CTA band ─────────────────────────────────────────── */
+.gl-cta {
+  background: var(--espresso);
+  padding: clamp(56px,8vw,100px) 0; text-align: center;
+}
+.gl-cta-eyebrow { color: var(--gold); margin-bottom: 16px; }
+.gl-cta-title {
+  font-family: var(--font-serif-en); font-size: clamp(28px,4vw,52px); font-weight: 300;
+  color: var(--base); margin-bottom: 36px;
+}
+[dir="rtl"] .gl-cta-title { font-family: var(--font-serif-ar); }
+.gl-cta .btn-primary { background: var(--base); color: var(--espresso); }
+.gl-cta .btn-primary:hover { background: var(--cream); }
+
+/* ── Reveal animation ─────────────────────────────────── */
+.gl-item { opacity: 0; transform: translateY(20px); transition: opacity 600ms, transform 600ms; }
+.gl-item.visible { opacity: 1; transform: none; }
+</style>
+</head>
+
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Marshmallows Nail Spa">
+      <img src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="Services.html" data-key="nav.services">Services</a></li>
+      <li><a href="Gallery.html" style="color:var(--gold)" data-key="nav.gallery">Gallery</a></li>
+      <li><a href="index.html#about" data-key="nav.about">About</a></li>
+      <li><a href="index.html#locations" data-key="nav.locations">Locations</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language selector">
+        <button class="lang-btn active" data-l="en">EN</button>
+        <button class="lang-btn" data-l="ar">عربي</button>
+      </div>
+      <a href="Booking.html" class="btn-primary nav-book" data-key="nav.book">Book Appointment</a>
+      <button id="nav-burger" class="nav-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="nav-mobile" role="dialog" aria-label="Mobile navigation">
+  <a href="index.html">Home</a>
+  <a href="Services.html" data-key="nav.services">Services</a>
+  <a href="Gallery.html" style="color:var(--gold)" data-key="nav.gallery">Gallery</a>
+  <a href="index.html#about" data-key="nav.about">About</a>
+  <a href="index.html#locations" data-key="nav.locations">Locations</a>
+  <a href="Booking.html" class="btn-primary" data-key="nav.book.m">Book Now</a>
+  <div class="lang-toggle" style="margin-top:12px">
+    <button class="lang-btn active" data-l="en">EN</button>
+    <button class="lang-btn" data-l="ar">عربي</button>
+  </div>
+</div>
+
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="gl-hero" data-screen-label="Gallery Hero">
+  <div class="container">
+    <a href="index.html" class="gl-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span data-key="gl.back">Back to Home</span>
+    </a>
+    <span class="eyebrow gl-hero-eyebrow" data-key="gl.eyebrow">The Artistry</span>
+    <h1 class="serif-heading gl-hero-title" data-key="gl.title">Gallery</h1>
+    <p class="gl-hero-sub" data-key="gl.sub">Every set a story — captured in detail.</p>
+  </div>
+</section>
+
+
+<!-- ══ GALLERY ═══════════════════════════════════════════ -->
+<section class="gl-section" data-screen-label="Gallery Grid">
+  <div class="container">
+    <div class="gl-grid" id="gl-grid"></div>
+  </div>
+</section>
+
+
+<!-- ══ LIGHTBOX ══════════════════════════════════════════ -->
+<div class="gl-lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="gl-lb-close" id="lb-close" aria-label="Close">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="gl-lb-prev" id="lb-prev" aria-label="Previous">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <button class="gl-lb-next" id="lb-next" aria-label="Next">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+  <div class="gl-lb-img-wrap">
+    <div class="gl-swipe-arrow left" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="gl-swipe-arrow right" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div class="gl-lb-frame">
+      <img id="lb-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
+      <div class="gl-lb-caption-area">
+        <img id="lb-logo" src="uploads/mm-logo.webp" alt="Marshmallows" />
+        <span id="lb-counter"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ CTA ═══════════════════════════════════════════════ -->
+<section class="gl-cta">
+  <div class="container">
+    <span class="eyebrow gl-cta-eyebrow" data-key="gl.cta.eyebrow">Ready?</span>
+    <h2 class="gl-cta-title" data-key="gl.cta.title">Book Your Appointment Today</h2>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="tel:+96522209072" class="btn-primary" data-key="gl.cta.call">Call +965 2220 9072</a>
+      <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="btn-ghost" style="color:var(--base);border-color:rgba(250,248,244,.25)" data-key="gl.cta.wa">WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer id="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand-logo" src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+        <p class="footer-tagline sans-text" data-key="foot.tagline">Where luxury meets artistry — since 2013.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-social-link" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.nav.head">Navigation</span>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="Services.html" data-key="foot.n1">Services</a></li>
+          <li><a href="Gallery.html" data-key="nav.gallery">Gallery</a></li>
+          <li><a href="index.html#about" data-key="foot.n2">About</a></li>
+          <li><a href="index.html#locations" data-key="foot.n3">Locations</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.con.head">Contact</span>
+        <ul>
+          <li><a href="tel:+96522209072" class="ltr-num" data-key="foot.phone">+965 2220 9072</a></li>
+          <li>
+            <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-wa" data-key="foot.wa">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+              WhatsApp Us
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.fol.head">Follow</span>
+        <ul>
+          <li><a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" data-key="foot.ig">Instagram</a></li>
+          <li><a href="https://www.snapchat.com/add/marshmallowsnaill" target="_blank" rel="noopener" data-key="foot.snap">Snapchat</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy sans-text" data-key="foot.copy">© 2025 Marshmallows Nail Spa. All rights reserved.</p>
+      <p class="footer-license sans-text" data-key="foot.lic">Commercial License: 2015/3739</p>
+    </div>
+  </div>
+</footer>
+
+
+<script src="marshmallows.js"></script>
+<script>
+/* ── Translations ─────────────────────────────────────── */
+Object.assign(T.en, {
+  'nav.gallery':    'Gallery',
+  'gl.back':        'Back to Home',
+  'gl.eyebrow':     'The Artistry',
+  'gl.title':       'Gallery',
+  'gl.sub':         'Every set a story — captured in detail.',
+  'gl.cta.eyebrow': 'Ready?',
+  'gl.cta.title':   'Book Your Appointment Today',
+  'gl.cta.call':    'Call +965 2220 9072',
+  'gl.cta.wa':      'WhatsApp Us'
+});
+Object.assign(T.ar, {
+  'nav.gallery':    'معرض الأعمال',
+  'gl.back':        'العودة للرئيسية',
+  'gl.eyebrow':     'أعمالنا الفنية',
+  'gl.title':       'معرض الأعمال',
+  'gl.sub':         'كل تصميم قصة — مُوثَّقة بدقة.',
+  'gl.cta.eyebrow': 'هل أنتِ مستعدة؟',
+  'gl.cta.title':   'احجزي موعدك اليوم',
+  'gl.cta.call':    'اتصلي \u200E+965 2220 9072',
+  'gl.cta.wa':      'تواصلي عبر واتساب'
+});
+
+/* ── Gallery data ─────────────────────────────────────── */
+const PHOTOS = [
+  { src:'uploads/marshmellows10.webp', alt:'Gold flower nail art',           en:'Gold Botanicals',   ar:'زهور ذهبية'     },
+  { src:'uploads/marshmellows8.webp',  alt:'Deep red glitter nails',         en:'Ruby Hearts',       ar:'قلوب الياقوت'   },
+  { src:'uploads/marshmellows9.webp',  alt:'Chrome silver nail art',         en:'Chrome Crystals',   ar:'كريستال كروم'   },
+  { src:'uploads/marshmellows11.webp', alt:'Dark cherry nails with flowers', en:'Dark Romance',      ar:'رومانسية داكنة' },
+  { src:'uploads/marshmellows12.webp', alt:'Nail artistry detail',           en:'Cherry Blossom',    ar:'زهر الكرز'      },
+  { src:'uploads/marshmellows2.webp',  alt:'Yellow floral nail art',         en:'Sunshine Florals',  ar:'أزهار الشمس'    },
+  { src:'uploads/marshmellows1.webp',  alt:'Pink watermelon nails',          en:'Watermelon Dreams', ar:'أحلام البطيخ'   }
+];
+
+/* ── Render grid ──────────────────────────────────────── */
+let currentLang = document.documentElement.getAttribute('data-lang') || 'en';
+
+function renderGrid(lg) {
+  const grid = document.getElementById('gl-grid');
+  grid.innerHTML = PHOTOS.map((p, i) =>
+    `<div class="gl-item" data-index="${i}">
+      <div class="gl-frame">
+        <div class="gl-frame-img">
+          <img src="${p.src}" alt="${p.alt}" loading="lazy" />
+          <div class="gl-view-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+        </div>
+        <div class="gl-caption"><img src="uploads/mm-logo.webp" alt="Marshmallows" class="gl-frame-logo" /></div>
+      </div>
+    </div>`
+  ).join('');
+
+  // Attach click handlers
+  grid.querySelectorAll('.gl-item').forEach(item => {
+    item.addEventListener('click', () => openLightbox(parseInt(item.dataset.index)));
+  });
+
+  // Reveal on scroll
+  initReveal();
+}
+
+/* ── Scroll reveal ────────────────────────────────────── */
+function initReveal() {
+  const items = document.querySelectorAll('.gl-item');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 40);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  items.forEach(el => obs.observe(el));
+}
+
+/* ── Lightbox ─────────────────────────────────────────── */
+let lbIndex = 0;
+
+function openLightbox(i) {
+  lbIndex = i;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateLightbox() {
+  const p  = PHOTOS[lbIndex];
+  document.getElementById('lb-img').src     = p.src;
+  document.getElementById('lb-img').alt     = p.alt;
+  document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + PHOTOS.length;
+}
+
+function lbPrev() { lbIndex = (lbIndex - 1 + PHOTOS.length) % PHOTOS.length; updateLightbox(); }
+function lbNext() { lbIndex = (lbIndex + 1) % PHOTOS.length; updateLightbox(); }
+
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', lbPrev);
+document.getElementById('lb-next').addEventListener('click', lbNext);
+
+/* Swipe arrow divs — clickable on mobile */
+document.querySelector('.gl-swipe-arrow.left').addEventListener('click',  lbPrev);
+document.querySelector('.gl-swipe-arrow.right').addEventListener('click', lbNext);
+
+/* Touch swipe for mobile */
+let _touchX = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => {
+  _touchX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - _touchX;
+  if (Math.abs(dx) > 44) { dx < 0 ? lbNext() : lbPrev(); }
+});
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  lbPrev();
+  if (e.key === 'ArrowRight') lbNext();
+});
+
+/* ── Language change ─────────────────────────────────── */
+new MutationObserver(() => {
+  const lg = document.documentElement.getAttribute('data-lang');
+  if (lg !== currentLang) {
+    currentLang = lg;
+    renderGrid(lg);
+    updateLightbox();
+  }
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+
+/* ── Boot ─────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderGrid(currentLang);
+});
+</script>
+
+</body>
+</html>

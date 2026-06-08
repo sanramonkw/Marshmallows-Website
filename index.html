@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marshmallows Nail Spa — Kuwait</title>
+  <meta name="description" content="Kuwait's premier luxury nail spa. Elevate your self-care ritual at Marshmallows Nail Spa — Agaila &amp; Salmiya." />
+  <link rel="icon" type="image/webp" href="uploads/mm-favicon.webp" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="marshmallows.css" />
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+
+    <!-- Logo -->
+    <a href="#hero" class="nav-logo" aria-label="Marshmallows Nail Spa">
+      <img src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a href="#services" data-key="nav.services">Services</a></li>
+      <li><a href="Gallery.html" data-key="nav.gallery">Gallery</a></li>
+      <li><a href="#about"    data-key="nav.about">About</a></li>
+      <li><a href="#locations" data-key="nav.locations">Locations</a></li>
+    </ul>
+
+    <!-- Right controls -->
+    <div class="nav-right">
+      <!-- Language toggle -->
+      <div class="lang-toggle" role="group" aria-label="Language selector">
+        <button class="lang-btn active" data-l="en" aria-label="English">EN</button>
+        <button class="lang-btn"        data-l="ar" aria-label="Arabic">عربي</button>
+      </div>
+      <!-- Book CTA -->
+      <a href="Booking.html" class="btn-primary nav-book" data-key="nav.book">Book Appointment</a>
+      <!-- Burger -->
+      <button id="nav-burger" class="nav-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Mobile overlay -->
+<div id="nav-mobile" role="dialog" aria-label="Mobile navigation">
+  <a href="#services"  data-key="nav.services">Services</a>
+  <a href="Gallery.html" data-key="nav.gallery">Gallery</a>
+  <a href="#about"     data-key="nav.about">About</a>
+  <a href="#locations" data-key="nav.locations">Locations</a>
+  <a href="Booking.html" class="btn-primary" data-key="nav.book.m">Book Now</a>
+  <div class="lang-toggle" style="margin-top:12px">
+    <button class="lang-btn active" data-l="en">EN</button>
+    <button class="lang-btn"        data-l="ar">عربي</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════ -->
+<section id="hero" data-screen-label="Hero">
+
+  <!-- Left: Editorial content -->
+  <div class="hero-left">
+    <span class="eyebrow hero-eyebrow" data-key="hero.eyebrow">Kuwait's Premier Nail Spa</span>
+
+    <h1 class="hero-title serif-heading" data-key="hero.title">Elevate Your&#10;Self-Care Ritual</h1>
+
+    <p class="hero-subtitle sans-text" data-key="hero.sub">
+      Where artistry meets serenity — crafted for the discerning woman.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="Booking.html" class="btn-primary" data-key="hero.cta">Book Now</a>
+      <a href="#services"        class="btn-ghost"   data-key="hero.cta2">Explore Services</a>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-line"></span>
+      <span data-key="hero.scroll">Scroll</span>
+    </div>
+  </div>
+
+  <!-- Right: Editorial Dark Collage -->
+  <div class="hero-right">
+
+    <!-- Warm ambient glow -->
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <!-- Card A — large, ruby hearts, tilted left -->
+    <figure class="hero-card hero-card--a">
+      <img src="uploads/marshmellows8.webp" alt="Deep red glitter nail design" />
+      <figcaption><img src="uploads/mm-logo.webp" alt="Marshmallows" class="hero-card-logo" /></figcaption>
+    </figure>
+
+    <!-- Card B — medium, gold florals, tilted right -->
+    <figure class="hero-card hero-card--b">
+      <img src="uploads/marshmellows10.webp" alt="Gold floral nail design" />
+      <figcaption><img src="uploads/mm-logo.webp" alt="Marshmallows" class="hero-card-logo" /></figcaption>
+    </figure>
+
+    <!-- Card C — deep cherry with flowers, lower -->
+    <figure class="hero-card hero-card--c">
+      <img src="uploads/marshmellows12.webp" alt="Deep cherry nail design with flowers" />
+      <figcaption><img src="uploads/mm-logo.webp" alt="Marshmallows" class="hero-card-logo" /></figcaption>
+    </figure>
+
+
+
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════════════════ -->
+<section id="about" data-screen-label="About">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- Images -->
+      <div class="about-images reveal">
+        <img class="about-img-main" src="uploads/salon-service.webp" alt="Specialist nail artisan at work" />
+        <img class="about-img-accent" src="uploads/marshmellows10.webp" alt="Luxury nail art detail" />
+      </div>
+
+      <!-- Content -->
+      <div class="about-content">
+        <span class="eyebrow about-eyebrow reveal" data-key="about.eyebrow">Est. 2013 · Kuwait</span>
+
+        <h2 class="serif-heading about-title reveal reveal-d1" data-key="about.title">A Decade of&#10;Artistry in Kuwait</h2>
+
+        <div class="about-rule reveal reveal-d2" aria-hidden="true"></div>
+
+        <div class="about-text reveal reveal-d2">
+          <p class="sans-text" data-key="about.p1">
+            Born from a vision to transform nail care into an art form, Marshmallows Nail Spa has spent over a decade curating Kuwait's most refined beauty experience.
+          </p>
+          <p class="sans-text" data-key="about.p2">
+            From our first studio to our two premier branches — in Agaila and Salmiya — we have remained devoted to one singular belief: every woman deserves to feel beautifully pampered.
+          </p>
+          <p class="sans-text" data-key="about.p3">
+            Our team of specialist artisans brings meticulous precision and genuine care to every service, ensuring an experience that transcends the ordinary.
+          </p>
+        </div>
+
+        <!-- Stats -->
+        <div class="about-stats reveal reveal-d3">
+          <div class="about-stat">
+            <div class="about-stat-num" data-key="about.s1.num">13+</div>
+            <div class="about-stat-label sans-text" data-key="about.s1.lbl">Years in Kuwait</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num" data-key="about.s2.num">2</div>
+            <div class="about-stat-label sans-text" data-key="about.s2.lbl">Premium Branches</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num" data-key="about.s3.num">∞</div>
+            <div class="about-stat-label sans-text" data-key="about.s3.lbl">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SERVICES
+══════════════════════════════════════════════════════ -->
+<section id="services" data-screen-label="Services">
+  <div class="services-header container reveal">
+    <span class="eyebrow services-eyebrow" data-key="svc.eyebrow">The Services Suite</span>
+    <h2 class="serif-heading services-title" data-key="svc.title">Three Pillars of&#10;Luxury Care</h2>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="container">
+    <div class="services-tabs" role="tablist">
+      <button class="svc-tab active" role="tab" aria-selected="true"  data-key="svc.tab1">Salon Experience</button>
+      <button class="svc-tab"        role="tab" aria-selected="false" data-key="svc.tab2">Home Service</button>
+      <button class="svc-tab"        role="tab" aria-selected="false" data-key="svc.tab3">Party Booth</button>
+    </div>
+  </div>
+
+  <!-- Panel 1: Salon -->
+  <div class="svc-panel active" role="tabpanel">
+    <div class="svc-layout">
+      <div class="svc-image">
+        <img src="uploads/IMG_2921.webp" alt="Marshmallows Nail Spa salon interior" />
+        <div class="svc-image-veil" aria-hidden="true"></div>
+      </div>
+      <div class="svc-content">
+        <div class="svc-num" aria-hidden="true">01</div>
+        <h3 data-key="svc1.title">Salon Experience</h3>
+        <p class="svc-desc sans-text" data-key="svc1.desc">
+          Step into our beautifully curated studio and surrender to a world of refined nail artistry. From signature manicures and pedicures to avant-garde extensions and hand-painted designs — every treatment is a bespoke ritual.
+        </p>
+        <div class="svc-details">
+          <span class="svc-detail sans-text" data-key="svc1.d1">Manicure &amp; Pedicure</span>
+          <span class="svc-detail sans-text" data-key="svc1.d2">Nail Extensions &amp; Gel</span>
+          <span class="svc-detail sans-text" data-key="svc1.d3">Nail Art &amp; Design</span>
+          <span class="svc-detail sans-text" data-key="svc1.d4">Spa Treatments</span>
+        </div>
+        <a href="Services.html" class="btn-primary" data-key="svc.explore">Explore Services</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 2: Home -->
+  <div class="svc-panel" role="tabpanel">
+    <div class="svc-layout">
+      <div class="svc-image">
+        <img src="uploads/home-service.webp" alt="Marshmallows home service setup" />
+        <div class="svc-image-veil" aria-hidden="true"></div>
+      </div>
+      <div class="svc-content">
+        <div class="svc-num" aria-hidden="true">02</div>
+        <h3 data-key="svc2.title">Home Service</h3>
+        <p class="svc-desc sans-text" data-key="svc2.desc">
+          The Marshmallows experience, delivered to your door. Our specialist technicians bring our full suite of services — with premium products and immaculate hygiene standards — directly to the comfort of your home.
+        </p>
+        <div class="svc-details">
+          <span class="svc-detail sans-text" data-key="svc2.d1">Full Manicure at Home</span>
+          <span class="svc-detail sans-text" data-key="svc2.d2">Pedicure &amp; Foot Spa</span>
+          <span class="svc-detail sans-text" data-key="svc2.d3">Nail Extensions</span>
+          <span class="svc-detail sans-text" data-key="svc2.d4">Bridal Packages</span>
+        </div>
+        <a href="Services.html" class="btn-primary" data-key="svc.explore">Explore Services</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3: Party Booth -->
+  <div class="svc-panel" role="tabpanel">
+    <div class="svc-layout">
+      <div class="svc-image">
+        <img src="uploads/party-booth.webp" alt="Marshmallows party booth" />
+        <div class="svc-image-veil" aria-hidden="true"></div>
+      </div>
+      <div class="svc-content">
+        <div class="svc-num" aria-hidden="true">03</div>
+        <h3 data-key="svc3.title">Party Booth</h3>
+        <p class="svc-desc sans-text" data-key="svc3.desc">
+          Make your celebration unforgettable with our exclusive Party Booth. Perfect for birthdays, bridal parties, and private gatherings — we bring the spa to your event with our signature arched booth.
+        </p>
+        <div class="svc-details">
+          <span class="svc-detail sans-text" data-key="svc3.d1">Bridal &amp; Henna Events</span>
+          <span class="svc-detail sans-text" data-key="svc3.d2">Birthday Celebrations</span>
+          <span class="svc-detail sans-text" data-key="svc3.d3">Corporate Events</span>
+          <span class="svc-detail sans-text" data-key="svc3.d4">Custom Packages</span>
+        </div>
+        <a href="Services.html" class="btn-primary" data-key="svc.explore">Explore Services</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     GALLERY TEASER
+══════════════════════════════════════════════════════ -->
+<section id="gallery" data-screen-label="Gallery Teaser">
+  <div class="container">
+    <div class="gallery-header reveal">
+      <span class="gallery-eyebrow eyebrow" data-key="gallery.eyebrow">The Artistry</span>
+      <h2 class="gallery-title serif-heading" data-key="gallery.title">Crafted with&#10;Precision</h2>
+    </div>
+    <!-- Preview strip — framed -->
+    <div class="gallery-teaser reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:44px;">
+      <div class="gt-frame"><div class="gt-img-wrap"><img src="uploads/marshmellows10.webp" alt="Gold flower nail art" /></div><div class="gt-caption"><img src="uploads/mm-logo.webp" alt="Marshmallows" class="gt-logo" /></div></div>
+      <div class="gt-frame"><div class="gt-img-wrap"><img src="uploads/marshmellows8.webp"  alt="Ruby hearts nail art" /></div><div class="gt-caption"><img src="uploads/mm-logo.webp" alt="Marshmallows" class="gt-logo" /></div></div>
+      <div class="gt-frame"><div class="gt-img-wrap"><img src="uploads/marshmellows11.webp" alt="Dark romance nails" /></div><div class="gt-caption"><img src="uploads/mm-logo.webp" alt="Marshmallows" class="gt-logo" /></div></div>
+    </div>
+    <div style="text-align:center;">
+      <a href="Gallery.html" class="btn-primary" style="background:var(--base);color:var(--espresso);" data-key="gallery.cta">View Full Gallery</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     LOCATIONS
+══════════════════════════════════════════════════════ -->
+<section id="locations" data-screen-label="Locations">
+  <div class="container">
+
+    <div class="locations-top">
+      <div>
+        <span class="eyebrow locations-eyebrow reveal" data-key="loc.eyebrow">Find Us</span>
+        <h2 class="serif-heading locations-title reveal reveal-d1" data-key="loc.title">Two Locations&#10;Across Kuwait</h2>
+      </div>
+      <div class="locations-phone-quick reveal reveal-d2">
+        <span class="locations-phone-lbl sans-text" data-key="loc.phone.lbl">Call for Appointments</span>
+        <a href="tel:+96522209072" class="locations-phone-num ltr-num">+965 2220 9072</a>
+      </div>
+    </div>
+
+    <div class="locations-grid">
+
+      <!-- Branch 1: Agaila -->
+      <div class="loc-card reveal">
+        <span class="loc-index" aria-hidden="true">01</span>
+        <h3 class="loc-name" data-key="loc1.name">Agaila Branch</h3>
+        <p class="loc-address sans-text" data-key="loc1.addr">Sama Mall, First Floor</p>
+        <p class="loc-area sans-text"    data-key="loc1.area">Agaila, Kuwait</p>
+        <div class="loc-actions">
+          <a href="tel:+96522209072" class="loc-action" data-key="loc.call">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.01 1.18a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Call Us
+          </a>
+          <a href="https://maps.app.goo.gl/sama-mall-agaila" target="_blank" rel="noopener" class="loc-action" data-key="loc.maps">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            View on Maps
+          </a>
+        </div>
+      </div>
+
+      <!-- Branch 2: Salmiya -->
+      <div class="loc-card reveal reveal-d1">
+        <span class="loc-index" aria-hidden="true">02</span>
+        <h3 class="loc-name" data-key="loc2.name">Salmiya Branch</h3>
+        <p class="loc-address sans-text" data-key="loc2.addr">Symphony Mall, Mezzanine, Shop 12</p>
+        <p class="loc-area sans-text"    data-key="loc2.area">Salmiya, Kuwait</p>
+        <div class="loc-actions">
+          <a href="tel:+96522209072" class="loc-action" data-key="loc.call">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.01 1.18a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Call Us
+          </a>
+          <a href="https://maps.app.goo.gl/symphony-mall-salmiya" target="_blank" rel="noopener" class="loc-action" data-key="loc.maps">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            View on Maps
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════ -->
+<footer id="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+
+      <!-- Brand column -->
+      <div class="footer-brand">
+        <img class="footer-brand-logo" src="uploads/mm-logo.webp" alt="Marshmallows Nail Spa" />
+        <p class="footer-tagline sans-text" data-key="foot.tagline">
+          Where luxury meets artistry — since 2013.
+        </p>
+        <!-- Social icons -->
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://www.snapchat.com/add/marshmallowsnaill" target="_blank" rel="noopener" class="footer-social-link" aria-label="Snapchat">
+            <svg viewBox="0 0 24 24"><path d="M12.166.006C9.39.006 6.5 1.07 4.694 3.316c-1.224 1.522-1.792 3.516-1.677 5.61-.455.233-.973.35-1.51.35-.563 0-1.09-.13-1.465-.357-.122-.07-.254-.107-.388-.107-.28 0-.55.148-.685.412-.145.282-.111.614.092.858.59.71 1.657 1.18 2.833 1.273.007.11.013.22.017.33-.004.044-.006.087-.006.13 0 .94-.253 1.61-.786 2.057-.374.314-.638.75-.638 1.22 0 .696.518 1.287 1.2 1.392.32.05.644.075.973.075.7 0 1.394-.12 2.078-.36.602.945 1.512 1.66 2.578 2.043.63.226 1.117.65 1.117 1.328 0 .174-.035.345-.106.506-.24.538-.636 1.02-.636 1.626 0 .684.547 1.272 1.283 1.272h.063c.54 0 1.053-.219 1.508-.219.378 0 .72.115 1.028.335.523.369 1.156.573 1.802.573.648 0 1.28-.204 1.803-.573.307-.22.65-.335 1.028-.335.456 0 .97.219 1.51.219h.062c.736 0 1.283-.588 1.283-1.272 0-.606-.396-1.088-.636-1.626a1.415 1.415 0 01-.106-.506c0-.678.487-1.102 1.117-1.328 1.067-.383 1.977-1.098 2.578-2.043.684.24 1.378.36 2.079.36.328 0 .653-.025.972-.075.683-.105 1.2-.696 1.2-1.392 0-.47-.264-.906-.638-1.22-.533-.447-.786-1.118-.786-2.057 0-.043-.002-.086-.006-.13.004-.11.01-.22.017-.33 1.176-.093 2.243-.563 2.833-1.273.203-.244.237-.576.092-.858-.136-.264-.405-.412-.685-.412-.134 0-.266.037-.388.107-.375.228-.902.357-1.466.357-.536 0-1.054-.117-1.51-.35.115-2.094-.453-4.088-1.677-5.61C17.5 1.07 14.613.006 12.167.006z"/></svg>
+          </a>
+          <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-social-link" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation column -->
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.nav.head">Navigation</span>
+        <ul>
+          <li><a href="#services"  data-key="foot.n1">Services</a></li>
+          <li><a href="#about"     data-key="foot.n2">About</a></li>
+          <li><a href="#locations" data-key="foot.n3">Locations</a></li>
+          <li><a href="Booking.html" data-key="foot.n4">Book Appointment</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact column -->
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.con.head">Contact</span>
+        <ul>
+          <li><a href="tel:+96522209072" class="ltr-num" data-key="foot.phone">+965 2220 9072</a></li>
+          <li>
+            <a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-wa" data-key="foot.wa">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.096 1.508 5.82L.057 23.93a.5.5 0 00.613.613l6.11-1.451A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.776 9.776 0 01-5.07-1.41l-.363-.216-3.762.894.908-3.762-.236-.373A9.776 9.776 0 012.182 12C2.182 6.562 6.562 2.182 12 2.182S21.818 6.562 21.818 12 17.438 21.818 12 21.818z"/></svg>
+              WhatsApp Us
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Follow column -->
+      <div class="footer-col">
+        <span class="footer-col-title" data-key="foot.fol.head">Follow</span>
+        <ul>
+          <li><a href="https://www.instagram.com/marshmallowsnailspa" target="_blank" rel="noopener" data-key="foot.ig">Instagram</a></li>
+          <li><a href="https://www.snapchat.com/add/marshmallowsnaill" target="_blank" rel="noopener" data-key="foot.snap">Snapchat</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <p class="footer-copy sans-text" data-key="foot.copy">
+        © 2025 Marshmallows Nail Spa. All rights reserved.
+      </p>
+      <p class="footer-license sans-text" data-key="foot.lic">
+        Commercial License: 2015/3739
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="marshmallows.js"></script>
+</body>
+</html>
