@@ -33,7 +33,11 @@
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
@@ -53,6 +57,17 @@ body {
 [data-lang="ar"] .eyebrow { font-family: var(--font-sans-ar); letter-spacing: 0; font-size: 13px; }
 [data-lang="ar"] .serif-heading { font-family: var(--font-serif-ar) !important; }
 [data-lang="ar"] .sans-text { font-family: var(--font-sans-ar) !important; }
+
+/* Phone numbers stay LTR in Arabic/RTL layouts */
+.ltr-num,
+[dir="rtl"] .ltr-num {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+[dir="rtl"] input[type="tel"] {
+  direction: ltr;
+  text-align: left;
+}
 
 /* ── Shared utilities ────────────────────────────────────── */
 .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--px); }
@@ -705,6 +720,8 @@ body {
   font-family: var(--font-serif-en); font-size: 30px; font-weight: 300;
   color: var(--espresso); text-decoration: none;
   transition: color 300ms;
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 .locations-phone-num:hover { color: var(--gold); }
 

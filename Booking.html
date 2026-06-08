@@ -268,6 +268,8 @@
   white-space: nowrap; flex-shrink: 0;
 }
 [dir="rtl"] .bk-phone-prefix { border-right: 1.5px solid var(--cream-deep); border-left: none; }
+[dir="rtl"] .bk-phone-wrap { direction: ltr; }
+[dir="rtl"] .bk-phone-wrap .bk-input { text-align: left; font-family: var(--font-sans-en); }
 
 /* Booking summary card */
 .bk-summary {
@@ -428,7 +430,7 @@
       <div class="footer-col">
         <span class="footer-col-title" data-key="foot.con.head">Contact</span>
         <ul>
-          <li><a href="tel:+96522209072" data-key="foot.phone">+965 2220 9072</a></li>
+          <li><a href="tel:+96522209072" class="ltr-num" data-key="foot.phone">+965 2220 9072</a></li>
           <li><a href="https://wa.me/96522209072" target="_blank" rel="noopener" class="footer-wa" data-key="foot.wa">WhatsApp Us</a></li>
         </ul>
       </div>
@@ -477,16 +479,16 @@ const BK = {
 const BRANCHES = [
   { id:'salmiya',  icon:'🏛',  en:'Salmiya',       ar:'السالمية',
     addr_en:'Symphony Mall · Salem Al-Mubarak St\nMezzanine, Shop 12 · +965 2220 9072',
-    addr_ar:'سيمفوني مول · شارع سالم المبارك\nالميزانين، محل 12 · 2220 9072 965+' },
+    addr_ar:'سيمفوني مول · شارع سالم المبارك\nالميزانين، محل 12 · \u200E+965 2220 9072' },
   { id:'agaila',   icon:'✦',   en:'Agaila',         ar:'العقيلة',
     addr_en:'Sama Mall · First Floor\n+965 2220 9072',
-    addr_ar:'سمامول · الطابق الأول\n2220 9072 965+' },
+    addr_ar:'سمامول · الطابق الأول\n\u200E+965 2220 9072' },
   { id:'home',     icon:'⌂',   en:'Home Service',   ar:'خدمة المنزل',
     addr_en:'We come to you — Kuwait City & surrounds',
     addr_ar:'نأتي إليكِ — الكويت والمناطق المحيطة' },
   { id:'sugar',    icon:'◇',   en:'Sugar Coat',     ar:'شوجر كوت',
     addr_en:'Sister brand · Salmiya · +965 2246 2646',
-    addr_ar:'العلامة الشقيقة · السالمية · 2246 2646 965+' }
+    addr_ar:'العلامة الشقيقة · السالمية · \u200E+965 2246 2646' }
 ];
 
 const SERVICES = [
@@ -786,9 +788,9 @@ function renderDetails(c) {
           </div>
           <div class="bk-form-group">
             <label class="bk-label" for="bk-phone">${t('Phone Number','رقم الهاتف')}<span class="bk-required">*</span></label>
-            <div class="bk-phone-wrap">
+            <div class="bk-phone-wrap ltr-num">
               <span class="bk-phone-prefix">+965</span>
-              <input class="bk-input" id="bk-phone" type="tel" placeholder="${t('XXXX XXXX','XXXX XXXX')}" value="${BK.phone}" autocomplete="tel" style="border-left:none;flex:1" maxlength="8" />
+              <input class="bk-input" id="bk-phone" type="tel" dir="ltr" inputmode="numeric" placeholder="${t('XXXX XXXX','XXXX XXXX')}" value="${BK.phone}" autocomplete="tel" style="border-left:none;flex:1" maxlength="8" />
             </div>
             <span class="bk-field-error" id="err-phone"></span>
           </div>
