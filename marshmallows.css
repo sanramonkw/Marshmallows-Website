@@ -226,10 +226,10 @@ body {
 
 .hero-left {
   display: flex; flex-direction: column; justify-content: center;
-  padding: 120px var(--px) 120px clamp(32px, 6vw, 120px);
+  padding-block: 120px;
+  padding-inline: clamp(32px, 6vw, 120px) var(--px);
   position: relative;
 }
-[dir="rtl"] .hero-left { padding: 120px clamp(32px, 6vw, 120px) 120px var(--px); }
 
 .hero-eyebrow { margin-bottom: 28px; }
 
@@ -443,7 +443,10 @@ body {
 /* Landscape tablet — keep two columns but tighter */
 @media (max-width: 1080px) and (min-width: 861px) {
   #hero { grid-template-columns: 53% 47%; }
-  .hero-left { padding: 104px clamp(24px, 4vw, 56px) 104px clamp(28px, 5vw, 72px); }
+  .hero-left {
+    padding-block: 104px;
+    padding-inline: clamp(28px, 5vw, 72px) clamp(24px,  4vw, 56px);
+  }
   .hero-subtitle { margin-bottom: 36px; }
 }
 
@@ -456,24 +459,27 @@ body {
   }
   .hero-right {
     order: -1;
-    min-height: 500px;
+    min-height: 400px;
   }
   .hero-card--a { width: 44%; left: 5%; top: calc(90px + 3%); }
   .hero-card--b { width: 34%; right: 5%; top: calc(90px + 1%); }
   .hero-card--c { width: 30%; left: 30%; top: calc(90px + 44%); }
   .hero-left {
-    padding: clamp(28px, 6vw, 48px) clamp(24px, 6vw, 56px) clamp(56px, 9vw, 88px);
+    padding-block: clamp(20px, 4vw, 32px) clamp(40px, 7vw, 56px);
+    padding-inline: clamp(24px, 6vw, 56px);
     align-items: flex-start;
+    justify-content: flex-start;
   }
-  .hero-eyebrow { margin-bottom: 20px; }
-  .hero-subtitle { margin-bottom: 36px; }
+  .hero-eyebrow { margin-bottom: 14px; }
+  .hero-title { margin-bottom: 18px; }
+  .hero-subtitle { margin-bottom: 28px; }
   .hero-scroll { display: none; }
   .hero-title { font-size: clamp(40px, 9vw, 64px); }
 
 }
 
 @media (max-width: 480px) {
-  .hero-right { min-height: 420px; }
+  .hero-right { min-height: 340px; }
   .hero-card--a { width: 46%; left: 4%; top: calc(90px + 3%); }
   .hero-card--b { width: 36%; right: 4%; top: calc(90px + 1%); }
   .hero-card--c { display: none; }
@@ -657,6 +663,13 @@ body {
 }
 [data-lang="ar"] .gallery-title { font-family: var(--font-serif-ar); }
 .gallery-eyebrow { margin-bottom: 16px; }
+
+.gallery-teaser {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 44px;
+}
 
 .gallery-grid { columns: 4; column-gap: 10px; }
 .gallery-item { break-inside: avoid; margin-bottom: 10px; overflow: hidden; }
@@ -850,4 +863,75 @@ body {
 @media (max-width: 600px) {
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* Homepage — tighter vertical rhythm (EN + AR) */
+@media (max-width: 860px) {
+  #about,
+  #services,
+  #gallery,
+  #locations {
+    padding-block: clamp(44px, 6vw, 64px);
+  }
+
+  #footer { padding-block: 56px 32px; }
+
+  .about-grid { gap: 28px; }
+  .about-content { padding-block: 0; }
+  .about-eyebrow { margin-bottom: 12px; }
+  .about-title { margin-bottom: 20px; }
+  .about-rule { margin-bottom: 20px; }
+  .about-text p { margin-bottom: 14px; }
+  .about-stats { margin-top: 32px; padding-top: 28px; gap: 24px; }
+
+  .services-header { margin-bottom: 36px; }
+  .services-eyebrow { margin-bottom: 10px; }
+  .svc-content { padding: 32px 20px; }
+  .svc-content h3 { margin-bottom: 14px; }
+  .svc-desc { margin-bottom: 24px; }
+  .svc-details { margin-bottom: 28px; }
+
+  .gallery-header { margin-bottom: 32px; }
+  .gallery-eyebrow { margin-bottom: 10px; }
+  .gallery-teaser { gap: 12px; margin-bottom: 28px; }
+
+  .locations-top { margin-bottom: 32px; gap: 20px; }
+  .locations-eyebrow { margin-bottom: 10px; }
+  .loc-card { padding: clamp(28px, 4vw, 40px); }
+  .loc-area { margin-bottom: 28px; }
+
+  .footer-grid { gap: 36px; margin-bottom: 40px; }
+  .footer-brand-logo { margin-bottom: 16px; }
+  .footer-tagline { margin-bottom: 24px; }
+  .footer-col-title { margin-bottom: 16px; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-bottom { padding-top: 24px; }
+}
+
+@media (max-width: 480px) {
+  #about,
+  #services,
+  #gallery,
+  #locations {
+    padding-block: clamp(36px, 5vw, 52px);
+  }
+
+  .hero-left {
+    padding-block: clamp(16px, 3.5vw, 24px) clamp(32px, 6vw, 44px);
+  }
+  .hero-eyebrow { margin-bottom: 12px; }
+  .hero-title { margin-bottom: 14px; }
+  .hero-subtitle { margin-bottom: 22px; }
+
+  .about-grid { gap: 22px; }
+  .about-stats { margin-top: 24px; padding-top: 22px; gap: 18px; }
+
+  .services-header { margin-bottom: 28px; }
+  .svc-content { padding: 28px 18px; }
+
+  .gallery-header { margin-bottom: 24px; }
+  .gallery-teaser { gap: 10px; margin-bottom: 22px; }
+
+  .locations-top { margin-bottom: 24px; }
+  .loc-area { margin-bottom: 22px; }
 }
