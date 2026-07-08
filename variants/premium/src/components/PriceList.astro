@@ -1,0 +1,43 @@
+---
+/**
+ * Category price list — presented as a spa menu carte.
+ * Accessible accordion (native <details>), first category open;
+ * items are typographic rows with dotted leaders and end-aligned prices.
+ */
+import type { PriceCategory } from '../data/services';
+
+interface Props {
+  categories: PriceCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="mx-auto max-w-3xl rounded-3xl border border-hairline bg-cream px-4 py-2 shadow-plush sm:px-10 sm:py-6">
+  {categories.map((cat, i) => (
+    <details class="group border-b border-hairline last:border-b-0" open={i === 0}>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+        <span class="font-display text-xl text-ink transition-colors group-hover:text-rosewood sm:text-2xl">
+          {cat.category}
+        </span>
+        <span
+          class="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-hairline text-sm text-rosewood transition-transform duration-300 group-open:rotate-45"
+          aria-hidden="true"
+        >+</span>
+      </summary>
+      <ul class="pb-6 pt-1">
+        {cat.items.map((item) =>
+          item.name ? (
+            <li class="carte-item">
+              <span class="carte-name">{item.name}</span>
+              <span class="carte-dots" aria-hidden="true"></span>
+              <span class="carte-price">{item.price}</span>
+            </li>
+          ) : (
+            <li class="py-2 text-sm italic text-ink-soft">{item.note}</li>
+          )
+        )}
+      </ul>
+    </details>
+  ))}
+</div>

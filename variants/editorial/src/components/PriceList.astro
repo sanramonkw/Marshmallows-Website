@@ -1,0 +1,60 @@
+---
+/**
+ * EDITORIAL carte — the price list set like a fine spa menu:
+ * numbered category headings (Arabic-Indic folios in AR), hairline
+ * rules, dotted leaders and a KD price column. A small typographic
+ * index at the top jumps between categories. Content verbatim from
+ * src/data (same data model).
+ */
+import type { PriceCategory } from '../data/services';
+import type { Locale } from '../i18n/ui';
+import { folio } from '../i18n/utils';
+
+interface Props {
+  categories: PriceCategory[];
+  locale: Locale;
+}
+
+const { categories, locale } = Astro.props;
+const slug = (i: number) => `carte-${i + 1}`;
+---
+
+<div class="mx-auto max-w-3xl">
+  <!-- typographic index -->
+  <nav class="mb-14 border-y border-hairline py-5" aria-label={locale === 'ar' ? 'فهرس الخدمات' : 'Service index'}>
+    <ol class="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-[0.8125rem] font-bold">
+      {categories.map((cat, i) => (
+        <li>
+          <a href={`#${slug(i)}`} class="text-ink-soft transition-colors hover:text-rose">
+            <span class="folio me-1.5" aria-hidden="true">{folio(i + 1, locale)}</span>{cat.category}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="space-y-16">
+    {categories.map((cat, i) => (
+      <section id={slug(i)} class="scroll-mt-28">
+        <div class="mb-6 flex items-baseline gap-4">
+          <span class="folio text-xl" aria-hidden="true">{folio(i + 1, locale)}</span>
+          <h2 class="display text-2xl font-bold md:text-3xl">{cat.category}</h2>
+          <hr class="rule mb-1 flex-1 self-end" />
+        </div>
+        <ul class="space-y-3">
+          {cat.items.map((item) =>
+            item.name ? (
+              <li class="carte-row">
+                <span class="text-ink">{item.name}</span>
+                <span class="leader" aria-hidden="true"></span>
+                <span class="carte-price">{item.price}</span>
+              </li>
+            ) : (
+              <li class="py-1 text-sm italic text-ink-soft">{item.note}</li>
+            )
+          )}
+        </ul>
+      </section>
+    ))}
+  </div>
+</div>

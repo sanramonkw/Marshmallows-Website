@@ -1,0 +1,31 @@
+---
+/**
+ * BOLD variant gallery — tilted, overlapping polaroid mood-board.
+ * Same images/links as master; tilt straightens on hover, static for
+ * prefers-reduced-motion (tilts stay but don't animate).
+ */
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+const tilts = ['tilt-a', 'tilt-b', 'tilt-c', 'tilt-d'];
+---
+
+<div class="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-7">
+  {images.map((img, i) => (
+    <a
+      href={img.src}
+      target="_blank"
+      rel="noopener"
+      class={`card-pop block overflow-hidden p-2 pb-3 ${tilts[i % 4]} ${i % 3 === 1 ? 'md:mt-8' : ''}`}
+    >
+      <img
+        src={img.src}
+        alt={img.alt}
+        loading="lazy"
+        class="w-full rounded-2xl border-2 border-plum/10 object-cover"
+      />
+    </a>
+  ))}
+</div>

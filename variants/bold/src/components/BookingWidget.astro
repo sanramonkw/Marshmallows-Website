@@ -1,0 +1,620 @@
+---
+/**
+ * PHASE 2 — Native Salonist booking widget (lightweight vanilla-TS island).
+ *
+ * Reimplements the flow of the owner's `salonist-appointment` WP plugin
+ * (branch → service → date/time → details → confirm) against our own
+ * server-side proxy at /api/salonist/* (see salonist-plugin/ANALYSIS.md and
+ * src/lib/salonist.ts). No React, no payment step — pay at salon, exactly
+ * like the live site.
+ *
+ * Graceful degradation: if the API is not configured (no SALONIST_DOMAIN_ID
+ * at runtime) or any call fails, the widget collapses into a friendly note —
+ * the WhatsApp/phone fallback card on BookingPage always remains.
+ */
+import type { Locale, UIKey } from '../i18n/ui';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+// Serialize only the bk.* strings the client script needs.
+const strings = Object.fromEntries(
+  (Object.keys(ui[locale]) as UIKey[])
+    .filter((k) => k.startsWith('bk.'))
+    .map((k) => [k.slice(3), ui[locale][k]]),
+);
+const config = { locale, strings };
+---
+
+<div
+  id="booking-widget"
+  class="card-pop p-5 sm:p-8"
+  data-locale={locale}
+>
+  <script type="application/json" id="bw-config" set:html={JSON.stringify(config)} />
+  <ol id="bw-steps" class="empty:hidden mb-8 flex items-center justify-center gap-1 text-xs font-bold sm:gap-2 sm:text-sm" aria-hidden="true"></ol>
+  <div id="bw-body" aria-live="polite">
+    <p class="py-12 text-center text-black/50">{ui[locale]['bk.loading']}</p>
+  </div>
+</div>
+
+<script>
+  type Branch = { id: string; name: string; address: string; staffSelect: boolean };
+  type Service = { id: string; name: string; price: number; duration: number };
+  type Category = { id: string; name: string; services: Service[] };
+  type Staff = { id: string; name: string; image: string };
+
+  const widget = document.getElementById('booking-widget');
+  if (widget) {
+    const cfg = JSON.parse(document.getElementById('bw-config')!.textContent || '{}');
+    const T: Record<string, string> = cfg.strings || {};
+    const locale: string = cfg.locale || 'ar';
+    const intl = locale === 'ar' ? 'ar' : 'en';
+    const stepsEl = document.getElementById('bw-steps')!;
+    const body = document.getElementById('bw-body')!;
+
+    const st = {
+      step: 1 as number,
+      branches: [] as Branch[],
+      branch: null as Branch | null,
+      categories: [] as Category[],
+      category: null as Category | null,
+      service: null as Service | null,
+      staff: [] as Staff[],
+      staffId: 'any',
+      closedDays: [] as number[],
+      maxAdvance: 30,
+      month: { y: new Date().getFullYear(), m: new Date().getMonth() },
+      date: '' as string, // YYYY-MM-DD
+      slots: null as string[] | null,
+      slotsLoading: false,
+      time: '',
+      customer: { name: '', phone: '', email: '' },
+      submitting: false,
+      error: '',
+      result: null as { orderId: string } | null,
+    };
+
+    const esc = (s: unknown) =>
+      String(s ?? '').replace(/[&<>"']/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+      );
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const ymd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const money = (n: number) =>
+      `${Number.isInteger(n) ? n : n.toFixed(2)} ${T.kd}`;
+    const fmtTime = (t: string) =>
+      locale === 'ar' ? t.replace(/\bAM\b/g, T.am).replace(/\bPM\b/g, T.pm) : t;
+    const fmtDate = (iso: string) => {
+      const [y, m, d] = iso.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString(intl, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    };
+
+    async function api(path: string, init?: RequestInit) {
+      // The site is built with trailingSlash: 'always' — it applies to API
+      // routes too (no-slash URLs 301, which would downgrade POSTs to GET).
+      const res = await fetch(`/api/salonist${path.replace(/^\/([a-z]+)/, '/$1/')}`, init);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data || data.ok !== true) {
+        throw new Error((data && data.error) || `http_${res.status}`);
+      }
+      return data;
+    }
+
+    /* ---------------- renderers ---------------- */
+
+    const STEPS = ['stepBranch', 'stepService', 'stepTime', 'stepDetails', 'stepConfirm'];
+
+    function renderSteps() {
+      if (st.result) {
+        stepsEl.innerHTML = '';
+        return;
+      }
+      stepsEl.innerHTML = STEPS.map((key, i) => {
+        const n = i + 1;
+        const active = n === st.step;
+        const done = n < st.step;
+        return `<li class="flex items-center gap-1 sm:gap-2">
+          <span class="flex h-7 w-7 items-center justify-center rounded-full ${
+            active
+              ? 'bg-pink text-white'
+              : done
+                ? 'bg-brown-deep text-white'
+                : 'bg-pink-pale text-black/40'
+          }">${n}</span>
+          <span class="${active ? 'text-pink' : 'text-black/40'} hidden sm:inline">${esc(T[key])}</span>
+        </li>${n < 5 ? '<li class="h-px w-3 bg-pink-pale sm:w-6" role="presentation"></li>' : ''}`;
+      }).join('');
+    }
+
+    const heading = (text: string) =>
+      `<h2 class="mb-6 text-center text-xl font-bold text-ink">${esc(text)}</h2>`;
+    const backBtn = (action: string, label = T.back) =>
+      `<button type="button" data-action="${action}" class="rounded-full border border-pink px-6 py-2 font-bold text-pink transition-colors hover:bg-pink-pale">${esc(label)}</button>`;
+    const errorBox = () =>
+      st.error
+        ? `<p class="mb-4 rounded-xl bg-pink-card p-3 text-center text-sm font-bold text-pink">${esc(st.error)}</p>`
+        : '';
+    const loadingBox = () =>
+      `<p class="py-12 text-center text-black/50">${esc(T.loading)}</p>`;
+
+    function renderOffline() {
+      stepsEl.innerHTML = '';
+      body.innerHTML = `<p class="py-8 text-center text-lg leading-relaxed">${esc(T.offline)}</p>`;
+    }
+
+    function renderBranches() {
+      body.innerHTML =
+        heading(T.chooseBranch) +
+        errorBox() +
+        `<div class="grid gap-4 sm:grid-cols-2">` +
+        st.branches
+          .map(
+            (b, i) => `
+        <button type="button" data-action="branch" data-i="${i}"
+          class="rounded-2xl border-2 ${st.branch?.id === b.id ? 'border-pink bg-pink-card' : 'border-pink-pale bg-white'} p-6 text-start transition-all hover:border-pink hover:shadow-md">
+          <span class="block text-lg font-bold text-ink">${esc(b.name) || esc(T.stepBranch)}</span>
+          ${b.address ? `<span class="mt-1 block text-sm text-black/50">${esc(b.address)}</span>` : ''}
+        </button>`,
+          )
+          .join('') +
+        `</div>`;
+    }
+
+    function renderServices() {
+      let inner: string;
+      if (!st.category) {
+        inner =
+          heading(T.chooseCategory) +
+          `<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">` +
+          st.categories
+            .map(
+              (c, i) => `
+          <button type="button" data-action="category" data-i="${i}"
+            class="rounded-2xl border-2 border-pink-pale bg-white p-6 text-start transition-all hover:border-pink hover:shadow-md">
+            <span class="block font-bold text-ink">${esc(c.name)}</span>
+            <span class="mt-1 block text-sm text-black/50">${c.services.length} ${esc(T.treatments)}</span>
+          </button>`,
+            )
+            .join('') +
+          `</div>`;
+      } else {
+        inner =
+          heading(st.category.name) +
+          `<div class="grid gap-3 sm:grid-cols-2">` +
+          st.category.services
+            .map(
+              (s, i) => `
+          <button type="button" data-action="service" data-i="${i}"
+            class="flex items-center justify-between gap-4 rounded-2xl border-2 ${st.service?.id === s.id ? 'border-pink bg-pink-card' : 'border-pink-pale bg-white'} p-4 text-start transition-all hover:border-pink hover:shadow-md">
+            <span>
+              <span class="block font-bold text-ink">${esc(s.name)}</span>
+              ${s.duration ? `<span class="mt-1 block text-xs text-black/50">${s.duration} ${esc(T.minutes)}</span>` : ''}
+            </span>
+            <span class="shrink-0 font-bold text-brown-deep">${money(s.price)}</span>
+          </button>`,
+            )
+            .join('') +
+          `</div>` +
+          `<div class="mt-6 text-center">${backBtn('back-to-categories', T.backToCategories)}</div>`;
+      }
+      body.innerHTML =
+        errorBox() +
+        inner +
+        (st.categories.length && !st.category
+          ? `<div class="mt-8 text-center">${backBtn('back')}</div>`
+          : '');
+    }
+
+    function calendarHtml() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const max = new Date(today);
+      max.setDate(max.getDate() + st.maxAdvance);
+      const first = new Date(st.month.y, st.month.m, 1);
+      const daysInMonth = new Date(st.month.y, st.month.m + 1, 0).getDate();
+      const monthLabel = first.toLocaleDateString(intl, { month: 'long', year: 'numeric' });
+
+      // localized weekday header, Sunday first (getDay() === 0)
+      const base = new Date(2026, 5, 28); // a Sunday
+      let head = '';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(base);
+        d.setDate(base.getDate() + i);
+        head += `<span class="text-xs font-bold text-black/40">${esc(d.toLocaleDateString(intl, { weekday: 'narrow' }))}</span>`;
+      }
+
+      let cells = '';
+      for (let i = 0; i < first.getDay(); i++) cells += '<span></span>';
+      for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(st.month.y, st.month.m, day);
+        const iso = ymd(d);
+        const disabled = d < today || d > max || st.closedDays.includes(d.getDay());
+        const selected = st.date === iso;
+        cells += disabled
+          ? `<span class="flex h-9 items-center justify-center rounded-lg text-sm text-black/25">${day}</span>`
+          : `<button type="button" data-action="date" data-date="${iso}"
+              class="flex h-9 items-center justify-center rounded-lg text-sm font-bold transition-colors ${
+                selected ? 'bg-pink text-white' : 'bg-pink-card text-ink hover:bg-pink-pale'
+              }">${day}</button>`;
+      }
+
+      const canPrev = new Date(st.month.y, st.month.m + 1, 0) > today;
+      const canNext = new Date(st.month.y, st.month.m + 1, 1) <= max;
+      return `
+        <div class="mb-3 flex items-center justify-between">
+          <button type="button" data-action="month" data-dir="-1" ${canPrev ? '' : 'disabled'}
+            class="rounded-full px-3 py-1 font-bold text-pink disabled:opacity-25" aria-label="prev">&lsaquo;</button>
+          <span class="font-bold text-ink">${esc(monthLabel)}</span>
+          <button type="button" data-action="month" data-dir="1" ${canNext ? '' : 'disabled'}
+            class="rounded-full px-3 py-1 font-bold text-pink disabled:opacity-25" aria-label="next">&rsaquo;</button>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center" dir="ltr">${head}${cells}</div>`;
+    }
+
+    function slotsHtml() {
+      if (st.slotsLoading) return loadingBox();
+      if (!st.date)
+        return `<p class="py-8 text-center text-sm text-black/50">${esc(T.pickDateFirst)}</p>`;
+      if (!st.slots || st.slots.length === 0)
+        return `<p class="py-8 text-center text-sm text-black/50">${esc(T.noSlots)}</p>`;
+      return (
+        `<div class="grid max-h-64 grid-cols-2 gap-2 overflow-y-auto sm:grid-cols-3">` +
+        st.slots
+          .map(
+            (t) => `
+        <button type="button" data-action="slot" data-time="${esc(t)}"
+          class="rounded-xl border-2 px-2 py-2 text-sm font-bold transition-colors ${
+            st.time === t
+              ? 'border-brown-deep bg-brown-deep text-white'
+              : 'border-pink-pale bg-white text-ink hover:border-brown-deep'
+          }">${esc(fmtTime(t))}</button>`,
+          )
+          .join('') +
+        `</div>`
+      );
+    }
+
+    function renderDateTime() {
+      const staffSelect =
+        st.branch?.staffSelect && st.staff.length
+          ? `<label class="mb-4 block">
+              <span class="mb-1 block text-sm font-bold text-ink">${esc(T.specialist)}</span>
+              <select data-action="staff" class="w-full rounded-xl border-2 border-pink-pale bg-white p-3">
+                <option value="any" ${st.staffId === 'any' ? 'selected' : ''}>${esc(T.noPreference)}</option>
+                ${st.staff
+                  .map(
+                    (s) =>
+                      `<option value="${esc(s.id)}" ${st.staffId === s.id ? 'selected' : ''}>${esc(s.name)}</option>`,
+                  )
+                  .join('')}
+              </select>
+            </label>`
+          : '';
+      body.innerHTML =
+        heading(T.pickDate) +
+        errorBox() +
+        staffSelect +
+        `<div class="grid gap-6 md:grid-cols-2">
+          <div class="rounded-2xl bg-pink-card/60 p-4">${calendarHtml()}</div>
+          <div>
+            <h3 class="mb-3 text-center font-bold text-ink">${esc(T.availableSlots)}</h3>
+            ${slotsHtml()}
+          </div>
+        </div>
+        <div class="mt-8 flex items-center justify-center gap-4">
+          ${backBtn('back')}
+          <button type="button" data-action="to-details" ${st.time ? '' : 'disabled'}
+            class="rounded-full bg-pink px-8 py-2 font-bold text-white transition-colors hover:bg-brown-deep disabled:cursor-not-allowed disabled:opacity-40">${esc(T.next)}</button>
+        </div>`;
+    }
+
+    function renderDetails() {
+      body.innerHTML =
+        heading(T.yourDetails) +
+        errorBox() +
+        `<form id="bw-form" class="mx-auto max-w-md space-y-4" novalidate>
+          <label class="block">
+            <span class="mb-1 block text-sm font-bold text-ink">${esc(T.fullName)} *</span>
+            <input name="name" type="text" required value="${esc(st.customer.name)}"
+              class="w-full rounded-xl border-2 border-pink-pale bg-white p-3 focus:border-pink focus:outline-none" />
+          </label>
+          <label class="block">
+            <span class="mb-1 block text-sm font-bold text-ink">${esc(T.phone)} *</span>
+            <input name="phone" type="tel" dir="ltr" required value="${esc(st.customer.phone)}"
+              placeholder="+965 …"
+              class="w-full rounded-xl border-2 border-pink-pale bg-white p-3 text-start focus:border-pink focus:outline-none" />
+          </label>
+          <label class="block">
+            <span class="mb-1 block text-sm font-bold text-ink">${esc(T.email)}</span>
+            <input name="email" type="email" dir="ltr" value="${esc(st.customer.email)}"
+              class="w-full rounded-xl border-2 border-pink-pale bg-white p-3 text-start focus:border-pink focus:outline-none" />
+          </label>
+          <div class="flex items-center justify-center gap-4 pt-2">
+            ${backBtn('back')}
+            <button type="submit" class="rounded-full bg-pink px-8 py-2 font-bold text-white transition-colors hover:bg-brown-deep">${esc(T.next)}</button>
+          </div>
+        </form>`;
+    }
+
+    function renderConfirm() {
+      const staffName =
+        st.staffId === 'any'
+          ? T.noPreference
+          : st.staff.find((s) => s.id === st.staffId)?.name || T.noPreference;
+      const row = (label: string, value: string) => `
+        <div class="flex items-start justify-between gap-4 border-b border-pink-pale/60 py-3 last:border-0">
+          <span class="text-sm font-bold text-black/50">${esc(label)}</span>
+          <span class="text-end font-bold text-ink">${value}</span>
+        </div>`;
+      body.innerHTML =
+        heading(T.confirmTitle) +
+        errorBox() +
+        `<div class="mx-auto max-w-md rounded-2xl bg-pink-card/60 p-6">
+          ${row(T.branch, esc(st.branch?.name || ''))}
+          ${row(T.service, esc(st.service?.name || ''))}
+          ${row(T.specialist, esc(staffName))}
+          ${row(T.dateTime, `${esc(fmtDate(st.date))}<br/><span dir="ltr">${esc(fmtTime(st.time))}</span>`)}
+          ${row(T.customer, `${esc(st.customer.name)}<br/><span dir="ltr">${esc(st.customer.phone)}</span>`)}
+          ${row(T.total, esc(money(st.service?.price || 0)))}
+        </div>
+        <p class="mx-auto mt-4 max-w-md text-center text-sm text-black/60">${esc(T.payAtSalon)}</p>
+        <div class="mt-8 flex items-center justify-center gap-4">
+          ${backBtn('back')}
+          <button type="button" data-action="book" ${st.submitting ? 'disabled' : ''}
+            class="rounded-full bg-pink px-8 py-3 font-bold text-white transition-colors hover:bg-brown-deep disabled:opacity-50">
+            ${esc(st.submitting ? T.submitting : T.confirmBook)}</button>
+        </div>`;
+    }
+
+    function renderSuccess() {
+      renderSteps();
+      body.innerHTML = `
+        <div class="py-8 text-center">
+          <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brown-deep text-3xl text-white">&#10003;</div>
+          <h2 class="mb-3 text-2xl font-bold text-ink">${esc(T.successTitle)}</h2>
+          <p class="mx-auto max-w-md leading-relaxed text-black/70">${esc(T.successMsg)}</p>
+          ${
+            st.result?.orderId
+              ? `<p class="mt-4 font-bold text-brown-deep">${esc(T.successRef)}: <span dir="ltr">${esc(st.result.orderId)}</span></p>`
+              : ''
+          }
+          <button type="button" data-action="restart"
+            class="mt-8 rounded-full bg-pink px-8 py-3 font-bold text-white transition-colors hover:bg-brown-deep">${esc(T.bookAnother)}</button>
+        </div>`;
+    }
+
+    function render() {
+      renderSteps();
+      if (st.result) return renderSuccess();
+      switch (st.step) {
+        case 1:
+          return renderBranches();
+        case 2:
+          return renderServices();
+        case 3:
+          return renderDateTime();
+        case 4:
+          return renderDetails();
+        case 5:
+          return renderConfirm();
+      }
+    }
+
+    /* ---------------- actions ---------------- */
+
+    async function loadSlots() {
+      if (!st.date || !st.branch || !st.service) return;
+      st.slotsLoading = true;
+      st.slots = null;
+      st.time = '';
+      render();
+      try {
+        const q = new URLSearchParams({
+          branch: st.branch.id,
+          service: st.service.id,
+          date: st.date,
+          staff: st.staffId,
+          duration: String(st.service.duration || ''),
+        });
+        const data = await api(`/slots?${q}`);
+        st.slots = data.slots;
+      } catch {
+        st.slots = [];
+      }
+      st.slotsLoading = false;
+      render();
+    }
+
+    async function selectBranch(b: Branch) {
+      st.branch = b;
+      st.category = null;
+      st.service = null;
+      st.error = '';
+      body.innerHTML = loadingBox();
+      try {
+        const [servicesData, hoursData] = await Promise.all([
+          api(`/services?branch=${encodeURIComponent(b.id)}`),
+          api(`/hours?branch=${encodeURIComponent(b.id)}`).catch(() => null),
+        ]);
+        st.categories = servicesData.categories;
+        if (hoursData) {
+          st.closedDays = hoursData.closedDays || [];
+          st.maxAdvance = hoursData.maxAdvance || 30;
+        }
+        st.step = 2;
+      } catch {
+        st.error = T.errorMsg;
+        st.step = 1;
+      }
+      render();
+    }
+
+    async function selectService(s: Service) {
+      st.service = s;
+      st.staff = [];
+      st.staffId = 'any';
+      st.date = '';
+      st.slots = null;
+      st.time = '';
+      st.error = '';
+      st.month = { y: new Date().getFullYear(), m: new Date().getMonth() };
+      st.step = 3;
+      render();
+      if (st.branch?.staffSelect) {
+        try {
+          const data = await api(
+            `/staff?branch=${encodeURIComponent(st.branch.id)}&service=${encodeURIComponent(s.id)}`,
+          );
+          st.staff = data.staff;
+          if (st.step === 3) render();
+        } catch {
+          /* staff list is optional — "no preference" still works */
+        }
+      }
+    }
+
+    async function submitBooking() {
+      if (st.submitting || !st.branch || !st.service) return;
+      st.submitting = true;
+      st.error = '';
+      render();
+      try {
+        const data = await api('/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            branchId: st.branch.id,
+            service: { id: st.service.id, name: st.service.name, price: st.service.price },
+            staffId: st.staffId,
+            date: st.date,
+            time: st.time,
+            customer: st.customer,
+          }),
+        });
+        st.result = { orderId: data.orderId || '' };
+      } catch {
+        st.error = T.errorMsg;
+      }
+      st.submitting = false;
+      render();
+    }
+
+    widget.addEventListener('click', (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLElement>('[data-action]');
+      if (!btn || btn.hasAttribute('disabled')) return;
+      const action = btn.dataset.action!;
+      const i = Number(btn.dataset.i ?? -1);
+      switch (action) {
+        case 'branch':
+          selectBranch(st.branches[i]);
+          break;
+        case 'category':
+          st.category = st.categories[i];
+          render();
+          break;
+        case 'back-to-categories':
+          st.category = null;
+          render();
+          break;
+        case 'service':
+          if (st.category) selectService(st.category.services[i]);
+          break;
+        case 'month': {
+          const dir = Number(btn.dataset.dir);
+          const m = st.month.m + dir;
+          st.month = { y: st.month.y + Math.floor(m / 12), m: ((m % 12) + 12) % 12 };
+          render();
+          break;
+        }
+        case 'date':
+          st.date = btn.dataset.date!;
+          loadSlots();
+          break;
+        case 'slot':
+          st.time = btn.dataset.time!;
+          render();
+          break;
+        case 'to-details':
+          if (st.time) {
+            st.step = 4;
+            st.error = '';
+            render();
+          }
+          break;
+        case 'book':
+          submitBooking();
+          break;
+        case 'restart':
+          st.result = null;
+          st.category = null;
+          st.service = null;
+          st.date = '';
+          st.slots = null;
+          st.time = '';
+          st.error = '';
+          st.step = st.branches.length > 1 ? 1 : 2;
+          render();
+          break;
+        case 'back':
+          st.error = '';
+          if (st.step === 2) st.step = 1;
+          else if (st.step > 2) st.step -= 1;
+          render();
+          break;
+      }
+    });
+
+    widget.addEventListener('change', (ev) => {
+      const sel = ev.target as HTMLSelectElement;
+      if (sel.matches('[data-action="staff"]')) {
+        st.staffId = sel.value;
+        if (st.date) loadSlots();
+      }
+    });
+
+    widget.addEventListener('submit', (ev) => {
+      const form = ev.target as HTMLFormElement;
+      if (form.id !== 'bw-form') return;
+      ev.preventDefault();
+      const fd = new FormData(form);
+      st.customer = {
+        name: String(fd.get('name') || '').trim(),
+        phone: String(fd.get('phone') || '').trim(),
+        email: String(fd.get('email') || '').trim(),
+      };
+      if (st.customer.name.length < 2) {
+        st.error = T.nameInvalid;
+      } else if (!/^\+?[0-9\s-]{7,15}$/.test(st.customer.phone)) {
+        st.error = T.phoneInvalid;
+      } else {
+        st.error = '';
+        st.step = 5;
+      }
+      render();
+    });
+
+    /* ---------------- init ---------------- */
+    (async () => {
+      try {
+        const data = await api('/branches');
+        st.branches = data.branches;
+        if (st.branches.length === 1) {
+          await selectBranch(st.branches[0]);
+        } else {
+          render();
+        }
+      } catch {
+        renderOffline();
+      }
+    })();
+  }
+</script>

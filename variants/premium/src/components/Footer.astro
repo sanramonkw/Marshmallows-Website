@@ -1,0 +1,60 @@
+---
+import type { Locale } from '../i18n/ui';
+import { business } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import BookingCTA from './BookingCTA.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const [agaila, salmiya] = business.branches;
+---
+
+<!-- Premium maison footer: deep warm ink field, cream type, hairline rules -->
+<footer class="mt-20 bg-[#332a25] text-[#efe4dc]">
+  <div class="mx-auto max-w-7xl px-6 pb-10 pt-16 md:px-10">
+    <div class="mb-12 flex flex-col items-center gap-5 text-center">
+      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-16 w-auto rounded-xl bg-cream/95 p-2" loading="lazy" width="240" height="112" />
+      <div class="flourish w-full max-w-64 opacity-60"><span class="flourish-gem"></span></div>
+    </div>
+
+    <div class="grid gap-10 text-sm leading-relaxed md:grid-cols-3">
+      <div>
+        <h3 class="font-display mb-4 text-xl text-pink-light">{t('footer.branchAgaila')}</h3>
+        <p class="leading-loose text-[#d9c9bf]">
+          {agaila.lines.map((l) => <>{l}<br /></>)}
+          <span dir="ltr">☎ +965 2220 9072</span><br />
+          <a href={agaila.mapUrl} class="underline decoration-pink-light/50 underline-offset-4 transition-colors hover:text-pink-light" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-display mb-4 text-xl text-pink-light">{t('footer.branchSalmiya')}</h3>
+        <p class="leading-loose text-[#d9c9bf]">
+          {salmiya.lines.map((l) => <>{l}<br /></>)}
+          <span dir="ltr">☎ +965 2220 9072</span><br />
+          <a href={salmiya.mapUrl} class="underline decoration-pink-light/50 underline-offset-4 transition-colors hover:text-pink-light" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-display mb-4 text-xl text-pink-light">{t('footer.getInTouch')}</h3>
+        <p class="mb-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[#d9c9bf]">
+          <a href={`mailto:${business.email}`} class="underline decoration-pink-light/50 underline-offset-4 transition-colors hover:text-pink-light">{business.email}</a>
+          <a href={business.instagram} rel="noopener" target="_blank" class="font-bold underline decoration-pink-light/50 underline-offset-4 transition-colors hover:text-pink-light">Instagram</a>
+        </p>
+        <p class="mb-6 text-[#d9c9bf]">
+          <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold underline decoration-pink-light/50 underline-offset-4 transition-colors hover:text-pink-light">WhatsApp</a>
+        </p>
+        <BookingCTA locale={locale} class="!border-pink-light !bg-transparent !text-pink-light !shadow-none hover:!bg-pink-light hover:!text-ink" variant="outline" />
+      </div>
+    </div>
+
+    <div class="mt-14 border-t border-white/10 pt-6 text-center text-xs text-[#bda798]">
+      <p>{t('footer.rights')}</p>
+    </div>
+  </div>
+</footer>

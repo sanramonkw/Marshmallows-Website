@@ -1,0 +1,31 @@
+---
+/**
+ * BOLD variant — animated counter strip built from real business data.
+ * Numbers are rendered statically (final value) so no-JS / reduced-motion
+ * users see the finished figure; BaseLayout's count-up script animates
+ * them on scroll otherwise.
+ */
+interface Stat {
+  value: number;
+  suffix?: string;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+  class?: string;
+}
+
+const { stats, class: className = '' } = Astro.props;
+---
+
+<dl class={`grid grid-cols-1 gap-5 sm:grid-cols-3 ${className}`}>
+  {stats.map((s, i) => (
+    <div class={`card-pop flex flex-col-reverse px-6 py-7 text-center ${['bg-pink-light!', 'bg-white!', 'bg-pink-pale!'][i % 3]}`}>
+      <dt class="mt-2 text-base font-bold text-plum/80">{s.label}</dt>
+      <dd class="text-5xl font-bold text-plum" data-count={s.value} data-suffix={s.suffix ?? ''}>
+        {s.value}{s.suffix ?? ''}
+      </dd>
+    </div>
+  ))}
+</dl>

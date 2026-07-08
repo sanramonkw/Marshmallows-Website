@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="videos"
+  title={`${t('nav.videos')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.videos')} />
+  <section class="py-14">
+    <div class="mx-auto max-w-4xl space-y-10 px-4">
+      <div class="card-pop tilt-c overflow-hidden p-2" data-reveal>
+        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
+          <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="card-pop tilt-b overflow-hidden p-2" data-reveal>
+        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
+          <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+        </video>
+      </div>
+      <p class="text-center text-lg">
+        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum">
+          {t('videos.followInstagram')}
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,53 @@
+---
+/**
+ * PHASE 2 — Native Salonist booking (functionality untouched; editorial
+ * restyle only — the widget island and /api/salonist/* proxy are the same
+ * as the master build; see CLAUDE.md PHASE 2).
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import BookingWidget from '../../components/BookingWidget.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations, folio } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="booking"
+  title={`${t('booking.title')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('booking.title')} subtitle={t('cta.book')} num={folio(5, locale)} />
+
+  <section>
+    <div class="mx-auto max-w-4xl px-5 py-16 lg:px-8 lg:py-20">
+      <BookingWidget locale={locale} />
+
+      <!-- Permanent WhatsApp / phone fallback (was the phase-1 placeholder) -->
+      <div class="mt-12 border-y border-hairline py-10 text-center">
+        <p class="mb-8 text-lg leading-loose">{t('bk.fallbackLead')}</p>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={business.whatsapp}
+            rel="noopener nofollow"
+            target="_blank"
+            class="btn-editorial"
+          >
+            {t('booking.whatsapp')}
+          </a>
+          <a href={business.phoneHref} class="btn-editorial btn-editorial--ghost">
+            {t('booking.call')} <span dir="ltr">{business.phone}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,119 @@
+---
+import type { Locale } from '../i18n/ui';
+import { useTranslations, pathFor, type PageId } from '../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  page: PageId;
+}
+
+const { locale, page } = Astro.props;
+const t = useTranslations(locale);
+
+const servicesChildren: { id: PageId; label: string }[] = [
+  { id: 'salonService', label: t('nav.salonService') },
+  { id: 'partyBooth', label: t('nav.partyBooth') },
+  { id: 'homeService', label: t('nav.homeService') },
+];
+const galleryChildren: { id: PageId; label: string }[] = [
+  { id: 'photos', label: t('nav.photos') },
+  { id: 'videos', label: t('nav.videos') },
+];
+
+const navLink =
+  'inline-block py-1 text-[0.8125rem] font-bold text-ink transition-colors hover:text-rose';
+const activeLink = 'text-rose border-b border-pink';
+---
+
+<header class="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center gap-6 px-5 py-4 lg:px-8">
+    <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
+      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-12 w-auto" width="240" height="112" />
+    </a>
+
+    <nav class="hidden flex-1 items-center justify-center gap-7 lg:flex" aria-label={t('nav.home')}>
+      <a href={pathFor('home', locale)} class:list={[navLink, { [activeLink]: page === 'home' }]}>{t('nav.home')}</a>
+
+      <div class="relative group">
+        <a
+          href={pathFor('services', locale)}
+          class:list={[navLink, { [activeLink]: ['services', 'salonService', 'partyBooth', 'homeService'].includes(page) }]}
+        >{t('nav.services')} <span aria-hidden="true" class="text-pink">↓</span></a>
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="min-w-52 border border-hairline bg-paper py-2">
+            {servicesChildren.map((c) => (
+              <li><a href={pathFor(c.id, locale)} class="block px-5 py-2 text-[0.8125rem] font-bold text-ink hover:bg-pink-card hover:text-rose">{c.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('about', locale)} class:list={[navLink, { [activeLink]: page === 'about' }]}>{t('nav.about')}</a>
+
+      <div class="relative group">
+        <a
+          href={pathFor('photos', locale)}
+          class:list={[navLink, { [activeLink]: ['photos', 'videos'].includes(page) }]}
+        >{t('nav.gallery')} <span aria-hidden="true" class="text-pink">↓</span></a>
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="min-w-52 border border-hairline bg-paper py-2">
+            {galleryChildren.map((c) => (
+              <li><a href={pathFor(c.id, locale)} class="block px-5 py-2 text-[0.8125rem] font-bold text-ink hover:bg-pink-card hover:text-rose">{c.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('contact', locale)} class:list={[navLink, { [activeLink]: page === 'contact' }]}>{t('nav.contact')}</a>
+      <LanguageSwitcher locale={locale} page={page} class="text-[0.8125rem] text-ink-soft" />
+    </nav>
+
+    <div class="ms-auto hidden lg:block">
+      <a href={pathFor('booking', locale)} class="btn-editorial btn-editorial--ghost !px-6 !py-2.5">
+        {t('cta.book')}
+      </a>
+    </div>
+
+    <!-- mobile toggle -->
+    <button
+      id="mobile-nav-toggle"
+      class="ms-auto text-3xl leading-none text-rose lg:hidden"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >☰</button>
+  </div>
+
+  <!-- mobile nav -->
+  <div id="mobile-nav" class="hidden border-t border-hairline bg-paper px-6 py-6 lg:hidden">
+    <ul class="space-y-4 font-bold text-ink">
+      <li><a href={pathFor('home', locale)} class="hover:text-rose">{t('nav.home')}</a></li>
+      <li>
+        <a href={pathFor('services', locale)} class="hover:text-rose">{t('nav.services')}</a>
+        <ul class="ms-4 mt-2 space-y-2 border-s border-hairline ps-4 font-normal">
+          {servicesChildren.map((c) => <li><a href={pathFor(c.id, locale)} class="hover:text-rose">{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('about', locale)} class="hover:text-rose">{t('nav.about')}</a></li>
+      <li>
+        <a href={pathFor('photos', locale)} class="hover:text-rose">{t('nav.gallery')}</a>
+        <ul class="ms-4 mt-2 space-y-2 border-s border-hairline ps-4 font-normal">
+          {galleryChildren.map((c) => <li><a href={pathFor(c.id, locale)} class="hover:text-rose">{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('contact', locale)} class="hover:text-rose">{t('nav.contact')}</a></li>
+      <li><LanguageSwitcher locale={locale} page={page} /></li>
+      <li class="pt-2"><a href={pathFor('booking', locale)} class="btn-editorial">{t('cta.book')}</a></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

@@ -1,0 +1,32 @@
+---
+/**
+ * Editorial plate: photograph in a hairline mat, folio number and title
+ * set as a quiet caption BELOW the image (magazine figure), not overlaid.
+ */
+interface Props {
+  href: string;
+  image: string;
+  title: string;
+  num?: string;
+}
+
+const { href, image, title, num } = Astro.props;
+---
+
+<a href={href} class="group block">
+  <div class="plate overflow-hidden">
+    <div class="aspect-[4/5] overflow-hidden">
+      <img
+        src={image}
+        alt={title}
+        loading="lazy"
+        class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
+      />
+    </div>
+  </div>
+  <div class="mt-4 flex items-baseline gap-3 border-b border-hairline pb-3">
+    {num && <span class="folio text-sm" aria-hidden="true">{num}</span>}
+    <h3 class="text-lg font-bold text-ink transition-colors group-hover:text-rose">{title}</h3>
+    <span class="ms-auto text-pink transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 motion-reduce:transition-none" aria-hidden="true"><span class="rtl:hidden">→</span><span class="hidden rtl:inline">←</span></span>
+  </div>
+</a>

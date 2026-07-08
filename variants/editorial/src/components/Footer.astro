@@ -1,0 +1,58 @@
+---
+import type { Locale } from '../i18n/ui';
+import { business } from '../i18n/ui';
+import { useTranslations, pathFor } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const [agaila, salmiya] = business.branches;
+---
+
+<!-- Editorial colophon: hairline-ruled directory, no card, pink confined to links -->
+<footer class="mt-24 border-t border-hairline bg-pink-card">
+  <div class="mx-auto max-w-6xl px-5 py-14 lg:px-8">
+    <div class="grid gap-10 md:grid-cols-3">
+      <div>
+        <h3 class="eyebrow mb-4">{t('footer.branchAgaila')}</h3>
+        <hr class="rule mb-4 w-10" />
+        <p class="text-sm leading-loose text-ink">
+          {agaila.lines.map((l) => <>{l}<br /></>)}
+          <a href="tel:+96522209072" class="hover:text-rose" dir="ltr">+965 2220 9072</a><br />
+          <a href={agaila.mapUrl} class="text-rose underline decoration-pink/50 hover:decoration-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="eyebrow mb-4">{t('footer.branchSalmiya')}</h3>
+        <hr class="rule mb-4 w-10" />
+        <p class="text-sm leading-loose text-ink">
+          {salmiya.lines.map((l) => <>{l}<br /></>)}
+          <a href="tel:+96522209072" class="hover:text-rose" dir="ltr">+965 2220 9072</a><br />
+          <a href={salmiya.mapUrl} class="text-rose underline decoration-pink/50 hover:decoration-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="eyebrow mb-4">{t('footer.getInTouch')}</h3>
+        <hr class="rule mb-4 w-10" />
+        <p class="mb-2 text-sm leading-loose">
+          <a href={`mailto:${business.email}`} class="text-rose underline decoration-pink/50 hover:decoration-pink">{business.email}</a>
+        </p>
+        <p class="mb-2 text-sm leading-loose">
+          <a href={business.instagram} rel="noopener" target="_blank" class="text-rose underline decoration-pink/50 hover:decoration-pink">Instagram</a>
+        </p>
+        <p class="mb-6 text-sm leading-loose">
+          <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="text-rose underline decoration-pink/50 hover:decoration-pink">WhatsApp</a>
+        </p>
+        <a href={pathFor('booking', locale)} class="btn-editorial">{t('cta.book')}</a>
+      </div>
+    </div>
+
+    <hr class="rule mt-12 mb-6" />
+    <p class="text-center text-xs leading-relaxed text-ink-soft">{t('footer.rights')}</p>
+  </div>
+</footer>

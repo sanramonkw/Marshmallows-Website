@@ -1,0 +1,65 @@
+---
+/**
+ * PHASE 2 — Native Salonist booking.
+ *
+ * The live WordPress site rendered a React booking widget here via the
+ * `salonist-appointment` plugin (mount #salonist-booking-root, REST proxy
+ * /wp-json/salonist/v1). Rebuilt natively:
+ *   - BookingWidget.astro — vanilla-TS island, branch → service → date/time
+ *     → details → confirm flow, bilingual, pay-at-salon only.
+ *   - /api/salonist/* — server-side proxy to the Salonist CRM (needs
+ *     SALONIST_DOMAIN_ID env var; see salonist-plugin/ANALYSIS.md).
+ * The WhatsApp/phone booking card is kept below the widget as a permanent
+ * fallback — if the API is unconfigured or down the widget degrades to a
+ * friendly note and this card still books customers.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import BookingWidget from '../../components/BookingWidget.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="booking"
+  title={`${t('booking.title')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('booking.title')} />
+
+  <section class="relative overflow-hidden py-16 md:py-20">
+    <div class="pointer-events-none absolute -top-20 start-[-8rem] h-[26rem] w-[26rem] rounded-full bg-pink-pale/50 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute bottom-[-10rem] end-[-8rem] h-[26rem] w-[26rem] rounded-full bg-blush-wash blur-3xl" aria-hidden="true"></div>
+
+    <div class="relative mx-auto max-w-4xl px-4">
+      <BookingWidget locale={locale} />
+
+      <!-- Permanent WhatsApp / phone fallback — glass-blur panel -->
+      <div class="glass mt-10 rounded-3xl p-8 text-center shadow-plush md:p-10">
+        <p class="mb-7 text-lg leading-relaxed">{t('bk.fallbackLead')}</p>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={business.whatsapp}
+            rel="noopener nofollow"
+            target="_blank"
+            class="btn-solid"
+          >
+            {t('booking.whatsapp')}
+          </a>
+          <a href={business.phoneHref} class="btn-outline">
+            {t('booking.call')} <span dir="ltr">{business.phone}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

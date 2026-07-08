@@ -1,0 +1,21 @@
+---
+/**
+ * Premium editorial page opener — porcelain field, overline flourish,
+ * display heading (Latin serif / GE SS TV Arabic).
+ */
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-porcelain-deep">
+  <div class="pointer-events-none absolute -top-24 start-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-pink-pale/50 blur-3xl rtl:translate-x-1/2" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-4xl px-4 py-20 text-center md:py-24">
+    {subtitle && <p class="overline-label mb-4">{subtitle}</p>}
+    <h1 class="font-display text-4xl md:text-6xl">{title}</h1>
+    <div class="flourish mx-auto mt-8 max-w-56"><span class="flourish-gem"></span></div>
+  </div>
+</section>

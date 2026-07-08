@@ -1,0 +1,110 @@
+---
+import type { Locale } from '../i18n/ui';
+import { useTranslations, pathFor, type PageId } from '../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import BookingCTA from './BookingCTA.astro';
+
+interface Props {
+  locale: Locale;
+  page: PageId;
+}
+
+const { locale, page } = Astro.props;
+const t = useTranslations(locale);
+
+const servicesChildren: { id: PageId; label: string }[] = [
+  { id: 'salonService', label: t('nav.salonService') },
+  { id: 'partyBooth', label: t('nav.partyBooth') },
+  { id: 'homeService', label: t('nav.homeService') },
+];
+const galleryChildren: { id: PageId; label: string }[] = [
+  { id: 'photos', label: t('nav.photos') },
+  { id: 'videos', label: t('nav.videos') },
+];
+---
+
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-black/5">
+  <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
+    <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
+      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-14 w-auto" width="240" height="112" />
+    </a>
+
+    <nav class="hidden lg:flex flex-1 items-center justify-center gap-6 font-bold text-pink">
+      <a href={pathFor('home', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'home' }]}>{t('nav.home')}</a>
+
+      <div class="relative group">
+        <a href={pathFor('services', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': ['services', 'salonService', 'partyBooth', 'homeService'].includes(page) }]}>
+          {t('nav.services')} ▾
+        </a>
+        <div class="invisible absolute start-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+          <ul class="min-w-44 rounded-lg bg-white p-2 shadow-lg">
+            {servicesChildren.map((c) => (
+              <li><a href={pathFor(c.id, locale)} class="block rounded px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('about', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'about' }]}>{t('nav.about')}</a>
+
+      <div class="relative group">
+        <span class="cursor-default">{t('nav.gallery')} ▾</span>
+        <div class="invisible absolute start-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+          <ul class="min-w-44 rounded-lg bg-white p-2 shadow-lg">
+            {galleryChildren.map((c) => (
+              <li><a href={pathFor(c.id, locale)} class="block rounded px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('contact', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'contact' }]}>{t('nav.contact')}</a>
+      <LanguageSwitcher locale={locale} page={page} />
+    </nav>
+
+    <div class="ms-auto hidden lg:block">
+      <BookingCTA locale={locale} />
+    </div>
+
+    <!-- mobile toggle -->
+    <button
+      id="mobile-nav-toggle"
+      class="ms-auto lg:hidden text-3xl leading-none"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >☰</button>
+  </div>
+
+  <!-- mobile nav -->
+  <div id="mobile-nav" class="hidden lg:hidden border-t border-black/5 bg-white px-6 py-4">
+    <ul class="space-y-3 font-bold text-pink">
+      <li><a href={pathFor('home', locale)}>{t('nav.home')}</a></li>
+      <li>
+        <a href={pathFor('services', locale)}>{t('nav.services')}</a>
+        <ul class="ms-4 mt-2 space-y-2 font-normal">
+          {servicesChildren.map((c) => <li><a href={pathFor(c.id, locale)}>{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('about', locale)}>{t('nav.about')}</a></li>
+      <li>
+        <span>{t('nav.gallery')}</span>
+        <ul class="ms-4 mt-2 space-y-2 font-normal">
+          {galleryChildren.map((c) => <li><a href={pathFor(c.id, locale)}>{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('contact', locale)}>{t('nav.contact')}</a></li>
+      <li><LanguageSwitcher locale={locale} page={page} /></li>
+      <li><BookingCTA locale={locale} /></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

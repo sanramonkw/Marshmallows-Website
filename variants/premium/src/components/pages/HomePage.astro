@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookingCTA from '../../components/BookingCTA.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations, pathFor } from '../../i18n/utils';
+import { aboutIntro } from '../../data/copy';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="home"
+  title={ui[locale]['site.name']}
+  description={ui[locale]['site.description']}
+>
+  <!-- Hero: editorial porcelain field, arched atelier video frame -->
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute -top-40 end-[-10rem] h-[36rem] w-[36rem] rounded-full bg-pink-pale/45 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute bottom-[-14rem] start-[-12rem] h-[30rem] w-[30rem] rounded-full bg-blush-wash blur-3xl" aria-hidden="true"></div>
+    <img
+      src="/images/pattern2b.png"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute -top-6 end-0 w-72 opacity-[0.14] mix-blend-multiply"
+    />
+
+    <div class="relative mx-auto grid max-w-7xl items-center gap-14 px-4 py-16 md:grid-cols-2 md:py-24 lg:px-6">
+      <div class="text-center md:text-start">
+        <div class="flourish flourish--start mx-auto mb-7 md:mx-0"><span class="flourish-gem"></span></div>
+        <h1 class="font-display text-4xl leading-tight text-ink md:text-[3.4rem]">
+          {t('home.heroTitle')}
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-ink-soft">{aboutIntro[locale][0]}</p>
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-4 md:justify-start">
+          <BookingCTA locale={locale} />
+          <a href={pathFor('services', locale)} class="btn-outline">{t('nav.services')}</a>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-md" data-reveal>
+        <div class="arch absolute -inset-3 translate-x-3 translate-y-3 border border-pink-light/60 rtl:-translate-x-3" aria-hidden="true"></div>
+        <div class="arch relative border border-hairline bg-cream p-3 shadow-plush">
+          <video autoplay muted loop playsinline class="arch aspect-[4/5] w-full object-cover" aria-hidden="true">
+            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Marshmallows: editorial split on blush wash -->
+  <section class="bg-blush-wash/60 py-20 md:py-28">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 md:grid-cols-12 lg:px-6">
+      <div class="relative md:col-span-5" data-reveal>
+        <div class="absolute -inset-4 rounded-[2.5rem] bg-pink-pale/50" aria-hidden="true"></div>
+        <img
+          src="/images/IMG_2921.jpg"
+          alt={t('home.aboutTitle')}
+          loading="lazy"
+          class="relative w-full rounded-[2rem] border-4 border-cream object-cover shadow-plush"
+        />
+      </div>
+      <div class="md:col-span-7 md:ps-8" data-reveal>
+        <h2 class="font-display text-3xl text-rosewood md:text-4xl">{t('home.aboutTitle')}</h2>
+        <div class="flourish flourish--start my-6"><span class="flourish-gem"></span></div>
+        {aboutIntro[locale].map((p) => <p class="mb-5 text-lg leading-loose">{p}</p>)}
+        <BookingCTA locale={locale} class="mt-3" variant="outline" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Services: arched triptych -->
+  <section class="py-20 md:py-28">
+    <div class="mx-auto max-w-7xl px-4 lg:px-6">
+      <div class="text-center" data-reveal>
+        <h2 class="font-display text-3xl text-ink md:text-4xl">{t('home.servicesTitle')}</h2>
+        <div class="flourish mx-auto mt-6 max-w-56"><span class="flourish-gem"></span></div>
+      </div>
+      <div class="mt-14 grid gap-10 sm:grid-cols-3 sm:gap-8" data-reveal>
+        <ServiceCard
+          href={pathFor('salonService', locale)}
+          image="/images/IMG_4385-e1776769490159.jpg"
+          title={t('nav.salonService')}
+        />
+        <ServiceCard
+          href={pathFor('partyBooth', locale)}
+          image="/images/IMG_2922.jpg"
+          title={t('nav.partyBooth')}
+        />
+        <ServiceCard
+          href={pathFor('homeService', locale)}
+          image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
+          title={t('nav.homeService')}
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* PREMIUM VARIANT — "Maison Marshmallows"                             */
+/* Soft editorial luxury: porcelain fields, rosewood-deepened brand    */
+/* pinks, refined serif moments (Latin only), hairline rules, glass.   */
+/* ------------------------------------------------------------------ */
+
+/* Original self-hosted webfonts (from the WordPress theme) */
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* ONE added self-hosted face (variant-only): Cormorant Garamond —
+   variable woff2 (400–700), Latin display serif.
+   Arabic display stays GE SS TV. */
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/cormorant-garamond-var.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Design tokens — brand pinks preserved + porcelain/rosewood family    */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* marshmallow pink family (unchanged brand tokens) */
+  --color-pink: #d9726d;        /* primary brand accent */
+  --color-pink-light: #f7aeac;  /* blush */
+  --color-pink-pale: #fbd8d7;   /* pale blush wash */
+  --color-pink-card: #fff5f5;   /* palest card */
+  /* premium derivatives of the brand pink */
+  --color-rosewood: #a34944;     /* deepened brand pink — AA text accent */
+  --color-rosewood-deep: #7e3835;/* hover / emphatic */
+  --color-blush-wash: #f8e8e2;   /* warm blush field */
+  /* porcelain neutrals */
+  --color-porcelain: #faf6f2;    /* page field */
+  --color-porcelain-deep: #f2eae3;
+  --color-cream: #fffdfb;        /* raised card */
+  --color-hairline: #e7d7cd;     /* hairline rules */
+  /* supporting accents (originals) */
+  --color-blue-soft: #ccdfe7;
+  --color-brown: #bba496;
+  --color-brown-line: #a99387;
+  --color-brown-deep: #ab866e;
+  --color-ink: #3a322d;          /* warm charcoal */
+  --color-ink-soft: #6f635b;
+
+  --font-latin: "Century Gothic", "Montserrat", Arial, sans-serif;
+  --font-arabic: "GE SS TV", "Century Gothic", Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+
+  --shadow-plush: 0 24px 60px -28px rgb(122 74 66 / 0.28);
+  --shadow-whisper: 0 10px 30px -18px rgb(122 74 66 / 0.22);
+}
+
+/* Base element styles live in @layer base so Tailwind utilities
+   (e.g. text-pink-light on footer headings) can still override them. */
+@layer base {
+  html[lang="en"] body { font-family: var(--font-latin); }
+  html[lang="ar"] body { font-family: var(--font-arabic); }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background-color: var(--color-porcelain);
+    color: var(--color-ink);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--color-ink); }
+}
+
+/* Display type: Latin gets the serif moment, Arabic keeps GE SS TV */
+.font-display { line-height: 1.15; }
+html[lang="en"] .font-display {
+  font-family: var(--font-serif);
+  font-weight: 560;
+  letter-spacing: 0.01em;
+}
+html[lang="ar"] .font-display {
+  font-family: var(--font-arabic);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* Overline label — letterspaced caps for Latin; Arabic keeps natural set */
+.overline-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-rosewood);
+}
+html[lang="en"] .overline-label {
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+html[lang="ar"] .overline-label { font-size: 0.85rem; }
+
+/* Hairline flourish — a fine rule with a diamond gem at its centre */
+.flourish {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-pink);
+}
+.flourish::before,
+.flourish::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, transparent, var(--color-hairline));
+}
+.flourish::after {
+  background: linear-gradient(to left, transparent, var(--color-hairline));
+}
+.flourish-gem {
+  width: 7px;
+  height: 7px;
+  rotate: 45deg;
+  background: var(--color-pink);
+  flex: none;
+}
+.flourish--start::before { display: none; }
+.flourish--start { max-width: 11rem; }
+
+/* Glass panel */
+.glass {
+  background: rgb(255 253 251 / 0.66);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border: 1px solid rgb(255 255 255 / 0.65);
+}
+
+/* Arch frame — boutique atelier window */
+.arch {
+  border-radius: 999px 999px 1.5rem 1.5rem;
+  overflow: hidden;
+}
+
+/* Buttons */
+.btn-solid {
+  display: inline-block;
+  border-radius: 999px;
+  background: var(--color-rosewood);
+  color: #fff;
+  padding: 0.8rem 2.4rem;
+  font-weight: 700;
+  border: 1px solid var(--color-rosewood);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  box-shadow: var(--shadow-whisper);
+}
+.btn-solid:hover {
+  background: var(--color-rosewood-deep);
+  border-color: var(--color-rosewood-deep);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid var(--color-rosewood);
+  color: var(--color-rosewood);
+  padding: 0.8rem 2.4rem;
+  font-weight: 700;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+.btn-outline:hover {
+  background: var(--color-rosewood);
+  color: #fff;
+  transform: translateY(-1px);
+}
+html[lang="en"] .btn-solid,
+html[lang="en"] .btn-outline {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+
+/* Focus states — visible jewelry ring everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-rosewood);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Divider line kept for compatibility */
+.brand-line {
+  height: 1px;
+  width: 72px;
+  margin-inline: auto;
+  background: var(--color-brown-line);
+}
+.brand-line--white { background: #fff; }
+
+/* ------------------------------------------------------------------ */
+/* Spa menu carte (price lists)                                        */
+/* ------------------------------------------------------------------ */
+.carte-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 0.65rem;
+}
+.carte-item .carte-name { font-weight: 700; color: var(--color-ink); }
+.carte-item .carte-dots {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--color-brown-line);
+  transform: translateY(-0.3em);
+  opacity: 0.55;
+}
+.carte-item .carte-price {
+  white-space: nowrap;
+  color: var(--color-rosewood);
+  font-weight: 700;
+}
+html[lang="en"] .carte-item .carte-price {
+  font-family: var(--font-serif);
+  font-size: 1.12em;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scroll reveal — transform/opacity only, honors reduced motion       */
+/* ------------------------------------------------------------------ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Condensing sticky header                                            */
+/* ------------------------------------------------------------------ */
+#site-header { transition: box-shadow 0.35s; }
+#site-header .header-logo {
+  transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 3.5rem;
+}
+#site-header .header-inner {
+  transition: padding 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#site-header.is-condensed {
+  box-shadow: 0 12px 40px -24px rgb(122 74 66 / 0.35);
+}
+#site-header.is-condensed .header-logo { height: 2.5rem; }
+#site-header.is-condensed .header-inner { padding-block: 0.45rem; }
+
+/* ------------------------------------------------------------------ */
+/* Booking widget — restyled via its EXISTING classes/tokens only      */
+/* (functional markup in BookingWidget.astro untouched)                */
+/* ------------------------------------------------------------------ */
+#booking-widget {
+  background: var(--color-cream);
+  border: 1px solid var(--color-hairline);
+  box-shadow: var(--shadow-plush);
+  border-radius: 1.5rem;
+}
+#booking-widget .bg-white { background: var(--color-cream); }
+html[lang="en"] #booking-widget h2 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+#booking-widget button { transition-duration: 0.3s; }
+#booking-widget .bg-pink { background: var(--color-rosewood); }
+#booking-widget button.bg-pink:hover { background: var(--color-rosewood-deep); }
+#booking-widget .text-pink { color: var(--color-rosewood); }
+#booking-widget .border-pink { border-color: var(--color-rosewood); }
+#booking-widget .shadow-md { box-shadow: var(--shadow-whisper); }
+#bw-steps:empty { display: none; }

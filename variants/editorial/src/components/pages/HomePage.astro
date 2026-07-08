@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookingCTA from '../../components/BookingCTA.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations, pathFor, folio } from '../../i18n/utils';
+import { aboutIntro } from '../../data/copy';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="home"
+  title={ui[locale]['site.name']}
+  description={ui[locale]['site.description']}
+>
+  <!-- COVER — huge quiet headline on paper, hero video as a magazine plate -->
+  <section class="border-b border-hairline">
+    <div class="mx-auto max-w-6xl px-5 pb-16 pt-16 lg:px-8 lg:pt-24">
+      <p class="eyebrow mb-8">{t('site.name')}</p>
+      <h1 class="display max-w-4xl text-4xl leading-[1.2] md:text-6xl md:leading-[1.15]">
+        {t('home.heroTitle')}
+      </h1>
+      <hr class="rule-pink mt-10 mb-14" />
+      <figure>
+        <div class="plate">
+          <video autoplay muted loop playsinline class="aspect-video w-full object-cover" aria-hidden="true">
+            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption class="plate-caption mt-3 flex items-baseline gap-3">
+          <span class="folio" aria-hidden="true">{folio(0, locale)}</span>
+          <span>{t('site.name')}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ٠١ — ABOUT: asymmetric editorial spread -->
+  <section class="border-b border-hairline">
+    <div class="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-24">
+      <div class="mb-10 flex items-center gap-4">
+        <span class="folio text-base" aria-hidden="true">{folio(1, locale)}</span>
+        <hr class="rule w-16" />
+      </div>
+      <div class="grid items-start gap-10 md:grid-cols-12 lg:gap-16">
+        <figure class="md:col-span-5">
+          <div class="plate overflow-hidden">
+            <img src="/images/IMG_2921.jpg" alt={t('home.aboutTitle')} loading="lazy" class="aspect-[4/5] w-full object-cover" />
+          </div>
+          <figcaption class="plate-caption mt-3">{t('home.aboutTitle')}</figcaption>
+        </figure>
+        <div class="md:col-span-7">
+          <h2 class="display mb-8 text-3xl leading-snug md:text-4xl">{t('home.aboutTitle')}</h2>
+          {aboutIntro[locale].map((p, i) => (
+            <p class:list={['mb-6 leading-loose', i === 0 ? 'text-xl leading-[1.9]' : 'text-ink-soft']}>{p}</p>
+          ))}
+          <BookingCTA locale={locale} class="mt-4" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ٠٢ — SERVICES: three numbered plates -->
+  <section>
+    <div class="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-24">
+      <div class="mb-10 flex items-center gap-4">
+        <span class="folio text-base" aria-hidden="true">{folio(2, locale)}</span>
+        <hr class="rule w-16" />
+      </div>
+      <h2 class="display mb-14 max-w-2xl text-3xl leading-snug md:text-4xl">{t('home.servicesTitle')}</h2>
+      <div class="grid gap-10 sm:grid-cols-3 lg:gap-8">
+        <ServiceCard
+          href={pathFor('salonService', locale)}
+          image="/images/IMG_4385-e1776769490159.jpg"
+          title={t('nav.salonService')}
+          num={folio(1, locale)}
+        />
+        <ServiceCard
+          href={pathFor('partyBooth', locale)}
+          image="/images/IMG_2922.jpg"
+          title={t('nav.partyBooth')}
+          num={folio(2, locale)}
+        />
+        <ServiceCard
+          href={pathFor('homeService', locale)}
+          image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
+          title={t('nav.homeService')}
+          num={folio(3, locale)}
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

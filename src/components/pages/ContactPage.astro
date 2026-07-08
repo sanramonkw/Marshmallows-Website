@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="contact"
+  title={`${t('nav.contact')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.contact')} subtitle={t('contact.subtitle')} />
+
+  <section class="py-14">
+    <div class="mx-auto grid max-w-6xl items-start gap-10 px-4 md:grid-cols-2">
+      <img src="/images/IMG_4592.jpg" alt={t('nav.contact')} loading="lazy" class="w-full rounded-2xl shadow-lg" />
+
+      <!--
+        Form fields mirror the original Contact Form 7 form (your-name,
+        your-email, your-phone, your-message). The WP/CF7 backend is gone,
+        so submission opens a pre-filled email — TODO: wire to a form
+        service (or handle in PHASE 2 alongside the Salonist rebuild).
+      -->
+      <form id="contact-form" class="space-y-4 rounded-2xl bg-white p-6 shadow-md">
+        <div>
+          <label for="cf-name" class="mb-1 block font-bold">{t('contact.name')}</label>
+          <input id="cf-name" name="your-name" type="text" required placeholder="eg. Sarah Smith"
+            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none" />
+        </div>
+        <div>
+          <label for="cf-email" class="mb-1 block font-bold">{t('contact.email')}</label>
+          <input id="cf-email" name="your-email" type="email" required placeholder="sarah@gmail.com"
+            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none" />
+        </div>
+        <div>
+          <label for="cf-phone" class="mb-1 block font-bold">{t('contact.phone')}</label>
+          <input id="cf-phone" name="your-phone" type="tel" placeholder="000 00 000 000" dir="ltr"
+            class="w-full rounded-lg border border-pink-pale px-4 py-2 text-start focus:border-pink focus:outline-none" />
+        </div>
+        <div>
+          <label for="cf-message" class="mb-1 block font-bold">{t('contact.message')}</label>
+          <textarea id="cf-message" name="your-message" rows="5" required placeholder="Type here..."
+            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none"></textarea>
+        </div>
+        <button type="submit" class="rounded-full bg-pink px-8 py-3 font-bold text-white transition-colors hover:bg-brown-deep">
+          {t('contact.send')}
+        </button>
+      </form>
+    </div>
+
+    <div class="mx-auto mt-10 max-w-6xl px-4 text-center">
+      <p class="text-lg">
+        <a href={`mailto:${business.email}`} class="font-bold text-pink underline">{business.email}</a>
+        <span class="mx-3">•</span>
+        <a href={business.phoneHref} class="font-bold text-pink underline" dir="ltr">{business.phone}</a>
+        <span class="mx-3">•</span>
+        <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold text-pink underline">WhatsApp</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const subject = encodeURIComponent('Website contact — marshmallows.co');
+    const body = encodeURIComponent(
+      `Name: ${data.get('your-name')}\nEmail: ${data.get('your-email')}\nPhone: ${data.get('your-phone')}\n\n${data.get('your-message')}`
+    );
+    window.location.href = `mailto:info@marshmallows.co?subject=${subject}&body=${body}`;
+  });
+</script>

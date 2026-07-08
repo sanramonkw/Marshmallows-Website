@@ -1,0 +1,32 @@
+---
+/**
+ * Editorial service card — arched atelier frame, caption beneath,
+ * jewelry hover (image bloom + hairline draws in).
+ */
+interface Props {
+  href: string;
+  image: string;
+  title: string;
+}
+
+const { href, image, title } = Astro.props;
+---
+
+<a href={href} class="group block text-center">
+  <div class="arch relative mx-auto border border-hairline bg-cream p-2.5 shadow-whisper transition-shadow duration-500 group-hover:shadow-plush">
+    <div class="arch overflow-hidden">
+      <div class="aspect-[3/4] overflow-hidden">
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="mt-6">
+    <h3 class="font-display text-2xl text-ink transition-colors duration-300 group-hover:text-rosewood">{title}</h3>
+    <span class="mx-auto mt-3 block h-px w-8 bg-brown-line transition-all duration-500 group-hover:w-16 group-hover:bg-rosewood" aria-hidden="true"></span>
+  </div>
+</a>

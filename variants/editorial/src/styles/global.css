@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* EDITORIAL MINIMAL variant — "The Marshmallows Journal"              */
+/* Beauty-magazine expression of the same brand: porcelain paper,      */
+/* hairline rules, numbered sections, carte typography. Pink stays     */
+/* the unmistakable signature but is confined to folios/rules/links/   */
+/* CTAs; rosewood (#a3423d) is its AA-safe derivative for small text.  */
+/* ------------------------------------------------------------------ */
+
+/* Original self-hosted webfonts (pulled from the WordPress theme)     */
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* GE SS TV is scoped to Arabic script + digits + basic punctuation:
+   its Latin set is incomplete (no "y" glyph — "Salmiya" rendered
+   "Salmi a"), so Latin words inside Arabic pages fall back to the
+   brand's Century Gothic instead. Digits stay in GE SS TV to keep its
+   Arabic-Indic numeral rendering. */
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+}
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+}
+/* ONE added editorial face (variant-only, self-hosted woff2, OFL):    */
+/* Cormorant Garamond — Latin display serif.                           */
+/* Arabic display stays GE SS TV per brand rule.                       */
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-var.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-Italic-var.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand design tokens (originals kept) + editorial additions          */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* marshmallow pink family — original brand tokens */
+  --color-pink: #d9726d;        /* primary accent — folios, rules, links */
+  --color-pink-light: #f7aeac;  /* original body bg — now a tint source  */
+  --color-pink-pale: #fbd8d7;   /* pale pink — hairline fills            */
+  --color-pink-card: #fff5f5;   /* pale blush plate                      */
+  --color-blue-soft: #ccdfe7;
+  --color-brown: #bba496;
+  --color-brown-line: #a99387;
+  --color-brown-deep: #ab866e;  /* Salonist widget accent (kept)         */
+  --color-ink: #29241f;         /* warm editorial ink                    */
+
+  /* editorial additions */
+  --color-paper: #fbf7f5;       /* warm blush-tinted paper (body)        */
+  --color-paper-2: #f5ebe8;     /* deeper blush plate                    */
+  --color-rose: #a3423d;        /* rosewood — AA pink derivative (5.9:1) */
+  --color-ink-soft: #6d635d;    /* quiet captions (5.2:1 on paper)       */
+  --color-hairline: #e4d9d4;    /* hairline rule                         */
+
+  --font-latin: "Century Gothic", "Montserrat", Arial, sans-serif;
+  --font-arabic: "GE SS TV", "Century Gothic", Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+}
+
+/* Language-aware base font (the theme swaps families per locale) */
+html[lang="en"] body { font-family: var(--font-latin); }
+html[lang="ar"] body { font-family: var(--font-arabic); }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-overflow-scrolling: touch;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+/* Latin display serif for EN headlines; Arabic display stays GE SS TV */
+html[lang="en"] .display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+html[lang="ar"] .display {
+  font-family: var(--font-arabic);
+  font-weight: 700;
+}
+
+/* Old-style serif numerals for Latin price/folio moments */
+.serif-num { font-family: var(--font-serif); font-weight: 600; }
+
+::selection { background: var(--color-pink-pale); color: var(--color-ink); }
+
+a { text-underline-offset: 4px; }
+:focus-visible {
+  outline: 2px solid var(--color-rose);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Editorial primitives                                                */
+/* ------------------------------------------------------------------ */
+
+/* small-caps / tracked label — the magazine "eyebrow" */
+.eyebrow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.9em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-rose);
+}
+html[lang="en"] .eyebrow {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+html[lang="ar"] .eyebrow { font-size: 0.8125rem; }
+
+/* folio number — Arabic-Indic in AR, tracked Latin in EN */
+.folio {
+  color: var(--color-pink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+html[lang="en"] .folio { font-family: var(--font-serif); font-weight: 600; }
+
+/* hairline rules */
+.rule { border: 0; border-block-start: 1px solid var(--color-hairline); }
+.rule-ink { border: 0; border-block-start: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent); }
+.rule-pink {
+  border: 0;
+  border-block-start: 1px solid var(--color-pink);
+  width: 3.5rem;
+}
+
+/* carte price row: name … dotted leader … price */
+.carte-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+}
+.carte-row .leader {
+  flex: 1;
+  min-width: 2rem;
+  border-block-end: 1px dotted color-mix(in srgb, var(--color-ink) 32%, transparent);
+  transform: translateY(-0.3em);
+}
+.carte-price {
+  white-space: nowrap;
+  color: var(--color-rose);
+  font-variant-numeric: tabular-nums;
+}
+html[lang="en"] .carte-price { font-family: var(--font-serif); font-weight: 600; font-size: 1.15em; }
+
+/* magazine plate caption */
+.plate-caption {
+  font-size: 0.8125rem;
+  color: var(--color-ink-soft);
+  line-height: 1.7;
+}
+html[lang="en"] .plate-caption { letter-spacing: 0.06em; }
+
+/* quiet image treatment — no shadows, no rounding; a hairline mat */
+.plate {
+  display: block;
+  border: 1px solid var(--color-hairline);
+  background: #fff;
+}
+
+/* understated editorial button — the rosewood signature CTA */
+.btn-editorial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  background: var(--color-rose);
+  color: #fff;
+  padding: 0.85rem 2.4rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  border: 1px solid var(--color-rose);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+html[lang="en"] .btn-editorial { letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.8125rem; }
+.btn-editorial:hover { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+
+.btn-editorial--ghost {
+  background: transparent;
+  color: var(--color-rose);
+}
+.btn-editorial--ghost:hover { background: var(--color-rose); border-color: var(--color-rose); color: #fff; }
+
+/* Divider kept for compatibility (restyled as a pink hairline) */
+.brand-line {
+  height: 1px;
+  width: 56px;
+  margin-inline: auto;
+  background: var(--color-pink);
+}
+.brand-line--white { background: #fff; }
+
+/* ------------------------------------------------------------------ */
+/* Booking widget (restyle ONLY — markup/logic untouched).             */
+/* The widget renders Tailwind classes from its client script; these   */
+/* scoped overrides flatten radii/shadows to the editorial language.   */
+/* ------------------------------------------------------------------ */
+#booking-widget {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid var(--color-hairline);
+  background: #fff;
+}
+#booking-widget [class*="rounded"] { border-radius: 0 !important; }
+#booking-widget [class*="shadow"] { box-shadow: none !important; }
+#booking-widget button {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}

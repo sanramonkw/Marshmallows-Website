@@ -1,0 +1,27 @@
+---
+/**
+ * BOLD variant — scrolling marquee band of service-category names.
+ * Pure CSS animation (transform only), direction-aware (see global.css),
+ * and collapses to a static wrapped row for prefers-reduced-motion.
+ * The duplicate track is aria-hidden so screen readers hear the list once.
+ */
+interface Props {
+  items: string[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+---
+
+<div class={`marquee grad-band border-y-2 border-plum py-3 ${className}`}>
+  {[false, true].map((dup) => (
+    <ul class="marquee__track" aria-hidden={dup ? 'true' : undefined}>
+      {items.map((item) => (
+        <li class="flex items-center gap-10 text-lg font-bold text-white">
+          <span>{item}</span>
+          <span aria-hidden="true" class="text-pink-pale">✦</span>
+        </li>
+      ))}
+    </ul>
+  ))}
+</div>

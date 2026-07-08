@@ -1,0 +1,35 @@
+---
+/**
+ * Soft editorial mosaic — masonry columns, alternating arch/soft frames,
+ * gentle lift on hover.
+ */
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="columns-2 gap-5 md:columns-3 lg:columns-4 [&>a]:mb-5 [&>a]:block">
+  {images.map((img, i) => (
+    <a
+      href={img.src}
+      target="_blank"
+      rel="noopener"
+      class:list={[
+        'group relative block overflow-hidden border border-hairline bg-cream p-1.5 shadow-whisper transition-all duration-500 hover:-translate-y-1 hover:shadow-plush',
+        i % 5 === 0 ? 'arch' : 'rounded-2xl',
+      ]}
+    >
+      <img
+        src={img.src}
+        alt={img.alt}
+        loading="lazy"
+        class:list={[
+          'w-full transition-transform duration-700 ease-out group-hover:scale-[1.03]',
+          i % 5 === 0 ? 'arch' : 'rounded-xl',
+        ]}
+      />
+    </a>
+  ))}
+</div>

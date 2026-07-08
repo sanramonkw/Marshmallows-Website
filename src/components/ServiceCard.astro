@@ -1,0 +1,24 @@
+---
+interface Props {
+  href: string;
+  image: string;
+  title: string;
+}
+
+const { href, image, title } = Astro.props;
+---
+
+<a href={href} class="group relative block overflow-hidden rounded-2xl shadow-md transition-transform hover:-translate-y-1">
+  <div class="aspect-[4/3] overflow-hidden">
+    <img
+      src={image}
+      alt={title}
+      loading="lazy"
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  </div>
+  <!-- live theme: title over a transparent→black/90 bottom gradient -->
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-transparent to-black/90 pt-14 pb-4">
+    <h3 class="text-center text-xl text-white">{title}</h3>
+  </div>
+</a>

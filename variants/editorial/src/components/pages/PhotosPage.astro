@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations, folio } from '../../i18n/utils';
+import { galleryImages } from '../../data/copy';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const images = galleryImages.map((src, i) => ({
+  src,
+  alt: `${t('site.name')} — ${t('nav.photos')} ${i + 1}`,
+}));
+---
+
+<BaseLayout
+  locale={locale}
+  page="photos"
+  title={`${t('nav.photos')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.photos')} subtitle={t('nav.gallery')} num={folio(3, locale)} />
+  <section>
+    <div class="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
+      <GalleryGrid images={images} locale={locale} />
+    </div>
+  </section>
+</BaseLayout>

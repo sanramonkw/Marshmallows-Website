@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookingCTA from '../../components/BookingCTA.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Marquee from '../../components/Marquee.astro';
+import StatStrip from '../../components/StatStrip.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations, pathFor } from '../../i18n/utils';
+import { aboutIntro, galleryImages } from '../../data/copy';
+import { salonService, homeService } from '../../data/services';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Marquee: real service-category names from the price data
+const marqueeItems = salonService[locale].map((c) => c.category);
+
+// Counter strip: real business facts (2 branches / 165+ services / est. 2013)
+const serviceCount =
+  salonService[locale].reduce((n, c) => n + c.items.filter((i) => i.name).length, 0) +
+  homeService[locale].reduce((n, c) => n + c.items.filter((i) => i.name).length, 0);
+const stats =
+  locale === 'ar'
+    ? [
+        { value: business.branches.length, label: 'فرع في الكويت' },
+        { value: Math.floor(serviceCount / 5) * 5, suffix: '+', label: 'خدمة تجميل' },
+        { value: 2013, label: 'تأسس عام' },
+      ]
+    : [
+        { value: business.branches.length, label: 'Branches in Kuwait' },
+        { value: Math.floor(serviceCount / 5) * 5, suffix: '+', label: 'Beauty services' },
+        { value: 2013, label: 'Established' },
+      ];
+
+const [agaila, salmiya] = business.branches;
+const moodboard = galleryImages.slice(0, 4);
+---
+
+<BaseLayout
+  locale={locale}
+  page="home"
+  title={ui[locale]['site.name']}
+  description={ui[locale]['site.description']}
+>
+  <!-- HERO — coral→blush gradient field, oversized display headline, sticker badges, tilted video card -->
+  <section class="grad-hero relative overflow-hidden border-b-2 border-plum">
+    <span aria-hidden="true" class="pointer-events-none absolute -top-10 start-[55%] h-44 w-44 rounded-full border-2 border-plum/15 bg-white/30"></span>
+    <span aria-hidden="true" class="pointer-events-none absolute -bottom-16 -start-10 h-52 w-52 rounded-full border-2 border-plum/10 bg-pink/20"></span>
+    <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:grid-cols-12 md:py-24">
+      <div class="md:col-span-7">
+        <h1 class="display-xl text-plum">{t('home.heroTitle')}</h1>
+
+        <!-- sticker badges = the three real service lines, linked -->
+        <ul class="mt-8 flex flex-wrap gap-3">
+          <li><a href={pathFor('salonService', locale)} class="sticker sticker--pink sticker--tilt-1 hover:bg-white">{t('nav.salonService')}</a></li>
+          <li><a href={pathFor('partyBooth', locale)} class="sticker sticker--pale sticker--tilt-2 hover:bg-white">{t('nav.partyBooth')}</a></li>
+          <li><a href={pathFor('homeService', locale)} class="sticker sticker--tilt-3 hover:bg-pink-pale">{t('nav.homeService')}</a></li>
+        </ul>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <BookingCTA locale={locale} size="lg" />
+          <a
+            href={business.whatsapp}
+            rel="noopener nofollow"
+            target="_blank"
+            class="inline-flex items-center gap-2 rounded-full border-2 border-plum bg-white px-8 py-3.5 text-lg font-bold text-plum shadow-[0_4px_0_0_var(--color-plum)] transition-transform hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          >
+            {t('booking.whatsapp')}
+          </a>
+        </div>
+      </div>
+
+      <div class="relative md:col-span-5">
+        <div class="card-pop tilt-b overflow-hidden p-2">
+          <video autoplay muted loop playsinline class="w-full rounded-2xl" aria-hidden="true">
+            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+          </video>
+        </div>
+        <span aria-hidden="true" class="sticker sticker--deep float-slow absolute -top-5 -start-3 rotate-[-3deg] text-xl">💅</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE — real service categories -->
+  <Marquee items={marqueeItems} />
+
+  <!-- ABOUT — oversized gradient heading + overlapping photo card -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-12">
+      <div class="relative md:col-span-5" data-reveal>
+        <div class="card-pop tilt-a overflow-hidden p-2">
+          <img src="/images/IMG_2921.jpg" alt={t('home.aboutTitle')} loading="lazy" class="w-full rounded-2xl" />
+        </div>
+        <div class="card-pop tilt-d absolute -bottom-10 -end-2 hidden w-40 overflow-hidden p-1.5 md:block" aria-hidden="true">
+          <img src="/images/IMG_2920.jpg" alt="" loading="lazy" class="w-full rounded-xl" />
+        </div>
+      </div>
+      <div class="md:col-span-7 md:ps-8" data-reveal>
+        <h2 class="display-lg grad-text">{t('home.aboutTitle')}</h2>
+        <div class="mt-6 space-y-4">
+          {aboutIntro[locale].map((p) => <p class="text-lg leading-relaxed">{p}</p>)}
+        </div>
+        <BookingCTA locale={locale} class="mt-8" />
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTER STRIP — real data -->
+  <section class="grad-soft border-y-2 border-plum py-14">
+    <div class="mx-auto max-w-5xl px-4" data-reveal>
+      <StatStrip stats={stats} />
+    </div>
+  </section>
+
+  <!-- BENTO — services + gallery teaser + booking CTA + branches -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="display-lg text-center text-plum" data-reveal>{t('home.servicesTitle')}</h2>
+      <div class="brand-line my-6"></div>
+
+      <div class="mt-12 grid gap-7 md:grid-cols-6">
+        <div class="md:col-span-2" data-reveal>
+          <ServiceCard
+            href={pathFor('salonService', locale)}
+            image="/images/IMG_4385-e1776769490159.jpg"
+            title={t('nav.salonService')}
+            tilt="a"
+          />
+        </div>
+        <div class="md:col-span-2" data-reveal>
+          <ServiceCard
+            href={pathFor('partyBooth', locale)}
+            image="/images/IMG_2922.jpg"
+            title={t('nav.partyBooth')}
+            tilt="c"
+          />
+        </div>
+        <div class="md:col-span-2" data-reveal>
+          <ServiceCard
+            href={pathFor('homeService', locale)}
+            image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
+            title={t('nav.homeService')}
+            tilt="b"
+          />
+        </div>
+
+        <!-- gallery mood-board teaser -->
+        <a href={pathFor('photos', locale)} class="card-pop group relative block overflow-hidden bg-pink-card p-6 md:col-span-3" data-reveal>
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xl font-bold text-plum">{t('nav.photos')}</h3>
+            <span aria-hidden="true" class="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-plum bg-pink-light text-lg font-bold text-plum transition-transform group-hover:rotate-45 motion-reduce:transition-none rtl:-scale-x-100">↗</span>
+          </div>
+          <div class="mt-5 grid grid-cols-4 items-end gap-3">
+            {moodboard.map((src, i) => (
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                class={`w-full rounded-xl border-2 border-plum bg-white object-cover shadow-[0_3px_0_0_var(--color-plum)] ${['tilt-a', 'tilt-b mb-3', 'tilt-c', 'tilt-d mb-2'][i]}`}
+              />
+            ))}
+          </div>
+        </a>
+
+        <!-- booking CTA tile -->
+        <div class="card-pop grad-band flex flex-col items-center justify-center gap-5 p-8 text-center md:col-span-3" data-reveal>
+          <p class="text-2xl font-bold text-white md:text-3xl">{t('cta.book')}</p>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <BookingCTA locale={locale} size="lg" />
+            <a href={business.phoneHref} class="rounded-full border-2 border-white px-7 py-3 font-bold text-white transition-colors hover:bg-white hover:text-pink-deep" dir="ltr">
+              {business.phone}
+            </a>
+          </div>
+        </div>
+
+        <!-- branch tiles -->
+        <div class="card-pop bg-pink-pale! p-6 md:col-span-3" data-reveal>
+          <h3 class="mb-3"><span class="sticker sticker--tilt-1">{t('footer.branchAgaila')}</span></h3>
+          <p class="leading-relaxed">
+            {agaila.lines.map((l) => <>{l}<br /></>)}
+          </p>
+          <a href={agaila.mapUrl} rel="noopener" target="_blank" class="mt-3 inline-block font-bold text-plum underline underline-offset-4 hover:text-pink-deep">{t('footer.findOnGoogle')}</a>
+        </div>
+        <div class="card-pop bg-pink-light! p-6 md:col-span-3" data-reveal>
+          <h3 class="mb-3"><span class="sticker sticker--tilt-2">{t('footer.branchSalmiya')}</span></h3>
+          <p class="leading-relaxed">
+            {salmiya.lines.map((l) => <>{l}<br /></>)}
+          </p>
+          <a href={salmiya.mapUrl} rel="noopener" target="_blank" class="mt-3 inline-block font-bold text-plum underline underline-offset-4 hover:text-pink-deep">{t('footer.findOnGoogle')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

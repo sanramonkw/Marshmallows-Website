@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations, pathFor, folio } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="services"
+  title={`${t('nav.services')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.services')} subtitle={t('services.subtitle')} num={folio(2, locale)} />
+
+  <section>
+    <div class="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:grid-cols-3 lg:gap-8 lg:px-8 lg:py-24">
+      <ServiceCard
+        href={pathFor('salonService', locale)}
+        image="/images/IMG_4385-e1776769490159.jpg"
+        title={t('nav.salonService')}
+        num={folio(1, locale)}
+      />
+      <ServiceCard
+        href={pathFor('partyBooth', locale)}
+        image="/images/IMG_2922.jpg"
+        title={t('nav.partyBooth')}
+        num={folio(2, locale)}
+      />
+      <ServiceCard
+        href={pathFor('homeService', locale)}
+        image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
+        title={t('nav.homeService')}
+        num={folio(3, locale)}
+      />
+    </div>
+  </section>
+</BaseLayout>

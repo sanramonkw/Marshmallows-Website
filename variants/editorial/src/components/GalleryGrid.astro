@@ -1,0 +1,36 @@
+---
+/**
+ * EDITORIAL contact sheet — uniform grid of plates with thin gutters
+ * and folio-numbered captions, like a photographer's contact sheet.
+ */
+import type { Locale } from '../i18n/ui';
+import { folio } from '../i18n/utils';
+
+interface Props {
+  images: { src: string; alt: string }[];
+  locale?: Locale;
+}
+
+const { images, locale = 'ar' } = Astro.props;
+---
+
+<div class="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:gap-x-6">
+  {images.map((img, i) => (
+    <figure>
+      <a href={img.src} target="_blank" rel="noopener" class="plate group block overflow-hidden">
+        <div class="aspect-square overflow-hidden">
+          <img
+            src={img.src}
+            alt={img.alt}
+            loading="lazy"
+            class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
+          />
+        </div>
+      </a>
+      <figcaption class="plate-caption mt-2 flex items-baseline gap-2">
+        <span class="folio" aria-hidden="true">{folio(i + 1, locale)}</span>
+        <hr class="rule w-6 self-center" />
+      </figcaption>
+    </figure>
+  ))}
+</div>

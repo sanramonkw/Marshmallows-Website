@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations, folio } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const field =
+  'w-full border-0 border-b border-hairline bg-transparent px-0 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-rose focus:outline-none focus:ring-0';
+---
+
+<BaseLayout
+  locale={locale}
+  page="contact"
+  title={`${t('nav.contact')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.contact')} subtitle={t('contact.subtitle')} num={folio(4, locale)} />
+
+  <section>
+    <div class="mx-auto grid max-w-6xl items-start gap-12 px-5 py-16 md:grid-cols-2 lg:gap-16 lg:px-8 lg:py-20">
+      <figure>
+        <div class="plate overflow-hidden">
+          <img src="/images/IMG_4592.jpg" alt={t('nav.contact')} loading="lazy" class="aspect-[4/5] w-full object-cover" />
+        </div>
+        <figcaption class="plate-caption mt-3 flex items-baseline gap-3">
+          <span class="folio" aria-hidden="true">{folio(4, locale)}</span>
+          <span>{t('contact.subtitle')}</span>
+        </figcaption>
+      </figure>
+
+      <!--
+        Form fields mirror the original Contact Form 7 form (your-name,
+        your-email, your-phone, your-message). The WP/CF7 backend is gone,
+        so submission opens a pre-filled email — TODO: wire to a form
+        service (or handle in PHASE 2 alongside the Salonist rebuild).
+      -->
+      <form id="contact-form" class="space-y-8 border-t-2 border-ink pt-8">
+        <div>
+          <label for="cf-name" class="eyebrow mb-1 block">{t('contact.name')}</label>
+          <input id="cf-name" name="your-name" type="text" required placeholder="eg. Sarah Smith" class={field} />
+        </div>
+        <div>
+          <label for="cf-email" class="eyebrow mb-1 block">{t('contact.email')}</label>
+          <input id="cf-email" name="your-email" type="email" required placeholder="sarah@gmail.com" class={field} />
+        </div>
+        <div>
+          <label for="cf-phone" class="eyebrow mb-1 block">{t('contact.phone')}</label>
+          <input id="cf-phone" name="your-phone" type="tel" placeholder="000 00 000 000" dir="ltr" class={`${field} text-start`} />
+        </div>
+        <div>
+          <label for="cf-message" class="eyebrow mb-1 block">{t('contact.message')}</label>
+          <textarea id="cf-message" name="your-message" rows="5" required placeholder="Type here..." class={field}></textarea>
+        </div>
+        <button type="submit" class="btn-editorial">{t('contact.send')}</button>
+      </form>
+    </div>
+
+    <div class="mx-auto max-w-6xl px-5 pb-16 lg:px-8">
+      <div class="border-y border-hairline py-8 text-center">
+        <p class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold">
+          <a href={`mailto:${business.email}`} class="text-rose underline decoration-pink/50 hover:decoration-pink">{business.email}</a>
+          <span class="text-pink" aria-hidden="true">·</span>
+          <a href={business.phoneHref} class="text-rose underline decoration-pink/50 hover:decoration-pink" dir="ltr">{business.phone}</a>
+          <span class="text-pink" aria-hidden="true">·</span>
+          <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="text-rose underline decoration-pink/50 hover:decoration-pink">WhatsApp</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const subject = encodeURIComponent('Website contact — marshmallows.co');
+    const body = encodeURIComponent(
+      `Name: ${data.get('your-name')}\nEmail: ${data.get('your-email')}\nPhone: ${data.get('your-phone')}\n\n${data.get('your-message')}`
+    );
+    window.location.href = `mailto:info@marshmallows.co?subject=${subject}&body=${body}`;
+  });
+</script>

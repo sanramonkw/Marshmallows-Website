@@ -1,0 +1,42 @@
+---
+import type { Locale } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import type { PartyPackage } from '../data/party';
+
+interface Props {
+  locale: Locale;
+  packages: PartyPackage[];
+}
+
+const { locale, packages } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div class="mx-auto grid max-w-6xl gap-7 md:grid-cols-2 lg:grid-cols-3">
+  {packages.map((pkg) => (
+    <article class="group flex flex-col rounded-3xl border border-hairline bg-cream p-8 shadow-whisper transition-all duration-500 hover:-translate-y-1 hover:shadow-plush">
+      <h3 class="font-display text-2xl text-rosewood">{pkg.name}</h3>
+      <div class="flourish flourish--start my-4"><span class="flourish-gem !h-1.5 !w-1.5"></span></div>
+      <p class="mb-2 leading-relaxed">{pkg.features.join(' • ')}</p>
+      {pkg.suitable && <p class="mb-3 text-sm text-ink-soft">{pkg.suitable}</p>}
+      <div class="mb-3 space-y-1">
+        {pkg.prices.map((p) => <p class="text-2xl font-bold text-ink">{p}</p>)}
+      </div>
+      {pkg.extras.length > 0 && (
+        <ul class="mb-3 space-y-1.5 text-sm text-ink-soft">
+          {pkg.extras.map((e) => (
+            <li>
+              {e.name && <em>{e.name}: </em>}
+              <span class="font-bold text-ink">{e.price}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {pkg.note && (
+        <p class="mt-auto border-t border-hairline pt-4 text-sm italic text-ink-soft">
+          {t('party.note')}: {pkg.note}
+        </p>
+      )}
+    </article>
+  ))}
+</div>

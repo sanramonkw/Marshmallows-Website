@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Original self-hosted webfonts (pulled from the WordPress theme)     */
+/* Latin: Century Gothic — Arabic: GE SS TV                            */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/centurygothic-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* GE SS TV's TTF is missing some Latin glyphs (e.g. "y" — "Salmiya" rendered
+   "Salmi a"). Scope it to Arabic script + digits/punctuation so Latin text
+   falls back to Century Gothic. */
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+}
+@font-face {
+  font-family: "GE SS TV";
+  src: url("/fonts/ge-sstv-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand design tokens (extracted from marshmallowskwt theme CSS)      */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* marshmallow pink family */
+  --color-pink: #d9726d;        /* .txt-pink / .bg-pink — primary accent */
+  --color-pink-light: #f7aeac;  /* body background + .btn-default */
+  --color-pink-pale: #fbd8d7;   /* .txt-pink3 / .bg-pink3 — footer card */
+  --color-pink-card: #fff5f5;   /* pale content card (about section) */
+  /* supporting accents */
+  --color-blue-soft: #ccdfe7;   /* .bg-blue — button hover */
+  --color-brown: #bba496;       /* .txt-brown / .bg-brown */
+  --color-brown-line: #a99387;  /* .line.brown divider */
+  --color-brown-deep: #ab866e;  /* Salonist widget accent */
+  --color-ink: #2e2e2e;         /* heading colour */
+
+  --font-latin: "Century Gothic", "Montserrat", Arial, sans-serif;
+  --font-arabic: "GE SS TV", "Century Gothic", Arial, sans-serif;
+}
+
+/* Language-aware base font (the theme swaps families per locale) */
+html[lang="en"] body {
+  font-family: var(--font-latin);
+}
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+}
+
+body {
+  background-color: var(--color-pink-light);
+  color: #000;
+  -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+/* Divider line used under section headings on the live site */
+.brand-line {
+  height: 3px;
+  width: 72px;
+  margin-inline: auto;
+  background: var(--color-brown-line);
+}
+.brand-line--white {
+  background: #fff;
+}

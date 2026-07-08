@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui, business } from '../../i18n/ui';
+import { useTranslations, folio } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="videos"
+  title={`${t('nav.videos')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.videos')} subtitle={t('nav.gallery')} num={folio(3, locale)} />
+  <section>
+    <div class="mx-auto max-w-4xl space-y-14 px-5 py-16 lg:px-8 lg:py-20">
+      <figure>
+        <div class="plate">
+          <video controls playsinline preload="metadata" class="w-full">
+            <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption class="plate-caption mt-3 flex items-baseline gap-3">
+          <span class="folio" aria-hidden="true">{folio(1, locale)}</span>
+          <span>{t('nav.videos')}</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <div class="plate">
+          <video controls playsinline preload="metadata" class="w-full">
+            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption class="plate-caption mt-3 flex items-baseline gap-3">
+          <span class="folio" aria-hidden="true">{folio(2, locale)}</span>
+          <span>{t('nav.videos')}</span>
+        </figcaption>
+      </figure>
+      <p class="border-t border-hairline pt-8 text-center">
+        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-rose underline decoration-pink/50 hover:decoration-pink">
+          {t('videos.followInstagram')}
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

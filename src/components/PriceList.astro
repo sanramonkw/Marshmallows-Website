@@ -1,0 +1,35 @@
+---
+/**
+ * Category price list — replaces the live theme's CSS-radio "tabs".
+ * Rendered as an accessible accordion (native <details>), first category open.
+ */
+import type { PriceCategory } from '../data/services';
+
+interface Props {
+  categories: PriceCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="mx-auto max-w-3xl space-y-4">
+  {categories.map((cat, i) => (
+    <details class="group rounded-2xl bg-white shadow-md open:pb-4" open={i === 0}>
+      <summary class="cursor-pointer list-none rounded-2xl px-6 py-4 text-lg font-bold text-pink transition-colors group-open:rounded-b-none hover:bg-pink-pale">
+        {cat.category}
+      </summary>
+      <ul class="divide-y divide-pink-pale px-6">
+        {cat.items.map((item) =>
+          item.name ? (
+            <li class="flex items-baseline justify-between gap-4 py-2">
+              <span class="font-bold">{item.name}</span>
+              <span class="whitespace-nowrap text-pink">{item.price}</span>
+            </li>
+          ) : (
+            <li class="py-2 italic text-neutral-500">{item.note}</li>
+          )
+        )}
+      </ul>
+    </details>
+  ))}
+</div>

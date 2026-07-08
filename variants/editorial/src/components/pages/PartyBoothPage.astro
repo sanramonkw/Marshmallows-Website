@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PartyPackages from '../../components/PartyPackages.astro';
+import BookingCTA from '../../components/BookingCTA.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations, folio } from '../../i18n/utils';
+import { partyPackages } from '../../data/party';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  page="partyBooth"
+  title={`${t('nav.partyBooth')} - ${ui[locale]['site.name']}`}
+  description={ui[locale]['site.description']}
+>
+  <PageHero title={t('nav.partyBooth')} subtitle={t('nav.services')} num={folio(2, locale)} />
+  <section>
+    <div class="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
+      <PartyPackages locale={locale} packages={partyPackages[locale]} />
+      <div class="mt-16 border-t border-hairline pt-12 text-center">
+        <BookingCTA locale={locale} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

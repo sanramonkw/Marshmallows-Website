@@ -1,0 +1,55 @@
+---
+import type { Locale } from '../i18n/ui';
+import { business } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import BookingCTA from './BookingCTA.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const [agaila, salmiya] = business.branches;
+---
+
+<!-- live theme: footer is a 16px-rounded #fbd8d7 card sitting on the pink-light body -->
+<footer class="px-4 pb-8 pt-4 text-sm">
+  <div class="mx-auto max-w-7xl rounded-2xl bg-pink-pale px-6 py-10 md:px-10">
+  <div class="grid gap-8 md:grid-cols-3">
+    <div>
+      <h3 class="mb-3 text-lg text-pink">{t('footer.branchAgaila')}</h3>
+      <p class="leading-relaxed">
+        {agaila.lines.map((l) => <>{l}<br /></>)}
+        <span dir="ltr">☎ +965 2220 9072</span><br />
+        <a href={agaila.mapUrl} class="underline hover:text-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+      </p>
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-lg text-pink">{t('footer.branchSalmiya')}</h3>
+      <p class="leading-relaxed">
+        {salmiya.lines.map((l) => <>{l}<br /></>)}
+        <span dir="ltr">☎ +965 2220 9072</span><br />
+        <a href={salmiya.mapUrl} class="underline hover:text-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+      </p>
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-lg text-pink">{t('footer.getInTouch')}</h3>
+      <p class="mb-4 flex items-center gap-4">
+        <a href={`mailto:${business.email}`} class="underline hover:text-pink">{business.email}</a>
+        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold underline hover:text-pink">Instagram</a>
+      </p>
+      <p class="mb-4">
+        <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold underline hover:text-pink">WhatsApp</a>
+      </p>
+      <BookingCTA locale={locale} />
+    </div>
+  </div>
+
+  <div class="mt-8 text-center">
+    <p>{t('footer.rights')}</p>
+  </div>
+  </div>
+</footer>

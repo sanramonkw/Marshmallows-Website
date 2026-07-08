@@ -1,0 +1,150 @@
+---
+import type { Locale } from '../i18n/ui';
+import { useTranslations, pathFor, type PageId } from '../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  page: PageId;
+}
+
+const { locale, page } = Astro.props;
+const t = useTranslations(locale);
+
+const servicesChildren: { id: PageId; label: string }[] = [
+  { id: 'salonService', label: t('nav.salonService') },
+  { id: 'partyBooth', label: t('nav.partyBooth') },
+  { id: 'homeService', label: t('nav.homeService') },
+];
+const galleryChildren: { id: PageId; label: string }[] = [
+  { id: 'photos', label: t('nav.photos') },
+  { id: 'videos', label: t('nav.videos') },
+];
+
+const linkBase =
+  'relative py-1 text-[0.92rem] font-bold text-ink transition-colors hover:text-rosewood ' +
+  'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-center after:scale-x-0 ' +
+  'after:bg-rosewood after:transition-transform after:duration-300 hover:after:scale-x-100';
+const activeLink = 'text-rosewood after:scale-x-100';
+---
+
+<header id="site-header" class="glass sticky top-0 z-50 border-b border-hairline">
+  <div class="header-inner mx-auto flex max-w-7xl items-center gap-5 px-4 py-3 lg:px-6">
+    <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
+      <img src="/images/mm-logo.png" alt={t('site.name')} class="header-logo w-auto" width="240" height="112" />
+    </a>
+
+    <nav class="hidden flex-1 items-center justify-center gap-7 lg:flex">
+      <a href={pathFor('home', locale)} class:list={[linkBase, { [activeLink]: page === 'home' }]}>{t('nav.home')}</a>
+
+      <div class="group relative">
+        <a
+          href={pathFor('services', locale)}
+          class:list={[linkBase, { [activeLink]: ['services', 'salonService', 'partyBooth', 'homeService'].includes(page) }]}
+        >{t('nav.services')} <span aria-hidden="true" class="text-[0.6rem] text-brown-line">▾</span></a>
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="glass min-w-52 rounded-xl p-2 shadow-plush">
+            {servicesChildren.map((c) => (
+              <li>
+                <a href={pathFor(c.id, locale)} class="block rounded-lg px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-pink-card hover:text-rosewood">
+                  {c.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('about', locale)} class:list={[linkBase, { [activeLink]: page === 'about' }]}>{t('nav.about')}</a>
+
+      <div class="group relative">
+        <a
+          href={pathFor('photos', locale)}
+          class:list={[linkBase, { [activeLink]: ['photos', 'videos'].includes(page) }]}
+        >{t('nav.gallery')} <span aria-hidden="true" class="text-[0.6rem] text-brown-line">▾</span></a>
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="glass min-w-52 rounded-xl p-2 shadow-plush">
+            {galleryChildren.map((c) => (
+              <li>
+                <a href={pathFor(c.id, locale)} class="block rounded-lg px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-pink-card hover:text-rosewood">
+                  {c.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <a href={pathFor('contact', locale)} class:list={[linkBase, { [activeLink]: page === 'contact' }]}>{t('nav.contact')}</a>
+      <LanguageSwitcher locale={locale} page={page} class="text-sm text-rosewood" />
+    </nav>
+
+    <div class="ms-auto hidden lg:block">
+      <a href={pathFor('booking', locale)} class="btn-solid !px-6 !py-2.5">{t('cta.book')}</a>
+    </div>
+
+    <!-- mobile toggle -->
+    <button
+      id="mobile-nav-toggle"
+      class="ms-auto flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border border-hairline lg:hidden"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <span class="block h-px w-5 bg-ink"></span>
+      <span class="block h-px w-5 bg-ink"></span>
+      <span class="block h-px w-3.5 bg-ink"></span>
+    </button>
+  </div>
+
+  <!-- mobile nav -->
+  <div id="mobile-nav" class="hidden border-t border-hairline bg-cream px-6 py-6 lg:hidden">
+    <ul class="space-y-4 font-bold text-ink">
+      <li><a href={pathFor('home', locale)} class="hover:text-rosewood">{t('nav.home')}</a></li>
+      <li>
+        <a href={pathFor('services', locale)} class="hover:text-rosewood">{t('nav.services')}</a>
+        <ul class="ms-4 mt-3 space-y-2.5 border-s border-hairline ps-4 font-normal text-ink-soft">
+          {servicesChildren.map((c) => <li><a href={pathFor(c.id, locale)} class="hover:text-rosewood">{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('about', locale)} class="hover:text-rosewood">{t('nav.about')}</a></li>
+      <li>
+        <span>{t('nav.gallery')}</span>
+        <ul class="ms-4 mt-3 space-y-2.5 border-s border-hairline ps-4 font-normal text-ink-soft">
+          {galleryChildren.map((c) => <li><a href={pathFor(c.id, locale)} class="hover:text-rosewood">{c.label}</a></li>)}
+        </ul>
+      </li>
+      <li><a href={pathFor('contact', locale)} class="hover:text-rosewood">{t('nav.contact')}</a></li>
+      <li><LanguageSwitcher locale={locale} page={page} /></li>
+      <li class="pt-2"><a href={pathFor('booking', locale)} class="btn-solid">{t('cta.book')}</a></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  // Condensing header on scroll (rAF-throttled, passive)
+  const header = document.getElementById('site-header');
+  let ticking = false;
+  const update = () => {
+    header?.classList.toggle('is-condensed', window.scrollY > 40);
+    ticking = false;
+  };
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    },
+    { passive: true },
+  );
+  update();
+</script>

@@ -1,0 +1,26 @@
+---
+/**
+ * Booking call-to-action.
+ *
+ * Links to the booking page, which hosts the native Salonist booking widget
+ * (PHASE 2 — see BookingWidget.astro and the PHASE 2 section of CLAUDE.md)
+ * with a permanent WhatsApp/phone fallback.
+ */
+import type { Locale } from '../i18n/ui';
+import { useTranslations, pathFor } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  class?: string;
+}
+
+const { locale, class: className = '' } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<a
+  href={pathFor('booking', locale)}
+  class={`inline-block rounded-xl bg-pink-light px-8 py-3 font-bold text-[#222] border border-pink transition-colors hover:bg-blue-soft ${className}`}
+>
+  {t('cta.book')}
+</a>

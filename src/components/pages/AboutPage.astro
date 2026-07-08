@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import BookingCTA from '../../components/BookingCTA.astro';
+import type { Locale } from '../../i18n/ui';
+import { ui } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+import { aboutIntro, aboutHair, aboutTeam } from '../../data/copy';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const sections = [
+  { image: '/images/IMG_2920.jpg', paras: aboutIntro[locale], reverse: false },
+  { image: '/images/IMG_4401.jpg', paras: aboutHair[locale], reverse: true },
+  { image: '/images/IMG_4585.jpg', paras: aboutTeam[locale], reverse: false },
+];
+---
+
+<BaseLayout
+  locale={locale}
+  page="about"
+  title={`${t('nav.about')} - ${ui[locale]['site.name']}`}
+  description={aboutIntro[locale][0]}
+>
+  <PageHero title={t('nav.about')} subtitle={t('about.subtitle')} />
+
+  {sections.map((s) => (
+    <section class="py-14">
+      <div class:list={['mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-12']}>
+        <div class:list={['md:col-span-5', { 'md:order-2': s.reverse }]}>
+          <img src={s.image} alt={t('nav.about')} loading="lazy" class="w-full rounded-2xl shadow-lg" />
+        </div>
+        <div class:list={['md:col-span-7', { 'md:order-1': s.reverse }]}>
+          {s.paras.map((p) => <p class="mb-4 text-lg leading-relaxed">{p}</p>)}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="pb-16 text-center">
+    <BookingCTA locale={locale} />
+  </section>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+/**
+ * EDITORIAL carte cards — party packages set as numbered menu entries:
+ * hairline-ruled columns, serif KD prices, no shadows or fills.
+ */
+import type { Locale } from '../i18n/ui';
+import { useTranslations, folio } from '../i18n/utils';
+import type { PartyPackage } from '../data/party';
+
+interface Props {
+  locale: Locale;
+  packages: PartyPackage[];
+}
+
+const { locale, packages } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div class="mx-auto grid max-w-5xl gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+  {packages.map((pkg, i) => (
+    <article class="flex flex-col border-t-2 border-ink pt-5">
+      <p class="folio mb-3 text-sm" aria-hidden="true">{folio(i + 1, locale)}</p>
+      <h3 class="mb-4 text-xl font-bold leading-snug">{pkg.name}</h3>
+      <ul class="mb-4 space-y-1.5 text-sm leading-relaxed text-ink">
+        {pkg.features.map((f) => (
+          <li class="flex gap-2.5"><span class="text-pink" aria-hidden="true">—</span>{f}</li>
+        ))}
+      </ul>
+      {pkg.suitable && <p class="mb-4 text-sm italic text-ink-soft">{pkg.suitable}</p>}
+      <div class="mb-4 space-y-1 border-y border-hairline py-3">
+        {pkg.prices.map((p) => <p class="carte-price text-lg font-bold">{p}</p>)}
+      </div>
+      {pkg.extras.length > 0 && (
+        <ul class="mb-4 space-y-2 text-sm text-ink-soft">
+          {pkg.extras.map((e) => (
+            <li class="carte-row">
+              <span>{e.name || '‎'}</span>
+              <span class="leader" aria-hidden="true"></span>
+              <span class="carte-price text-sm">{e.price}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {pkg.note && (
+        <p class="mt-auto pt-2 text-xs leading-relaxed text-ink-soft">
+          <span class="font-bold text-rose">{t('party.note')}:</span> {pkg.note}
+        </p>
+      )}
+    </article>
+  ))}
+</div>
