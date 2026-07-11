@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import type { Locale } from '../../i18n/ui';
+import { withBase } from '../../utils/paths';
 import { ui, business } from '../../i18n/ui';
 import { useTranslations, folio } from '../../i18n/utils';
 
@@ -25,7 +26,7 @@ const t = useTranslations(locale);
       <figure>
         <div class="plate">
           <video controls playsinline preload="metadata" class="w-full">
-            <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
+            <source src={withBase('/videos/Marshmallows-Nails-Spa.mp4')} type="video/mp4" />
           </video>
         </div>
         <figcaption class="plate-caption mt-3 flex items-baseline gap-3">
@@ -36,7 +37,7 @@ const t = useTranslations(locale);
       <figure>
         <div class="plate">
           <video controls playsinline preload="metadata" class="w-full">
-            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+            <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
           </video>
         </div>
         <figcaption class="plate-caption mt-3 flex items-baseline gap-3">

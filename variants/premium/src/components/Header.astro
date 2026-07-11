@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../i18n/ui';
+import { withBase } from '../utils/paths';
 import { useTranslations, pathFor, type PageId } from '../i18n/utils';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
@@ -31,7 +32,7 @@ const activeLink = 'text-rosewood after:scale-x-100';
 <header id="site-header" class="glass sticky top-0 z-50 border-b border-hairline">
   <div class="header-inner mx-auto flex max-w-7xl items-center gap-5 px-4 py-3 lg:px-6">
     <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
-      <img src="/images/mm-logo.png" alt={t('site.name')} class="header-logo w-auto" width="240" height="112" />
+      <img src={withBase('/images/mm-logo.png')} alt={t('site.name')} class="header-logo w-auto" width="240" height="112" />
     </a>
 
     <nav class="hidden flex-1 items-center justify-center gap-7 lg:flex">

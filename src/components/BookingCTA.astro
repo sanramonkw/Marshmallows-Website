@@ -8,6 +8,7 @@
  */
 import type { Locale } from '../i18n/ui';
 import { useTranslations, pathFor } from '../i18n/utils';
+import { withBase } from '../utils/paths';
 
 interface Props {
   locale: Locale;
@@ -19,7 +20,7 @@ const t = useTranslations(locale);
 ---
 
 <a
-  href={pathFor('booking', locale)}
+  href={withBase(pathFor('booking', locale))}
   class={`inline-block rounded-xl bg-pink-light px-8 py-3 font-bold text-[#222] border border-pink transition-colors hover:bg-blue-soft ${className}`}
 >
   {t('cta.book')}

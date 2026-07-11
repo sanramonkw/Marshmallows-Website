@@ -11,14 +11,14 @@
 /* Original self-hosted webfonts (pulled from the WordPress theme)     */
 @font-face {
   font-family: "Century Gothic";
-  src: url("/fonts/centurygothic.ttf") format("truetype");
+  src: url("../assets/fonts/centurygothic.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Century Gothic";
-  src: url("/fonts/centurygothic-bold.ttf") format("truetype");
+  src: url("../assets/fonts/centurygothic-bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -30,7 +30,7 @@
    Arabic-Indic numeral rendering. */
 @font-face {
   font-family: "GE SS TV";
-  src: url("/fonts/ge-sstv-medium.ttf") format("truetype");
+  src: url("../assets/fonts/ge-sstv-medium.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -38,7 +38,7 @@
 }
 @font-face {
   font-family: "GE SS TV";
-  src: url("/fonts/ge-sstv-bold.ttf") format("truetype");
+  src: url("../assets/fonts/ge-sstv-bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -49,14 +49,14 @@
 /* Arabic display stays GE SS TV per brand rule.                       */
 @font-face {
   font-family: "Cormorant Garamond";
-  src: url("/fonts/CormorantGaramond-var.woff2") format("woff2");
+  src: url("../assets/fonts/CormorantGaramond-var.woff2") format("woff2");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Cormorant Garamond";
-  src: url("/fonts/CormorantGaramond-Italic-var.woff2") format("woff2");
+  src: url("../assets/fonts/CormorantGaramond-Italic-var.woff2") format("woff2");
   font-weight: 300 700;
   font-style: italic;
   font-display: swap;

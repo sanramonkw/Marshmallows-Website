@@ -6,6 +6,7 @@ interface Props {
   tilt?: 'a' | 'b' | 'c' | 'd' | 'none';
 }
 
+import { withBase } from '../utils/paths';
 const { href, image, title, tilt = 'none' } = Astro.props;
 const tiltClass = tilt === 'none' ? '' : `tilt-${tilt}`;
 ---
@@ -13,7 +14,7 @@ const tiltClass = tilt === 'none' ? '' : `tilt-${tilt}`;
 <a href={href} class={`card-pop group relative block overflow-hidden ${tiltClass}`}>
   <div class="aspect-[4/3] overflow-hidden">
     <img
-      src={image}
+      src={withBase(image)}
       alt=""
       loading="lazy"
       class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"

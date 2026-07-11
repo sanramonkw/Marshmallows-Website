@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BookingCTA from '../../components/BookingCTA.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import type { Locale } from '../../i18n/ui';
+import { withBase } from '../../utils/paths';
 import { ui } from '../../i18n/ui';
 import { useTranslations, pathFor } from '../../i18n/utils';
 import { aboutIntro } from '../../data/copy';
@@ -26,7 +27,7 @@ const t = useTranslations(locale);
     <div class="pointer-events-none absolute -top-40 end-[-10rem] h-[36rem] w-[36rem] rounded-full bg-pink-pale/45 blur-3xl" aria-hidden="true"></div>
     <div class="pointer-events-none absolute bottom-[-14rem] start-[-12rem] h-[30rem] w-[30rem] rounded-full bg-blush-wash blur-3xl" aria-hidden="true"></div>
     <img
-      src="/images/pattern2b.png"
+      src={withBase('/images/pattern2b.png')}
       alt=""
       aria-hidden="true"
       class="pointer-events-none absolute -top-6 end-0 w-72 opacity-[0.14] mix-blend-multiply"
@@ -49,7 +50,7 @@ const t = useTranslations(locale);
         <div class="arch absolute -inset-3 translate-x-3 translate-y-3 border border-pink-light/60 rtl:-translate-x-3" aria-hidden="true"></div>
         <div class="arch relative border border-hairline bg-cream p-3 shadow-plush">
           <video autoplay muted loop playsinline class="arch aspect-[4/5] w-full object-cover" aria-hidden="true">
-            <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+            <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
           </video>
         </div>
       </div>
@@ -62,7 +63,7 @@ const t = useTranslations(locale);
       <div class="relative md:col-span-5" data-reveal>
         <div class="absolute -inset-4 rounded-[2.5rem] bg-pink-pale/50" aria-hidden="true"></div>
         <img
-          src="/images/IMG_2921.jpg"
+          src={withBase('/images/IMG_2921.jpg')}
           alt={t('home.aboutTitle')}
           loading="lazy"
           class="relative w-full rounded-[2rem] border-4 border-cream object-cover shadow-plush"

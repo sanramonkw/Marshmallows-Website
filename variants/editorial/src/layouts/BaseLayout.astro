@@ -4,7 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { Locale } from '../i18n/ui';
 import { business, ui } from '../i18n/ui';
-import { dirFor, pathFor, alternatePath, type PageId } from '../i18n/utils';
+import { dirFor, seoPath, seoAlternate, type PageId } from '../i18n/utils';
+import { withBase } from '../utils/paths';
 
 interface Props {
   locale: Locale;
@@ -18,8 +19,8 @@ const { locale, page, title, description, ogImage = '/images/Marshmallow-.png' }
 const dir = dirFor(locale);
 const site = Astro.site ?? new URL('https://marshmallows.co');
 
-const canonical = new URL(pathFor(page, locale), site).href;
-const alternate = new URL(alternatePath(page, locale), site).href;
+const canonical = new URL(seoPath(page, locale), site).href;
+const alternate = new URL(seoAlternate(page, locale), site).href;
 const arUrl = locale === 'ar' ? canonical : alternate;
 const enUrl = locale === 'en' ? canonical : alternate;
 const ogImageAbs = new URL(ogImage, site).href;
@@ -76,8 +77,8 @@ const jsonLd = {
     <link rel="alternate" href={enUrl} hreflang="en" />
     <link rel="alternate" href={arUrl} hreflang="x-default" />
 
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/png" href={withBase('/favicon.png')} />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={locale === 'ar' ? 'ar_KW' : 'en_US'} />

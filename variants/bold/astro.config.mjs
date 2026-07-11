@@ -8,7 +8,10 @@ import tailwindcss from '@tailwindcss/vite';
 //   Arabic  = default locale, served at the root (/, /services-ar/, /about-ar/ …)
 //   English = prefixed with /en/ (/en/home/, /en/services/ …)
 export default defineConfig({
-  site: 'https://marshmallows.co',
+  // Production value (kept for reference): site: 'https://marshmallows.co'
+  // GitHub Pages review deployment:
+  site: 'https://sanramonkw.github.io',
+  base: '/Marshmallows-Website/variants/bold/',
   trailingSlash: 'always',
   // PHASE 2 — Salonist booking: the site stays fully prerendered ('static' is
   // Astro 5's default), but the node adapter enables the on-demand API proxy

@@ -5,6 +5,7 @@ import ServiceCard from '../../components/ServiceCard.astro';
 import type { Locale } from '../../i18n/ui';
 import { ui } from '../../i18n/ui';
 import { useTranslations, pathFor } from '../../i18n/utils';
+import { withBase } from '../../utils/paths';
 import { aboutIntro } from '../../data/copy';
 
 interface Props {
@@ -22,11 +23,11 @@ const t = useTranslations(locale);
   description={ui[locale]['site.description']}
 >
   <!-- Hero: headline + autoplay video over the theme's leaf-pattern texture -->
-  <section class="bg-pink bg-[url(/images/pattern2b.png)] bg-no-repeat bg-right-top py-16">
+  <section class="bg-pink bg-no-repeat bg-right-top py-16" style={`background-image: url('${withBase('/images/pattern2b.png')}')`}>
     <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-2">
       <h1 class="text-4xl leading-snug text-white md:text-5xl">{t('home.heroTitle')}</h1>
       <video autoplay muted loop playsinline class="w-full rounded-2xl shadow-lg" aria-hidden="true">
-        <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+        <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
       </video>
     </div>
   </section>
@@ -35,7 +36,7 @@ const t = useTranslations(locale);
   <section class="py-16">
     <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-12">
       <div class="md:col-span-5">
-        <img src="/images/IMG_2921.jpg" alt={t('home.aboutTitle')} loading="lazy" class="w-full rounded-2xl shadow-lg" />
+        <img src={withBase('/images/IMG_2921.jpg')} alt={t('home.aboutTitle')} loading="lazy" class="w-full rounded-2xl shadow-lg" />
       </div>
       <div class="rounded-2xl bg-pink-card p-8 shadow-sm md:col-span-7 md:p-12">
         <h2 class="text-3xl text-pink">{t('home.aboutTitle')}</h2>

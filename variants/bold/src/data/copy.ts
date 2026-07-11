@@ -1,4 +1,5 @@
 // Real copy extracted verbatim from marshmallows.co (2026-07-02).
+import { withBase } from '../utils/paths';
 
 export const aboutIntro = {
   ar: [
@@ -37,6 +38,6 @@ export const aboutTeam = {
 
 /** Gallery uploads from the WP media library (the live gallery shortcode is broken). */
 export const galleryImages = [
-  ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.png`),
-  ...Array.from({ length: 6 }, (_, i) => `/images/marshmallowskwt-${i + 1}.webp`),
+  ...Array.from({ length: 12 }, (_, i) => withBase(`/images/marshmellows${i + 1}.png`)),
+  ...Array.from({ length: 6 }, (_, i) => withBase(`/images/marshmallowskwt-${i + 1}.webp`)),
 ];

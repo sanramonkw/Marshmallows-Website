@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../i18n/ui';
+import { withBase } from '../utils/paths';
 import { useTranslations, pathFor, type PageId } from '../i18n/utils';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import BookingCTA from './BookingCTA.astro';
@@ -29,7 +30,7 @@ const active = 'bg-plum text-white hover:bg-plum';
 <header class="sticky top-0 z-50 border-b-2 border-plum bg-cream/95 backdrop-blur">
   <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
     <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
-      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-12 w-auto md:h-14" width="240" height="112" />
+      <img src={withBase('/images/mm-logo.png')} alt={t('site.name')} class="h-12 w-auto md:h-14" width="240" height="112" />
     </a>
 
     <nav class="hidden flex-1 items-center justify-center gap-1 font-bold text-plum lg:flex">

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import type { Locale } from '../../i18n/ui';
+import { withBase } from '../../utils/paths';
 import { ui, business } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/utils';
 
@@ -24,12 +25,12 @@ const t = useTranslations(locale);
     <div class="mx-auto max-w-4xl space-y-10 px-4">
       <div class="card-pop tilt-c overflow-hidden p-2" data-reveal>
         <video controls playsinline preload="metadata" class="w-full rounded-2xl">
-          <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
+          <source src={withBase('/videos/Marshmallows-Nails-Spa.mp4')} type="video/mp4" />
         </video>
       </div>
       <div class="card-pop tilt-b overflow-hidden p-2" data-reveal>
         <video controls playsinline preload="metadata" class="w-full rounded-2xl">
-          <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+          <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
         </video>
       </div>
       <p class="text-center text-lg">
