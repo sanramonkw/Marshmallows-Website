@@ -75,6 +75,7 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {import.meta.env.DEPLOY_TARGET === 'pages' && <meta name="robots" content="noindex, nofollow" />}
     <link rel="alternate" href={arUrl} hreflang="ar" />
     <link rel="alternate" href={enUrl} hreflang="en" />
     <link rel="alternate" href={arUrl} hreflang="x-default" />
