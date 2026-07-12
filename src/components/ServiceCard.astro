@@ -3,22 +3,27 @@ interface Props {
   href: string;
   image: string;
   title: string;
+  tilt?: 'a' | 'b' | 'c' | 'd' | 'none';
 }
 
-const { href, image, title } = Astro.props;
+const { href, image, title, tilt = 'none' } = Astro.props;
+const tiltClass = tilt === 'none' ? '' : `tilt-${tilt}`;
 ---
 
-<a href={href} class="group relative block overflow-hidden rounded-2xl shadow-md transition-transform hover:-translate-y-1">
+<a href={href} class={`card-pop group relative block overflow-hidden ${tiltClass}`}>
   <div class="aspect-[4/3] overflow-hidden">
     <img
       src={image}
-      alt={title}
+      alt=""
       loading="lazy"
-      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
     />
   </div>
-  <!-- live theme: title over a transparent→black/90 bottom gradient -->
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-transparent to-black/90 pt-14 pb-4">
-    <h3 class="text-center text-xl text-white">{title}</h3>
+  <div class="flex items-center justify-between gap-3 border-t-2 border-plum bg-white px-5 py-4">
+    <h3 class="text-lg font-bold text-plum md:text-xl">{title}</h3>
+    <span
+      aria-hidden="true"
+      class="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-plum bg-pink-light text-lg font-bold text-plum transition-transform group-hover:rotate-45 motion-reduce:transition-none rtl:-scale-x-100"
+    >↗</span>
   </div>
 </a>

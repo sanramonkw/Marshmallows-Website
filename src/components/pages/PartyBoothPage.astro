@@ -23,11 +23,11 @@ const t = useTranslations(locale);
   description={ui[locale]['site.description']}
 >
   <PageHero title={t('nav.partyBooth')} />
-  <section class="py-14">
+  <section class="py-14 md:py-20">
     <div class="mx-auto max-w-7xl px-4">
       <PartyPackages locale={locale} packages={partyPackages[locale]} />
-      <div class="mt-10 text-center">
-        <BookingCTA locale={locale} />
+      <div class="mt-14 text-center">
+        <BookingCTA locale={locale} size="lg" />
       </div>
     </div>
   </section>

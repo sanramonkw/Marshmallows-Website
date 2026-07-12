@@ -1,7 +1,8 @@
 ---
 /**
- * Category price list — replaces the live theme's CSS-radio "tabs".
- * Rendered as an accessible accordion (native <details>), first category open.
+ * Category price list — accessible native <details> accordion, BOLD variant:
+ * chunky bordered cards, category summaries as bold rows with a rotating
+ * marker, KD prices as sticker-style chips.
  */
 import type { PriceCategory } from '../data/services';
 
@@ -12,21 +13,25 @@ interface Props {
 const { categories } = Astro.props;
 ---
 
-<div class="mx-auto max-w-3xl space-y-4">
+<div class="mx-auto max-w-3xl space-y-5">
   {categories.map((cat, i) => (
-    <details class="group rounded-2xl bg-white shadow-md open:pb-4" open={i === 0}>
-      <summary class="cursor-pointer list-none rounded-2xl px-6 py-4 text-lg font-bold text-pink transition-colors group-open:rounded-b-none hover:bg-pink-pale">
-        {cat.category}
+    <details class="card-pop group overflow-hidden open:pb-4" open={i === 0}>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-lg font-bold text-plum transition-colors hover:bg-pink-card [&::-webkit-details-marker]:hidden">
+        <span>{cat.category}</span>
+        <span
+          aria-hidden="true"
+          class="grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-plum bg-pink-light text-base transition-transform group-open:rotate-45 motion-reduce:transition-none"
+        >+</span>
       </summary>
-      <ul class="divide-y divide-pink-pale px-6">
+      <ul class="divide-y divide-pink-pale border-t-2 border-plum px-6">
         {cat.items.map((item) =>
           item.name ? (
-            <li class="flex items-baseline justify-between gap-4 py-2">
+            <li class="flex items-center justify-between gap-4 py-2.5">
               <span class="font-bold">{item.name}</span>
-              <span class="whitespace-nowrap text-pink">{item.price}</span>
+              <span class="chip-price">{item.price}</span>
             </li>
           ) : (
-            <li class="py-2 italic text-neutral-500">{item.note}</li>
+            <li class="py-2.5 italic text-plum/60">{item.note}</li>
           )
         )}
       </ul>

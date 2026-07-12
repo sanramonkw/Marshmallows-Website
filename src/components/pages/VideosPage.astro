@@ -22,14 +22,18 @@ const t = useTranslations(locale);
   <PageHero title={t('nav.videos')} />
   <section class="py-14">
     <div class="mx-auto max-w-4xl space-y-10 px-4">
-      <video controls playsinline preload="metadata" class="w-full rounded-2xl shadow-lg">
-        <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
-      </video>
-      <video controls playsinline preload="metadata" class="w-full rounded-2xl shadow-lg">
-        <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
-      </video>
+      <div class="card-pop tilt-c overflow-hidden p-2" data-reveal>
+        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
+          <source src="/videos/Marshmallows-Nails-Spa.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="card-pop tilt-b overflow-hidden p-2" data-reveal>
+        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
+          <source src="/videos/Marshmallows_video_21042026.mov" type="video/mp4" />
+        </video>
+      </div>
       <p class="text-center text-lg">
-        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-pink underline">
+        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum">
           {t('videos.followInstagram')}
         </a>
       </p>

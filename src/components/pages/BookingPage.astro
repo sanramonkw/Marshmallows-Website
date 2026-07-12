@@ -41,20 +41,20 @@ const t = useTranslations(locale);
       <BookingWidget locale={locale} />
 
       <!-- Permanent WhatsApp / phone fallback (was the phase-1 placeholder) -->
-      <div class="mt-8 rounded-2xl bg-white p-8 text-center shadow-md">
+      <div class="card-pop mt-10 bg-pink-card! p-8 text-center">
         <p class="mb-6 text-lg leading-relaxed">{t('bk.fallbackLead')}</p>
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a
             href={business.whatsapp}
             rel="noopener nofollow"
             target="_blank"
-            class="rounded-full bg-pink px-8 py-3 font-bold text-white transition-colors hover:bg-brown-deep"
+            class="inline-flex items-center gap-2 rounded-full border-2 border-plum bg-pink-deep px-8 py-3 font-bold text-white shadow-[0_4px_0_0_var(--color-plum)] transition-transform hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {t('booking.whatsapp')}
           </a>
           <a
             href={business.phoneHref}
-            class="rounded-full border-2 border-pink px-8 py-3 font-bold text-pink transition-colors hover:bg-pink-pale"
+            class="rounded-full border-2 border-plum bg-white px-8 py-3 font-bold text-plum shadow-[0_4px_0_0_var(--color-plum)] transition-transform hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {t('booking.call')} <span dir="ltr">{business.phone}</span>
           </a>

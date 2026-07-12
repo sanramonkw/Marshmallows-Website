@@ -7,6 +7,33 @@ their sites off WordPress; the live site ran WordPress 7.0 with the custom
 `marshmallowskwt` theme (Bootstrap 3, jQuery, Polylang, Yoast, Contact Form 7,
 Salonist booking plugin). Site analysis and asset pull done 2026-07-02.
 
+## Design: BOLD INNOVATION ("Sugar Rush") is the master design (2026-07-12)
+
+Three alternative design directions were built in parallel under `variants/`
+(`bold`, `editorial`, `premium`) — see the original `CLAUDE.md`
+"Cold-resume checklist" history for that process. **The owner chose Bold
+Innovation ("Sugar Rush")** as the final production design. It has been
+**promoted from `variants/bold/` into the project root** (this file, `src/`,
+`public/`, and the config files); `variants/bold/` was then deleted since its
+content now lives at root. `variants/premium/` and `variants/editorial/`
+remain as archived alternatives, each with its own `VARIANT.md`, in case the
+owner wants to revisit them.
+
+A pre-promotion snapshot of the previous master design exists at the git
+branch **`pre-bold-promotion`** (tag it further if needed before it's pruned).
+
+**Concept — playful nail-art-studio energy, Gen-Z beauty-brand rebrand.**
+RTL-first: oversized GE SS TV Bold Arabic display headlines on a coral→blush
+gradient hero, sticker/badge chips with hard offset shadows, a bento home
+grid, a tilted polaroid mood-board gallery, a direction-aware marquee band of
+real service categories, and an animated (count-up, reduced-motion-safe)
+stat strip from real data (2 branches / 165+ services / est. 2013). Fun but
+salon-trustworthy — hierarchy, whitespace and AA contrast are kept strict.
+Same 20 pages, same URLs, same verbatim content, same SEO head, same booking
+widget + `/api/salonist/*` (restyled shell only), same WhatsApp bubble +
+fallback, same contact mailto — the promotion only restyled the site; nothing
+functional changed.
+
 ## Stack & rationale
 
 - **Astro 5** — fully static output, zero client JS by default; ideal for an
@@ -53,9 +80,10 @@ Mirrors the live Polylang setup exactly:
   locale. Two route files use Arabic filenames (`الصور.astro`,
   `مقاطع-الفيديو.astro`) to preserve the live Arabic URLs.
 
-## Design tokens (originals from the WP theme)
+## Design tokens (originals from the WP theme, plus Bold's AA-safe derivatives)
 
-Fonts (self-hosted originals in `public/fonts/`, pulled from the theme):
+Fonts (self-hosted originals in `public/fonts/`, pulled from the theme) —
+**unchanged by the Bold promotion**, no font added, no CDNs:
 
 | Role | Family | Files |
 |---|---|---|
@@ -66,36 +94,99 @@ Fonts (self-hosted originals in `public/fonts/`, pulled from the theme):
 and declared a `helvetica-neue-ar-light` face whose file 404s on origin.)
 Font family switches per `html[lang]` in `global.css`.
 
-Colors (Tailwind `@theme` in `src/styles/global.css`):
+**Font-face fix — do not drop this on future edits to `global.css`:** GE SS
+TV's TTF is missing/broken for some Latin glyphs (e.g. "y" — "Salmiya"
+rendered "Salmi a" without this). Both GE SS TV `@font-face` rules carry a
+`unicode-range` scoping them to Arabic script + digits/punctuation, so Latin
+runs (like the "Salmiya" branch name mixed into Arabic copy) fall back to
+Century Gothic instead of rendering the broken glyph. Verified 2026-07-12
+after the Bold promotion (Playwright: footer/branch-name "Salmiya" renders
+with the "y", computed `font-family` resolves to the fallback for that run).
 
-| Token | Hex | Origin in theme CSS |
+Colors (Tailwind `@theme` in `src/styles/global.css`) — original brand hues
+preserved, plus three same-hue derivatives added for Bold's AA-safe
+white-on-pink text and hard offset shadows:
+
+| Token | Hex | Origin / why |
 |---|---|---|
-| `pink` | `#d9726d` | `.txt-pink` / `.bg-pink` — primary accent, hero bg, nav links |
-| `pink-light` | `#f7aeac` | body background, `.btn-default` (booking button fill) |
-| `pink-pale` | `#fbd8d7` | `.txt-pink3` / `.bg-pink3` — 16px-rounded footer card |
-| `pink-card` | `#fff5f5` | pale content card (about section) — pixel-verified vs live |
-| `blue-soft` | `#ccdfe7` | `.bg-blue`, button hover |
-| `brown` | `#bba496` | `.txt-brown` |
-| `brown-line` | `#a99387` | `.line.brown` divider |
-| `brown-deep` | `#ab866e` | Salonist widget hover accent (wp-custom-css) |
-| `ink` | `#2e2e2e` | heading color |
+| `pink` | `#d9726d` | original `.txt-pink` / `.bg-pink` — primary accent |
+| `pink-light` | `#f7aeac` | original body background / booking button fill |
+| `pink-pale` | `#fbd8d7` | original `.txt-pink3` / `.bg-pink3` |
+| `pink-card` | `#fff5f5` | original pale content card |
+| `blue-soft` | `#ccdfe7` | original `.bg-blue`, button hover |
+| `brown` | `#bba496` | original `.txt-brown` |
+| `brown-line` | `#a99387` | original `.line.brown` divider |
+| `brown-deep` | `#ab866e` | Salonist widget hover accent |
+| `pink-deep` | `#b3413c` | **Bold** — darkened brand pink, white text passes WCAG AA (≈5.6:1) |
+| `plum` | `#3a1c1a` | **Bold** — near-black ink derived from the pink; body/heading ink, borders, offset shadows; ≥4.5:1 on every pink |
+| `cream` | `#fff8f6` | **Bold** — warm paper body background |
+| `ink` | remapped to `plum` | so untouched components inherit the Bold palette |
 
 Typography feel: rounded geometric Latin (Century Gothic) + classic Kufi-style
-GE SS TV Arabic, generous line-height (29px AR), pink-on-pink marshmallow look.
+GE SS TV Arabic, generous line-height (29px AR), pink-on-pink marshmallow look,
+now on Bold's gradient/sticker system.
 
-**Color/layout fidelity pass (2026-07-02, verified with Playwright screenshots
-against the live site — keep these, the first draft got them wrong):**
-- Header is **white** (`bg-white/95`) with pink nav links — NOT pink-light.
-- Hero: `bg-pink` + the theme's leaf texture `public/images/pattern2b.png`
-  (`bg-no-repeat bg-right-top`).
-- Booking button: `bg-pink-light`, `text-[#222]`, `border border-pink`,
-  `rounded-xl` (12px) — from live computed styles.
-- About section: pale `pink-card` rounded-2xl card on the pink-light body;
-  in AR the photo sits on the RIGHT (image div comes first in DOM → RTL grid).
-- Services band: plain body background (NOT solid pink); white H2; card titles
-  sit over a transparent→black/90 bottom gradient in white.
-- Footer: content inside a rounded-2xl `pink-pale` card, copyright included.
-- Floating WhatsApp bubble fixed bottom-**right** (physical, both locales).
+### Bold Innovation techniques / components
+
+- `global.css`: gradient utilities (`grad-hero`, `grad-band`, `grad-soft`,
+  `grad-text`), `display-xl/lg` clamp headline scale, `.sticker` /
+  `.chip-price` badge system, `.card-pop` (2.5px plum border + hard offset
+  shadow + hover lift), `.tilt-a…d` mood-board rotations, direction-aware pure
+  CSS marquee (`translateX(±100%)` per `dir`), scroll-reveal styles using the
+  **`translate` property** (never fights the tilt `transform`s), chunky
+  `:focus-visible` ring, `::selection`.
+- Components: `Marquee.astro` (service categories, aria-hidden duplicate
+  track, wraps statically under reduced motion), `StatStrip.astro` (semantic
+  `<dl>`, final values server-rendered; count-up only enhances).
+- `BaseLayout.astro`: tiny inline `html.js` marker + one IntersectionObserver
+  script (reveals + count-up, `prefers-reduced-motion` gated, transform/opacity
+  only); sticky mobile Book-Now pill (header CTA is lg-only); restyled
+  WhatsApp bubble (still fixed bottom-**right**, physical, both locales).
+  Head/SEO byte-compatible with the prior master.
+- `HomePage.astro`: gradient hero with oversized Arabic headline + linked
+  service sticker chips + tilted video card + floating 💅 sticker → marquee →
+  about with overlapping tilted photos + gradient display heading → counter
+  strip (2 branches / 165+ services, computed from `src/data/services.ts` /
+  est. 2013) → bento grid (3 service cards, gallery mood-board teaser,
+  gradient booking-CTA tile with phone, 2 branch tiles).
+- `PriceList`: bold `<details>` accordion, prices as KD sticker chips.
+  `PartyPackages`: tinted header strips + price stickers. `GalleryGrid`:
+  tilted, staggered polaroids. `Footer`: deep-plum rounded card with sticker
+  headings and pink offset shadow. `PageHero`: gradient band + display-xl h1.
+- Accessibility: one h1/page, semantic dl/details/nav, focus-visible ring,
+  plum-on-pink text everywhere (no white-on-`#d9726d` body text), reveals and
+  marquee fully disabled/static under `prefers-reduced-motion`, lazy images.
+
+### Jury log (Playwright, desktop 1440×900 + mobile 390×844, AR + EN — from the
+original Bold variant build, still relevant post-promotion)
+
+1. **Booking bento tile white-on-white** — `.card-pop` (background #fff,
+   declared later) beat `.grad-band` → white CTA text invisible. Fixed with
+   explicit `.card-pop.grad-band` rule.
+2. **Reveal killed the tilts** — `[data-reveal].is-in { transform:
+   translateY(0) }` overwrote `rotate()` on elements carrying both (contact
+   photo, video frames). Fixed by moving reveals to the independent
+   `translate` property.
+3. **Empty Salonist step bar** — when the API is unconfigured the widget's
+   empty `<ol id="bw-steps">` left dead space; added `empty:hidden` (restyle
+   only, no logic change). Offline degradation message + WhatsApp fallback
+   card confirmed working.
+4. **Sticky Book-Now missing on mobile** (header CTA was lg-only) — added a
+   fixed bottom-start pill in `BaseLayout` for < lg, per brief.
+5. **Contrast fixes** — branch-tile links switched from `pink-deep` (3.2:1 on
+   pink-light) to plum (8.5:1); nav links plum instead of the old master's
+   pink (3.5:1 on white).
+6. RTL correctness verified: hero/text/bento mirror via logical properties,
+   marquee animates the correct direction per `dir`, arrow badges flip with
+   `rtl:-scale-x-100`, WhatsApp bubble stays physical bottom-right, digits
+   render as Arabic-Indic through GE SS TV.
+7. A "header mid-page" mess seen in one full-page screenshot was a
+   Playwright sticky-stitching artifact, not a site bug (viewport shots
+   clean). Confirmed again post-promotion 2026-07-12: a full-page screenshot
+   taken without emulating `prefers-reduced-motion` / pre-scrolling shows
+   large blank gaps where `[data-reveal]` sections haven't intersected yet;
+   emulate reduced motion (or scroll through the page) before capturing
+   full-page screenshots for review.
 
 ## Page inventory (rebuilt, per locale)
 
@@ -266,6 +357,14 @@ Never modify or restart the machine's `cybertruck` cloudflared tunnel
    color-fidelity notes in the design-tokens section). The owner provided the
    Salonist plugin (`salonist-plugin/`); the ONLY blocker for booking go-live
    is the owner's `SALONIST_DOMAIN_ID`.
+3b. **2026-07-12: Bold Innovation ("Sugar Rush") promoted from
+    `variants/bold/` to master** (see "Design: BOLD INNOVATION" section up
+    top) — pure restyle, no functional change. `npm run build` re-verified
+    green (20 pages + API), Playwright re-verified AR/RTL + EN/LTR rendering,
+    booking widget presence + credential-less degradation + WhatsApp
+    fallback, and the GE SS TV `unicode-range` font fix (kept post-promotion;
+    "Salmiya" renders correctly). Pre-promotion state saved at git branch
+    `pre-bold-promotion`.
 4. Open TODOs, in priority order:
    - **Salonist booking go-live**: obtain `SALONIST_DOMAIN_ID` from the owner,
      set it in the deploy environment, smoke-test against the live CRM

@@ -22,23 +22,32 @@ const t = useTranslations(locale);
 >
   <PageHero title={t('nav.services')} subtitle={t('services.subtitle')} />
 
-  <section class="bg-pink/90 py-16">
+  <section class="grad-soft py-16 md:py-20">
     <div class="mx-auto grid max-w-7xl gap-8 px-4 sm:grid-cols-3">
-      <ServiceCard
-        href={pathFor('salonService', locale)}
-        image="/images/IMG_4385-e1776769490159.jpg"
-        title={t('nav.salonService')}
-      />
-      <ServiceCard
-        href={pathFor('partyBooth', locale)}
-        image="/images/IMG_2922.jpg"
-        title={t('nav.partyBooth')}
-      />
-      <ServiceCard
-        href={pathFor('homeService', locale)}
-        image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
-        title={t('nav.homeService')}
-      />
+      <div data-reveal>
+        <ServiceCard
+          href={pathFor('salonService', locale)}
+          image="/images/IMG_4385-e1776769490159.jpg"
+          title={t('nav.salonService')}
+          tilt="a"
+        />
+      </div>
+      <div data-reveal>
+        <ServiceCard
+          href={pathFor('partyBooth', locale)}
+          image="/images/IMG_2922.jpg"
+          title={t('nav.partyBooth')}
+          tilt="c"
+        />
+      </div>
+      <div data-reveal>
+        <ServiceCard
+          href={pathFor('homeService', locale)}
+          image="/images/WhatsApp-Image-2024-01-25-at-12.57.09-PM.webp"
+          title={t('nav.homeService')}
+          tilt="b"
+        />
+      </div>
     </div>
   </section>
 </BaseLayout>

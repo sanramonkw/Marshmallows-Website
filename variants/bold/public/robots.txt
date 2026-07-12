@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://marshmallows.co/sitemap-index.xml

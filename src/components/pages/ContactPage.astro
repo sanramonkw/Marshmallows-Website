@@ -23,7 +23,9 @@ const t = useTranslations(locale);
 
   <section class="py-14">
     <div class="mx-auto grid max-w-6xl items-start gap-10 px-4 md:grid-cols-2">
-      <img src="/images/IMG_4592.jpg" alt={t('nav.contact')} loading="lazy" class="w-full rounded-2xl shadow-lg" />
+      <div class="card-pop tilt-a overflow-hidden p-2" data-reveal>
+        <img src="/images/IMG_4592.jpg" alt={t('nav.contact')} loading="lazy" class="w-full rounded-2xl" />
+      </div>
 
       <!--
         Form fields mirror the original Contact Form 7 form (your-name,
@@ -31,28 +33,28 @@ const t = useTranslations(locale);
         so submission opens a pre-filled email — TODO: wire to a form
         service (or handle in PHASE 2 alongside the Salonist rebuild).
       -->
-      <form id="contact-form" class="space-y-4 rounded-2xl bg-white p-6 shadow-md">
+      <form id="contact-form" class="card-pop space-y-4 p-6 md:p-8">
         <div>
           <label for="cf-name" class="mb-1 block font-bold">{t('contact.name')}</label>
           <input id="cf-name" name="your-name" type="text" required placeholder="eg. Sarah Smith"
-            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none" />
+            class="w-full rounded-xl border-2 border-plum/20 bg-cream px-4 py-2.5 transition-colors focus:border-pink-deep focus:outline-none" />
         </div>
         <div>
           <label for="cf-email" class="mb-1 block font-bold">{t('contact.email')}</label>
           <input id="cf-email" name="your-email" type="email" required placeholder="sarah@gmail.com"
-            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none" />
+            class="w-full rounded-xl border-2 border-plum/20 bg-cream px-4 py-2.5 transition-colors focus:border-pink-deep focus:outline-none" />
         </div>
         <div>
           <label for="cf-phone" class="mb-1 block font-bold">{t('contact.phone')}</label>
           <input id="cf-phone" name="your-phone" type="tel" placeholder="000 00 000 000" dir="ltr"
-            class="w-full rounded-lg border border-pink-pale px-4 py-2 text-start focus:border-pink focus:outline-none" />
+            class="w-full rounded-xl border-2 border-plum/20 bg-cream px-4 py-2.5 text-start transition-colors focus:border-pink-deep focus:outline-none" />
         </div>
         <div>
           <label for="cf-message" class="mb-1 block font-bold">{t('contact.message')}</label>
           <textarea id="cf-message" name="your-message" rows="5" required placeholder="Type here..."
-            class="w-full rounded-lg border border-pink-pale px-4 py-2 focus:border-pink focus:outline-none"></textarea>
+            class="w-full rounded-xl border-2 border-plum/20 bg-cream px-4 py-2.5 transition-colors focus:border-pink-deep focus:outline-none"></textarea>
         </div>
-        <button type="submit" class="rounded-full bg-pink px-8 py-3 font-bold text-white transition-colors hover:bg-brown-deep">
+        <button type="submit" class="inline-flex items-center gap-2 rounded-full border-2 border-plum bg-pink-deep px-8 py-3 font-bold text-white shadow-[0_4px_0_0_var(--color-plum)] transition-transform hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
           {t('contact.send')}
         </button>
       </form>
@@ -60,11 +62,11 @@ const t = useTranslations(locale);
 
     <div class="mx-auto mt-10 max-w-6xl px-4 text-center">
       <p class="text-lg">
-        <a href={`mailto:${business.email}`} class="font-bold text-pink underline">{business.email}</a>
+        <a href={`mailto:${business.email}`} class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum">{business.email}</a>
         <span class="mx-3">•</span>
-        <a href={business.phoneHref} class="font-bold text-pink underline" dir="ltr">{business.phone}</a>
+        <a href={business.phoneHref} class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum" dir="ltr">{business.phone}</a>
         <span class="mx-3">•</span>
-        <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold text-pink underline">WhatsApp</a>
+        <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum">WhatsApp</a>
       </p>
     </div>
   </section>

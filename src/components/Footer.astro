@@ -13,43 +13,43 @@ const t = useTranslations(locale);
 const [agaila, salmiya] = business.branches;
 ---
 
-<!-- live theme: footer is a 16px-rounded #fbd8d7 card sitting on the pink-light body -->
-<footer class="px-4 pb-8 pt-4 text-sm">
-  <div class="mx-auto max-w-7xl rounded-2xl bg-pink-pale px-6 py-10 md:px-10">
-  <div class="grid gap-8 md:grid-cols-3">
-    <div>
-      <h3 class="mb-3 text-lg text-pink">{t('footer.branchAgaila')}</h3>
-      <p class="leading-relaxed">
-        {agaila.lines.map((l) => <>{l}<br /></>)}
-        <span dir="ltr">☎ +965 2220 9072</span><br />
-        <a href={agaila.mapUrl} class="underline hover:text-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
-      </p>
+<!-- BOLD variant: deep-plum footer card (ink derivative of the brand pink) -->
+<footer class="px-4 pb-8 pt-6 text-sm">
+  <div class="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border-2 border-plum bg-plum px-6 py-10 text-pink-pale shadow-[0_8px_0_0_var(--color-pink)] md:px-10">
+    <div class="grid gap-10 md:grid-cols-3">
+      <div>
+        <h3 class="mb-4"><span class="sticker sticker--pink sticker--tilt-1">{t('footer.branchAgaila')}</span></h3>
+        <p class="leading-relaxed text-white">
+          {agaila.lines.map((l) => <>{l}<br /></>)}
+          <span dir="ltr">☎ +965 2220 9072</span><br />
+          <a href={agaila.mapUrl} class="font-bold text-pink-light underline underline-offset-4 hover:text-white" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="mb-4"><span class="sticker sticker--pale sticker--tilt-2">{t('footer.branchSalmiya')}</span></h3>
+        <p class="leading-relaxed text-white">
+          {salmiya.lines.map((l) => <>{l}<br /></>)}
+          <span dir="ltr">☎ +965 2220 9072</span><br />
+          <a href={salmiya.mapUrl} class="font-bold text-pink-light underline underline-offset-4 hover:text-white" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="mb-4"><span class="sticker sticker--tilt-3">{t('footer.getInTouch')}</span></h3>
+        <p class="mb-4 flex flex-wrap items-center gap-4 text-white">
+          <a href={`mailto:${business.email}`} class="font-bold text-pink-light underline underline-offset-4 hover:text-white">{business.email}</a>
+          <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-pink-light underline underline-offset-4 hover:text-white">Instagram</a>
+        </p>
+        <p class="mb-6">
+          <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold text-pink-light underline underline-offset-4 hover:text-white">WhatsApp</a>
+        </p>
+        <BookingCTA locale={locale} />
+      </div>
     </div>
 
-    <div>
-      <h3 class="mb-3 text-lg text-pink">{t('footer.branchSalmiya')}</h3>
-      <p class="leading-relaxed">
-        {salmiya.lines.map((l) => <>{l}<br /></>)}
-        <span dir="ltr">☎ +965 2220 9072</span><br />
-        <a href={salmiya.mapUrl} class="underline hover:text-pink" rel="noopener" target="_blank">{t('footer.findOnGoogle')}</a>
-      </p>
+    <div class="mt-10 border-t-2 border-pink-deep/60 pt-6 text-center text-pink-pale/90">
+      <p>{t('footer.rights')}</p>
     </div>
-
-    <div>
-      <h3 class="mb-3 text-lg text-pink">{t('footer.getInTouch')}</h3>
-      <p class="mb-4 flex items-center gap-4">
-        <a href={`mailto:${business.email}`} class="underline hover:text-pink">{business.email}</a>
-        <a href={business.instagram} rel="noopener" target="_blank" class="font-bold underline hover:text-pink">Instagram</a>
-      </p>
-      <p class="mb-4">
-        <a href={business.whatsapp} rel="noopener nofollow" target="_blank" class="font-bold underline hover:text-pink">WhatsApp</a>
-      </p>
-      <BookingCTA locale={locale} />
-    </div>
-  </div>
-
-  <div class="mt-8 text-center">
-    <p>{t('footer.rights')}</p>
-  </div>
   </div>
 </footer>

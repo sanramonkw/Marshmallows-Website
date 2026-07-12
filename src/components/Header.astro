@@ -21,45 +21,54 @@ const galleryChildren: { id: PageId; label: string }[] = [
   { id: 'photos', label: t('nav.photos') },
   { id: 'videos', label: t('nav.videos') },
 ];
+
+const linkBase = 'rounded-full px-4 py-1.5 transition-colors hover:bg-pink-pale';
+const active = 'bg-plum text-white hover:bg-plum';
 ---
 
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-black/5">
+<header class="sticky top-0 z-50 border-b-2 border-plum bg-cream/95 backdrop-blur">
   <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
     <a href={pathFor('home', locale)} class="shrink-0" title={t('site.name')}>
-      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-14 w-auto" width="240" height="112" />
+      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-12 w-auto md:h-14" width="240" height="112" />
     </a>
 
-    <nav class="hidden lg:flex flex-1 items-center justify-center gap-6 font-bold text-pink">
-      <a href={pathFor('home', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'home' }]}>{t('nav.home')}</a>
+    <nav class="hidden flex-1 items-center justify-center gap-1 font-bold text-plum lg:flex">
+      <a href={pathFor('home', locale)} class:list={[linkBase, { [active]: page === 'home' }]}>{t('nav.home')}</a>
 
       <div class="relative group">
-        <a href={pathFor('services', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': ['services', 'salonService', 'partyBooth', 'homeService'].includes(page) }]}>
+        <a
+          href={pathFor('services', locale)}
+          class:list={[linkBase, { [active]: ['services', 'salonService', 'partyBooth', 'homeService'].includes(page) }]}
+        >
           {t('nav.services')} ▾
         </a>
-        <div class="invisible absolute start-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-          <ul class="min-w-44 rounded-lg bg-white p-2 shadow-lg">
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="min-w-48 rounded-2xl border-2 border-plum bg-white p-2 shadow-[0_5px_0_0_var(--color-plum)]">
             {servicesChildren.map((c) => (
-              <li><a href={pathFor(c.id, locale)} class="block rounded px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
+              <li><a href={pathFor(c.id, locale)} class="block rounded-xl px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
             ))}
           </ul>
         </div>
       </div>
 
-      <a href={pathFor('about', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'about' }]}>{t('nav.about')}</a>
+      <a href={pathFor('about', locale)} class:list={[linkBase, { [active]: page === 'about' }]}>{t('nav.about')}</a>
 
       <div class="relative group">
-        <span class="cursor-default">{t('nav.gallery')} ▾</span>
-        <div class="invisible absolute start-0 top-full pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-          <ul class="min-w-44 rounded-lg bg-white p-2 shadow-lg">
+        <a
+          href={pathFor('photos', locale)}
+          class:list={[linkBase, { [active]: ['photos', 'videos'].includes(page) }]}
+        >{t('nav.gallery')} ▾</a>
+        <div class="invisible absolute start-0 top-full pt-3 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <ul class="min-w-48 rounded-2xl border-2 border-plum bg-white p-2 shadow-[0_5px_0_0_var(--color-plum)]">
             {galleryChildren.map((c) => (
-              <li><a href={pathFor(c.id, locale)} class="block rounded px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
+              <li><a href={pathFor(c.id, locale)} class="block rounded-xl px-3 py-2 hover:bg-pink-pale">{c.label}</a></li>
             ))}
           </ul>
         </div>
       </div>
 
-      <a href={pathFor('contact', locale)} class:list={['hover:opacity-70', { 'underline underline-offset-4': page === 'contact' }]}>{t('nav.contact')}</a>
-      <LanguageSwitcher locale={locale} page={page} />
+      <a href={pathFor('contact', locale)} class:list={[linkBase, { [active]: page === 'contact' }]}>{t('nav.contact')}</a>
+      <LanguageSwitcher locale={locale} page={page} class="ms-2 rounded-full border-2 border-plum px-4 py-1" />
     </nav>
 
     <div class="ms-auto hidden lg:block">
@@ -69,7 +78,7 @@ const galleryChildren: { id: PageId; label: string }[] = [
     <!-- mobile toggle -->
     <button
       id="mobile-nav-toggle"
-      class="ms-auto lg:hidden text-3xl leading-none"
+      class="ms-auto rounded-xl border-2 border-plum bg-white px-3 py-1 text-2xl leading-none shadow-[0_3px_0_0_var(--color-plum)] lg:hidden"
       aria-label="Menu"
       aria-expanded="false"
       aria-controls="mobile-nav"
@@ -77,24 +86,24 @@ const galleryChildren: { id: PageId; label: string }[] = [
   </div>
 
   <!-- mobile nav -->
-  <div id="mobile-nav" class="hidden lg:hidden border-t border-black/5 bg-white px-6 py-4">
-    <ul class="space-y-3 font-bold text-pink">
+  <div id="mobile-nav" class="hidden border-t-2 border-plum bg-cream px-6 py-5 lg:hidden">
+    <ul class="space-y-4 text-lg font-bold text-plum">
       <li><a href={pathFor('home', locale)}>{t('nav.home')}</a></li>
       <li>
         <a href={pathFor('services', locale)}>{t('nav.services')}</a>
-        <ul class="ms-4 mt-2 space-y-2 font-normal">
+        <ul class="ms-4 mt-2 space-y-2 text-base font-normal">
           {servicesChildren.map((c) => <li><a href={pathFor(c.id, locale)}>{c.label}</a></li>)}
         </ul>
       </li>
       <li><a href={pathFor('about', locale)}>{t('nav.about')}</a></li>
       <li>
         <span>{t('nav.gallery')}</span>
-        <ul class="ms-4 mt-2 space-y-2 font-normal">
+        <ul class="ms-4 mt-2 space-y-2 text-base font-normal">
           {galleryChildren.map((c) => <li><a href={pathFor(c.id, locale)}>{c.label}</a></li>)}
         </ul>
       </li>
       <li><a href={pathFor('contact', locale)}>{t('nav.contact')}</a></li>
-      <li><LanguageSwitcher locale={locale} page={page} /></li>
+      <li><LanguageSwitcher locale={locale} page={page} class="inline-block rounded-full border-2 border-plum px-4 py-1" /></li>
       <li><BookingCTA locale={locale} /></li>
     </ul>
   </div>

@@ -39,50 +39,225 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Brand design tokens (extracted from marshmallowskwt theme CSS)      */
+/* BOLD INNOVATION tokens — brand pinks preserved, plus AA-safe        */
+/* dark derivatives (plum ink) and a deep pink for white-on-pink text. */
 /* ------------------------------------------------------------------ */
 @theme {
-  /* marshmallow pink family */
-  --color-pink: #d9726d;        /* .txt-pink / .bg-pink — primary accent */
-  --color-pink-light: #f7aeac;  /* body background + .btn-default */
-  --color-pink-pale: #fbd8d7;   /* .txt-pink3 / .bg-pink3 — footer card */
-  --color-pink-card: #fff5f5;   /* pale content card (about section) */
-  /* supporting accents */
-  --color-blue-soft: #ccdfe7;   /* .bg-blue — button hover */
-  --color-brown: #bba496;       /* .txt-brown / .bg-brown */
-  --color-brown-line: #a99387;  /* .line.brown divider */
-  --color-brown-deep: #ab866e;  /* Salonist widget accent */
-  --color-ink: #2e2e2e;         /* heading colour */
+  /* marshmallow pink family (original brand) */
+  --color-pink: #d9726d;        /* primary brand accent */
+  --color-pink-light: #f7aeac;  /* blush */
+  --color-pink-pale: #fbd8d7;   /* pale field */
+  --color-pink-card: #fff5f5;   /* near-white pink card */
+  /* bold-variant derivatives (same hue family, WCAG-AA safe) */
+  --color-pink-deep: #b3413c;   /* darkened brand pink — white text passes AA */
+  --color-plum: #3a1c1a;        /* near-black ink derived from the brand pink */
+  --color-cream: #fff8f6;       /* warm paper */
+  /* supporting accents (original) */
+  --color-blue-soft: #ccdfe7;
+  --color-brown: #bba496;
+  --color-brown-line: #a99387;
+  --color-brown-deep: #ab866e;
+  --color-ink: #3a1c1a;         /* remapped to plum so components inherit it */
 
   --font-latin: "Century Gothic", "Montserrat", Arial, sans-serif;
   --font-arabic: "GE SS TV", "Century Gothic", Arial, sans-serif;
+
+  --shadow-pop: 0 2px 0 0 var(--color-plum);
+  --shadow-pop-lg: 0 6px 0 0 var(--color-plum);
 }
 
 /* Language-aware base font (the theme swaps families per locale) */
-html[lang="en"] body {
-  font-family: var(--font-latin);
-}
-html[lang="ar"] body {
-  font-family: var(--font-arabic);
+html[lang="en"] body { font-family: var(--font-latin); }
+html[lang="ar"] body { font-family: var(--font-arabic); }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
-  background-color: var(--color-pink-light);
-  color: #000;
+  background-color: var(--color-cream);
+  color: var(--color-plum);
   -webkit-overflow-scrolling: touch;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
+h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+
+::selection {
+  background: var(--color-pink);
+  color: #fff;
 }
 
-/* Divider line used under section headings on the live site */
+/* Visible, chunky focus ring everywhere (AA) */
+:focus-visible {
+  outline: 3px solid var(--color-pink-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Divider line kept for compatibility with master components */
 .brand-line {
-  height: 3px;
+  height: 4px;
   width: 72px;
   margin-inline: auto;
-  background: var(--color-brown-line);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-pink), var(--color-pink-light));
 }
-.brand-line--white {
+.brand-line--white { background: #fff; }
+
+/* ------------------------------------------------------------------ */
+/* Gradient fields                                                     */
+/* ------------------------------------------------------------------ */
+.grad-hero {
+  background:
+    radial-gradient(52rem 30rem at 85% -10%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(40rem 26rem at 8% 110%, rgba(179, 65, 60, 0.25), transparent 65%),
+    linear-gradient(160deg, var(--color-pink-pale) 0%, var(--color-pink-light) 45%, var(--color-pink) 100%);
+}
+.grad-band {
+  background: linear-gradient(120deg, var(--color-pink) 0%, var(--color-pink-deep) 100%);
+}
+.grad-soft {
+  background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-pink-card) 55%, var(--color-pink-pale) 100%);
+}
+.grad-text {
+  background: linear-gradient(100deg, var(--color-pink-deep), var(--color-pink) 60%, var(--color-brown-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Oversized display headlines (GE SS TV Bold huge / Century Gothic Bold) */
+.display-xl {
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6.8vw, 5.2rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+.display-lg {
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.22;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sticker / badge energy                                              */
+/* ------------------------------------------------------------------ */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-plum);
   background: #fff;
+  color: var(--color-plum);
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-pop);
+  white-space: nowrap;
+}
+.sticker--pink { background: var(--color-pink-light); }
+.sticker--pale { background: var(--color-pink-pale); }
+.sticker--deep { background: var(--color-pink-deep); color: #fff; }
+.sticker--tilt-1 { transform: rotate(-3deg); }
+.sticker--tilt-2 { transform: rotate(2.5deg); }
+.sticker--tilt-3 { transform: rotate(-1.5deg); }
+
+/* KD price chip */
+.chip-price {
+  display: inline-block;
+  padding: 0.15rem 0.75rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-plum);
+  background: var(--color-pink-pale);
+  color: var(--color-plum);
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 0 var(--color-plum);
+}
+
+/* Bold card: thick plum border + hard offset shadow, lifts on hover */
+.card-pop {
+  border: 2.5px solid var(--color-plum);
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: var(--shadow-pop-lg);
+}
+.card-pop.grad-band {
+  background: linear-gradient(120deg, var(--color-pink) 0%, var(--color-pink-deep) 100%);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card-pop {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  a.card-pop:hover, .card-pop--hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 0 0 var(--color-plum);
+  }
+}
+
+/* Tilted mood-board photos */
+.tilt-a { transform: rotate(-2.5deg); }
+.tilt-b { transform: rotate(2deg); }
+.tilt-c { transform: rotate(-1.2deg); }
+.tilt-d { transform: rotate(3deg); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tilt-a, .tilt-b, .tilt-c, .tilt-d { transition: transform 0.3s ease; }
+  .tilt-a:hover, .tilt-b:hover, .tilt-c:hover, .tilt-d:hover {
+    transform: rotate(0deg) scale(1.02);
+    z-index: 5;
+    position: relative;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Marquee band (pure CSS, direction-aware, reduced-motion safe)       */
+/* ------------------------------------------------------------------ */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+}
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2.5rem;
+  padding-inline-end: 2.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .marquee__track { animation: marquee-ltr 38s linear infinite; }
+  [dir="rtl"] .marquee__track { animation-name: marquee-rtl; }
+}
+@keyframes marquee-ltr { to { transform: translateX(-100%); } }
+@keyframes marquee-rtl { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { min-width: 0; flex-wrap: wrap; row-gap: 0.75rem; }
+  .marquee__track[aria-hidden="true"] { display: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Scroll reveals — applied only when JS is available AND motion is OK */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  /* `translate` (not `transform`) so reveals never fight the tilt rotations */
+  html.js [data-reveal] {
+    opacity: 0;
+    translate: 0 26px;
+    transition: opacity 0.7s ease, translate 0.7s ease;
+  }
+  html.js [data-reveal].is-in {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .float-slow { animation: float-slow 6s ease-in-out infinite; }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-10px) rotate(-3deg); }
+  }
 }

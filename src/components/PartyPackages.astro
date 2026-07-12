@@ -10,32 +10,35 @@ interface Props {
 
 const { locale, packages } = Astro.props;
 const t = useTranslations(locale);
+const accents = ['bg-pink-light', 'bg-pink-pale', 'bg-pink-card'];
 ---
 
-<div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {packages.map((pkg) => (
-    <article class="flex flex-col rounded-2xl bg-white p-6 shadow-md">
-      <h3 class="mb-3 text-lg text-pink">{pkg.name}</h3>
-      <p class="mb-2 font-bold">{pkg.features.join(' • ')}</p>
-      {pkg.suitable && <p class="mb-3 text-sm text-neutral-600">{pkg.suitable}</p>}
-      <div class="mb-3 space-y-1">
-        {pkg.prices.map((p) => <p class="text-2xl font-bold text-ink">{p}</p>)}
+<div class="mx-auto grid max-w-6xl gap-7 md:grid-cols-2 lg:grid-cols-3">
+  {packages.map((pkg, i) => (
+    <article class="card-pop card-pop--hover flex flex-col overflow-hidden">
+      <h3 class={`border-b-2 border-plum px-6 py-4 text-lg font-bold text-plum ${accents[i % 3]}`}>{pkg.name}</h3>
+      <div class="flex grow flex-col p-6 pt-5">
+        <p class="mb-2 font-bold">{pkg.features.join(' • ')}</p>
+        {pkg.suitable && <p class="mb-3 text-sm text-plum/60">{pkg.suitable}</p>}
+        <div class="mb-4 flex flex-wrap gap-2">
+          {pkg.prices.map((p) => <span class="sticker sticker--pink text-base">{p}</span>)}
+        </div>
+        {pkg.extras.length > 0 && (
+          <ul class="mb-3 space-y-1 text-sm text-plum/70">
+            {pkg.extras.map((e) => (
+              <li>
+                {e.name && <em>{e.name}: </em>}
+                <span class="font-bold">{e.price}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {pkg.note && (
+          <p class="mt-auto border-t-2 border-pink-pale pt-3 text-sm italic text-plum/60">
+            {t('party.note')}: {pkg.note}
+          </p>
+        )}
       </div>
-      {pkg.extras.length > 0 && (
-        <ul class="mb-3 space-y-1 text-sm text-neutral-600">
-          {pkg.extras.map((e) => (
-            <li>
-              {e.name && <em>{e.name}: </em>}
-              <span class="font-bold">{e.price}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {pkg.note && (
-        <p class="mt-auto border-t border-pink-pale pt-3 text-sm italic text-neutral-500">
-          {t('party.note')}: {pkg.note}
-        </p>
-      )}
     </article>
   ))}
 </div>

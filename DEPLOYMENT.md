@@ -3,6 +3,11 @@
 Read this fully before deploying. For architecture and project context see
 `CLAUDE.md`; for the Salonist wire protocol see `salonist-plugin/ANALYSIS.md`.
 
+**Design note (2026-07-12):** the site now ships the owner-chosen **BOLD
+INNOVATION ("Sugar Rush")** design, promoted from `variants/bold/` to the
+project root. This was a pure restyle — build/deploy story, env vars, routes,
+and the Salonist booking architecture below are all unchanged.
+
 ## 1. What you are deploying
 
 An Astro 5 site with **two output halves** (node adapter, `@astrojs/node`
@@ -133,7 +138,8 @@ since WhatsApp is the salon's primary contact channel anyway.
 
 ## 7. Post-launch smoke test (2 minutes)
 
-1. `/` renders RTL Arabic with white header, coral hero + leaf pattern.
+1. `/` renders RTL Arabic with the Bold Innovation ("Sugar Rush") gradient
+   hero (coral→blush), sticker chips, marquee, bento grid.
 2. `/en/home/` renders LTR English.
 3. Language switcher round-trips the same page in both directions.
 4. `/booking-ar/` walks branch → service → date → slot → details → confirm
