@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../i18n/ui';
+import { withBase } from '../utils/paths';
 import { business } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
 import BookingCTA from './BookingCTA.astro';
@@ -17,7 +18,7 @@ const [agaila, salmiya] = business.branches;
 <footer class="mt-20 bg-[#332a25] text-[#efe4dc]">
   <div class="mx-auto max-w-7xl px-6 pb-10 pt-16 md:px-10">
     <div class="mb-12 flex flex-col items-center gap-5 text-center">
-      <img src="/images/mm-logo.png" alt={t('site.name')} class="h-16 w-auto rounded-xl bg-cream/95 p-2" loading="lazy" width="240" height="112" />
+      <img src={withBase('/images/mm-logo.png')} alt={t('site.name')} class="h-16 w-auto rounded-xl bg-cream/95 p-2" loading="lazy" width="240" height="112" />
       <div class="flourish w-full max-w-64 opacity-60"><span class="flourish-gem"></span></div>
     </div>
 

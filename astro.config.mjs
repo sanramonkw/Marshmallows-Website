@@ -7,8 +7,27 @@ import tailwindcss from '@tailwindcss/vite';
 // Mirrors the live WordPress/Polylang setup:
 //   Arabic  = default locale, served at the root (/, /services-ar/, /about-ar/ …)
 //   English = prefixed with /en/ (/en/home/, /en/services/ …)
+//
+// DEPLOY_TARGET env var selects the deploy target at build time:
+//   (unset)            -> production: site https://marshmallows.co, base '/'.
+//                          Build + run `node dist/server/entry.mjs` (dist/client
+//                          + dist/server) so /api/salonist/* works and the
+//                          booking widget is fully functional. NEVER set
+//                          DEPLOY_TARGET for a production build.
+//   DEPLOY_TARGET=pages -> GitHub Pages review deploy: site
+//                          https://sanramonkw.github.io, base
+//                          '/Marshmallows-Website/'. Only dist/client (the
+//                          static half of the node-adapter build) is
+//                          published — Pages can't run dist/server, so
+//                          /api/salonist/* is unavailable there and the
+//                          booking widget gracefully degrades to its
+//                          WhatsApp/phone fallback. That degradation is
+//                          expected/correct on Pages, not a bug.
+const isPagesBuild = process.env.DEPLOY_TARGET === 'pages';
+
 export default defineConfig({
-  site: 'https://marshmallows.co',
+  site: isPagesBuild ? 'https://sanramonkw.github.io' : 'https://marshmallows.co',
+  base: isPagesBuild ? '/Marshmallows-Website/' : '/',
   trailingSlash: 'always',
   // PHASE 2 — Salonist booking: the site stays fully prerendered ('static' is
   // Astro 5's default), but the node adapter enables the on-demand API proxy

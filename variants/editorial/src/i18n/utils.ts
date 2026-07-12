@@ -1,4 +1,5 @@
 import { ui, defaultLocale, type Locale, type UIKey } from './ui';
+import { withBase } from '../utils/paths';
 
 export function useTranslations(locale: Locale) {
   return function t(key: UIKey): string {
@@ -28,12 +29,26 @@ export const routes: Record<string, { ar: string; en: string }> = {
 
 export type PageId = keyof typeof routes;
 
+/** In-page navigation href, base-prefixed for subpath (GitHub Pages) deploys. */
 export function pathFor(page: PageId, locale: Locale): string {
+  return withBase(routes[page][locale]);
+}
+
+/** The same page in the other language (for hreflang + language switcher), base-prefixed. */
+export function alternatePath(page: PageId, locale: Locale): string {
+  return withBase(routes[page][locale === 'ar' ? 'en' : 'ar']);
+}
+
+/**
+ * Bare (un-based) route paths for SEO absolute URLs (canonical / hreflang /
+ * og:url). These are resolved against the production `site` via `new URL()`,
+ * so they must NOT carry the GitHub Pages base prefix.
+ */
+export function seoPath(page: PageId, locale: Locale): string {
   return routes[page][locale];
 }
 
-/** The same page in the other language (for hreflang + language switcher). */
-export function alternatePath(page: PageId, locale: Locale): string {
+export function seoAlternate(page: PageId, locale: Locale): string {
   return routes[page][locale === 'ar' ? 'en' : 'ar'];
 }
 

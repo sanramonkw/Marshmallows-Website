@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import type { Locale } from '../../i18n/ui';
+import { withBase } from '../../utils/paths';
 import { ui, business } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/utils';
 
@@ -29,7 +30,7 @@ const fieldClass =
     <div class="mx-auto grid max-w-6xl items-start gap-12 px-4 md:grid-cols-2">
       <div class="relative" data-reveal>
         <div class="absolute -inset-4 rounded-[2.5rem] bg-pink-pale/40" aria-hidden="true"></div>
-        <img src="/images/IMG_4592.jpg" alt={t('nav.contact')} loading="lazy" class="relative w-full rounded-[2rem] border-4 border-cream shadow-plush" />
+        <img src={withBase('/images/IMG_4592.jpg')} alt={t('nav.contact')} loading="lazy" class="relative w-full rounded-[2rem] border-4 border-cream shadow-plush" />
       </div>
 
       <!--

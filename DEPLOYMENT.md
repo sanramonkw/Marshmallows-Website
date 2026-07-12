@@ -31,7 +31,9 @@ npm run build  # must end with "20 page(s) built" and no errors
 ```
 
 The build must pass **with no env vars set** — credentials are read at request
-time, never at build time.
+time, never at build time. For a production build/deploy, also leave
+`DEPLOY_TARGET` unset (see §4) — it only applies to the GitHub Pages review
+deploy.
 
 ## 3. Environment variables
 
@@ -47,6 +49,26 @@ Never commit `.env`. Never hardcode the domainId in source. It must never
 appear in client-side code — check the built `dist/client/` if unsure.
 
 ## 4. Deploy options
+
+### `DEPLOY_TARGET` env var — production vs. GitHub Pages review deploy
+
+`astro.config.mjs` reads `DEPLOY_TARGET` at **build** time to pick `site` +
+`base`:
+
+| `DEPLOY_TARGET` | `site` | `base` | Use for |
+|---|---|---|---|
+| *(unset)* | `https://marshmallows.co` | `/` | **Production.** Always leave unset for a production build/deploy. |
+| `pages` | `https://sanramonkw.github.io` | `/Marshmallows-Website/` | GitHub Pages **review-only** deploy (owner/stakeholder preview), via `npm run build:all` / `npm run deploy:all` (see `scripts/build-all.sh`, `scripts/publish-dist.sh`). |
+
+**Never set `DEPLOY_TARGET` for the real production deploy** — Options A/B
+below assume it is unset. The Pages review deploy is **static-client-only**:
+it publishes `dist/client/` alone (see `scripts/publish-dist.sh`), because
+GitHub Pages can only serve static files and cannot run `dist/server/`'s
+node process. That means on the Pages review site `/api/salonist/*` does
+not exist, so the booking widget on that preview always shows its
+WhatsApp/phone fallback — this is expected/correct for that deploy target,
+not a bug to fix. Production (this section, Options A/B) is unaffected: it
+runs the full node server so the API and booking widget work normally.
 
 ### Option A — node server (recommended: full online booking)
 

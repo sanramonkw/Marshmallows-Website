@@ -326,6 +326,40 @@ revisit only if the owner asks.
 **Read `DEPLOYMENT.md` (same folder) before deploying** — build, env vars,
 node-vs-static options, reverse proxy, cutover checklist, smoke tests.
 
+### `DEPLOY_TARGET` env var (base-path support, merged 2026-07-12)
+
+`astro.config.mjs` (root + each `variants/*`) reads `DEPLOY_TARGET` at build
+time to choose `site`/`base`, and every internal href/asset path runs through
+`withBase()` (`src/utils/paths.ts`) so links and assets keep working under a
+subpath:
+
+- **Unset (default) → production.** `site: 'https://marshmallows.co'`,
+  `base: '/'`. This is what real deploys (`node dist/server/entry.mjs`,
+  serving `dist/client` + `dist/server`) must use — **never set
+  `DEPLOY_TARGET` for a production build.**
+- **`DEPLOY_TARGET=pages` → GitHub Pages review deploy.**
+  `site: 'https://sanramonkw.github.io'`,
+  `base: '/Marshmallows-Website/'`. Driven by `npm run build:all` /
+  `npm run deploy:all` (`scripts/build-all.sh` + `scripts/publish-dist.sh`),
+  which build root + `variants/premium` + `variants/editorial` (`bold` no
+  longer exists as a variant — it's the promoted root design) into one
+  combined static tree and publish it to the repo's `gh-pages` branch.
+
+**Why the booking widget falls back to WhatsApp/phone on the Pages
+deploy:** the site uses the `@astrojs/node` **server** adapter, which splits
+`astro build` output into `dist/client/` (static pages + assets) and
+`dist/server/` (the node entry that also serves the on-demand
+`/api/salonist/*` proxy routes — see the PHASE 2 section below). GitHub
+Pages can only serve static files, so the Pages review deploy publishes
+`dist/client/` alone; `dist/server/` (and therefore the Salonist API)
+cannot run there. The `BookingWidget` island's `fetch('/api/salonist/...')`
+calls are intentionally **not** passed through `withBase()` (they're
+same-origin API calls, not page/asset links), so on Pages they 404 and the
+widget gracefully shows its permanent WhatsApp/phone fallback card — this is
+expected/correct for that preview target, not a bug. On a real production
+deploy (`DEPLOY_TARGET` unset, full node server running) the same fetches
+hit the live API and the booking widget works end-to-end.
+
 ## Local preview (owner's workflow)
 
 The owner previews over SSH port-forwarding — **do not expose public

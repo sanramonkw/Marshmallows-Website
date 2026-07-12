@@ -5,6 +5,7 @@ import BookingCTA from '../../components/BookingCTA.astro';
 import type { Locale } from '../../i18n/ui';
 import { ui } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/utils';
+import { withBase } from '../../utils/paths';
 import { aboutIntro, aboutHair, aboutTeam } from '../../data/copy';
 
 interface Props {
@@ -34,7 +35,7 @@ const sections = [
       <div class:list={['mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-12']}>
         <div class:list={['md:col-span-5', { 'md:order-2': s.reverse }]} data-reveal>
           <div class:list={['card-pop overflow-hidden p-2', s.reverse ? 'tilt-b' : 'tilt-a']}>
-            <img src={s.image} alt={t('nav.about')} loading="lazy" class="w-full rounded-2xl" />
+            <img src={withBase(s.image)} alt={t('nav.about')} loading="lazy" class="w-full rounded-2xl" />
           </div>
         </div>
         <div class:list={['md:col-span-7', { 'md:order-1': s.reverse }]} data-reveal>

@@ -9,6 +9,7 @@ interface Props {
   title: string;
 }
 
+import { withBase } from '../utils/paths';
 const { href, image, title } = Astro.props;
 ---
 
@@ -17,7 +18,7 @@ const { href, image, title } = Astro.props;
     <div class="arch overflow-hidden">
       <div class="aspect-[3/4] overflow-hidden">
         <img
-          src={image}
+          src={withBase(image)}
           alt=""
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
