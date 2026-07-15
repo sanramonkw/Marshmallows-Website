@@ -35,8 +35,13 @@ export const aboutTeam = {
   ],
 } as const;
 
-/** Gallery uploads from the WP media library (the live gallery shortcode is broken). */
+/** Gallery: nail-art photos + current (grey-walled) salon interiors.
+ * The older pink-walled interior shots (marshmallowskwt-*.webp) were removed at
+ * the salon's request — the salon was refitted with grey/white walls. */
 export const galleryImages = [
   ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.png`),
-  ...Array.from({ length: 6 }, (_, i) => `/images/marshmallowskwt-${i + 1}.webp`),
+  '/images/IMG_2921.jpg',
+  '/images/IMG_2920.jpg',
+  '/images/IMG_4592.jpg',
+  '/images/IMG_4401.jpg',
 ];
