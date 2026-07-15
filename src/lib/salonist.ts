@@ -17,6 +17,79 @@ export const SALONIST_BASE =
   process.env.SALONIST_API_BASE ||
   'https://salonist.io';
 
+/**
+ * Optional base URL for staff profile photos. The CRM returns bare filenames
+ * (e.g. `1770467062.jpeg`) in the staff `img` field; the folder they live in
+ * is not exposed by the plugin (which itself renders placeholder avatars), so
+ * we only build a URL when this is configured or the value is already absolute.
+ * Left empty → the widget shows a name-initials avatar (no broken images).
+ */
+export const SALONIST_IMAGE_BASE =
+  import.meta.env.SALONIST_IMAGE_BASE || process.env.SALONIST_IMAGE_BASE || '';
+
+function resolveStaffImage(raw: unknown): string {
+  const v = String(raw ?? '').trim();
+  if (!v || v === 'null') return '';
+  if (/^https?:\/\//i.test(v)) return v;
+  return SALONIST_IMAGE_BASE ? `${SALONIST_IMAGE_BASE.replace(/\/$/, '')}/${v}` : '';
+}
+
+/** CRM `service_time` is `"HH:MM"` (e.g. `"00:15"` = 15 min); tolerate a plain integer too. */
+export function parseServiceTime(raw: unknown): number {
+  const s = String(raw ?? '').trim();
+  if (!s) return 0;
+  const hm = /^(\d{1,2}):(\d{2})(?::\d{2})?$/.exec(s);
+  if (hm) return Number.parseInt(hm[1], 10) * 60 + Number.parseInt(hm[2], 10);
+  const n = Number.parseInt(s, 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/** Fallback formatter for a slot value with no adjacent label (`"08:00:00"` → `"8:00 AM"`). */
+export function formatSlotLabel(value: string): string {
+  const m = /^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?$/i.exec(value.trim());
+  if (!m) return value.trim();
+  const h = Number.parseInt(m[1], 10);
+  const min = m[2];
+  const ap = m[3] ? m[3].toUpperCase() : h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${h12}:${min} ${ap}`;
+}
+
+// Windows-1252 code points (U+0080–U+009F specials) → their original byte,
+// used to reverse UTF-8-decoded-as-CP1252 mojibake.
+const CP1252_REV = new Map<number, number>([
+  [0x20ac, 0x80], [0x201a, 0x82], [0x0192, 0x83], [0x201e, 0x84], [0x2026, 0x85],
+  [0x2020, 0x86], [0x2021, 0x87], [0x02c6, 0x88], [0x2030, 0x89], [0x0160, 0x8a],
+  [0x2039, 0x8b], [0x0152, 0x8c], [0x017d, 0x8e], [0x2018, 0x91], [0x2019, 0x92],
+  [0x201c, 0x93], [0x201d, 0x94], [0x2022, 0x95], [0x2013, 0x96], [0x2014, 0x97],
+  [0x02dc, 0x98], [0x2122, 0x99], [0x0161, 0x9a], [0x203a, 0x9b], [0x0153, 0x9c],
+  [0x017e, 0x9e], [0x0178, 0x9f],
+]);
+
+/**
+ * Repair "double-encoded" text where UTF-8 bytes were mis-decoded as Windows-1252
+ * (e.g. the CRM stores `"Salem Al-Mubarak Street â€" Symphony Mall"` — the `â€"`
+ * is an en-dash "–"). Re-encodes to the original bytes and decodes as UTF-8.
+ * Safe no-op when there are no mojibake markers or the repair would be invalid.
+ */
+export function fixMojibake(input: unknown): string {
+  const s = String(input ?? '');
+  if (!s || !/Ã.|Â.|â€/.test(s)) return s; // no mojibake markers → leave untouched
+  const bytes: number[] = [];
+  for (const ch of s) {
+    const cp = ch.codePointAt(0)!;
+    if (cp <= 0xff) bytes.push(cp);
+    else if (CP1252_REV.has(cp)) bytes.push(CP1252_REV.get(cp)!);
+    else return s; // a genuinely non-CP1252 char (e.g. real Arabic) → not simple mojibake
+  }
+  try {
+    const decoded = Buffer.from(bytes).toString('utf8');
+    return decoded.includes('�') ? s : decoded; // invalid decode → keep original
+  } catch {
+    return s;
+  }
+}
+
 export function getDomainId(): string {
   return (
     import.meta.env.SALONIST_DOMAIN_ID ||
@@ -105,21 +178,52 @@ export function toCrmDate(date: string): string {
   throw new SalonistError('bad_request', 'Invalid date format', 400);
 }
 
+export interface Slot {
+  /** radio value submitted to the CRM, e.g. "08:00:00" */
+  value: string;
+  /** human label from the adjacent `<label>` text, e.g. "08:00 AM" */
+  label: string;
+}
+
 /**
  * The CRM's slot endpoints answer with a pre-rendered HTML fragment of
- * <input type="radio" value="H:MM AM"> pairs (see ANALYSIS.md §4).
- * Parse the radio values into a clean string array; empty array = no slots.
+ * `<label>08:00 AM <input type="radio" value="08:00:00" …></label>` pairs
+ * (see ANALYSIS.md §4). We keep BOTH the radio `value` (what the CRM expects
+ * back at booking time) and the visible label (what the widget shows). Empty
+ * array = no slots.
  */
-export function parseSlotsHtml(html: unknown): string[] {
+export function parseSlotsHtml(html: unknown): Slot[] {
   if (typeof html !== 'string' || html.trim() === '') return [];
   if (/not_available/i.test(html)) return [];
   if (/not\s+available/i.test(html.replace(/<[^>]*>/g, ' '))) return [];
-  const slots: string[] = [];
-  const re = /<input\b[^>]*\bvalue\s*=\s*"([^"]+)"[^>]*>/gi;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(html)) !== null) {
-    const v = m[1].trim();
-    if (v && !slots.includes(v)) slots.push(v);
+
+  const slots: Slot[] = [];
+  const seen = new Set<string>();
+  const push = (value: string, labelHtml: string) => {
+    const v = value.trim();
+    if (!v || seen.has(v)) return;
+    seen.add(v);
+    const label = labelHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    slots.push({ value: v, label: label || formatSlotLabel(v) });
+  };
+
+  // Preferred: each slot is wrapped in a <label> whose text is the display time.
+  const labelRe = /<label\b[^>]*>([\s\S]*?)<\/label>/gi;
+  let lm: RegExpExecArray | null;
+  let matched = false;
+  while ((lm = labelRe.exec(html)) !== null) {
+    const inner = lm[1];
+    const vm = /<input\b[^>]*\bvalue\s*=\s*"([^"]+)"/i.exec(inner);
+    if (!vm) continue;
+    matched = true;
+    push(vm[1], inner.replace(/<input[\s\S]*$/i, '')); // text before the <input>
+  }
+
+  // Fallback: bare <input>s with no wrapping label.
+  if (!matched) {
+    const re = /<input\b[^>]*\bvalue\s*=\s*"([^"]+)"[^>]*>/gi;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) push(m[1], '');
   }
   return slots;
 }
@@ -147,8 +251,8 @@ export async function fetchBranches(domainId: string): Promise<Branch[]> {
       if (!id) return null;
       return {
         id,
-        name: String(detail.name || domain.name || domain.domain || ''),
-        address: String(domain.address || detail.address || ''),
+        name: fixMojibake(detail.name || domain.name || domain.domain || ''),
+        address: fixMojibake(domain.address || detail.address || ''),
         staffSelect: (detail.staff_select ?? '') !== 'None',
       };
     })
@@ -192,7 +296,7 @@ export async function fetchServices(domainId: string): Promise<ServiceCategory[]
           id,
           name: String(c.name ?? ''),
           price: Number.parseFloat(String(c.price ?? '0')) || 0,
-          duration: Number.parseInt(String(c.service_time ?? '0'), 10) || 0,
+          duration: parseServiceTime(c.service_time),
         };
       })
       .filter((s): s is ServiceItem => s !== null);
@@ -223,7 +327,8 @@ export async function fetchStaff(domainId: string, serviceId: string): Promise<S
     .map((s): StaffMember | null => {
       const id = String(s?.id ?? '');
       if (!id) return null;
-      return { id, name: String(s.name ?? ''), image: String(s.image ?? '') };
+      // CRM field is `img` (a bare filename or null); older shapes used `image`.
+      return { id, name: String(s.name ?? ''), image: resolveStaffImage(s.img ?? s.image) };
     })
     .filter((s): s is StaffMember => s !== null);
 }
@@ -259,7 +364,7 @@ export async function fetchSlots(opts: {
   date: string; // DD-MM-YYYY
   staffId?: string;
   duration?: string;
-}): Promise<string[]> {
+}): Promise<Slot[]> {
   const { domainId, serviceId, date } = opts;
   const staffId = opts.staffId && opts.staffId !== 'any' ? opts.staffId : '';
 
@@ -340,5 +445,91 @@ export async function createBooking(req: BookingRequest): Promise<BookingResult>
     ok,
     orderId: String(res?.order_id ?? res?.salonSaleId ?? ''),
     message: String(res?.message ?? ''),
+  };
+}
+
+export interface MonthAvailability {
+  month: string; // YYYY-MM
+  /** ISO dates (YYYY-MM-DD) that were probed and returned NO slots. */
+  unavailable: string[];
+  /** ISO dates actually probed (the rest were skipped by the time budget). */
+  probed: string[];
+  /** true if every candidate day was probed within the budget. */
+  complete: boolean;
+}
+
+/**
+ * Smart calendar helper (mirrors the plugin's per-day pre-check, but safer):
+ * for each bookable day in `month` — within [today, today+maxAdvance], excluding
+ * closed weekdays — probe the normal slot path and mark the day unavailable ONLY
+ * when it genuinely returns zero slots. Days left unprobed by the time budget are
+ * reported via `probed`/`complete` so the UI can leave them clickable (never a
+ * false "No Slot"). Bounded concurrency keeps upstream load reasonable.
+ */
+export async function fetchMonthAvailability(opts: {
+  domainId: string;
+  serviceId: string;
+  month: string; // YYYY-MM
+  staffId?: string;
+  duration?: string;
+  closedDays?: number[];
+  maxAdvance?: number;
+}): Promise<MonthAvailability> {
+  const mm = /^(\d{4})-(\d{2})$/.exec(opts.month);
+  if (!mm) throw new SalonistError('bad_request', 'Invalid month (expected YYYY-MM)', 400);
+  const year = Number.parseInt(mm[1], 10);
+  const mon = Number.parseInt(mm[2], 10); // 1-12
+  const closed = new Set(opts.closedDays ?? []);
+  const maxAdvance = opts.maxAdvance && opts.maxAdvance > 0 ? opts.maxAdvance : 30;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const max = new Date(today);
+  max.setDate(max.getDate() + maxAdvance);
+
+  const daysInMonth = new Date(year, mon, 0).getDate();
+  const candidates: string[] = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, mon - 1, d);
+    date.setHours(0, 0, 0, 0);
+    if (date < today || date > max) continue;
+    if (closed.has(date.getDay())) continue; // closed weekday — UI already greys it
+    candidates.push(`${mm[1]}-${mm[2]}-${String(d).padStart(2, '0')}`);
+  }
+
+  const unavailable: string[] = [];
+  const probed: string[] = [];
+  const deadline = Date.now() + 12_000; // overall time budget
+  const CONCURRENCY = 8;
+  let idx = 0;
+
+  const worker = async () => {
+    while (idx < candidates.length && Date.now() < deadline) {
+      const iso = candidates[idx++];
+      try {
+        const slots = await fetchSlots({
+          domainId: opts.domainId,
+          serviceId: opts.serviceId,
+          date: toCrmDate(iso),
+          staffId: opts.staffId,
+          duration: opts.duration,
+        });
+        probed.push(iso);
+        if (slots.length === 0) unavailable.push(iso);
+      } catch {
+        // probe failed → leave the day clickable (do not mark unavailable)
+      }
+    }
+  };
+
+  await Promise.all(
+    Array.from({ length: Math.min(CONCURRENCY, candidates.length) }, worker),
+  );
+
+  return {
+    month: opts.month,
+    unavailable,
+    probed,
+    complete: probed.length === candidates.length,
   };
 }

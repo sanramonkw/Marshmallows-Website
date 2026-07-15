@@ -46,6 +46,7 @@ const config = { locale, strings };
   type Service = { id: string; name: string; price: number; duration: number };
   type Category = { id: string; name: string; services: Service[] };
   type Staff = { id: string; name: string; image: string };
+  type Slot = { value: string; label: string };
 
   const widget = document.getElementById('booking-widget');
   if (widget) {
@@ -65,18 +66,29 @@ const config = { locale, strings };
       service: null as Service | null,
       staff: [] as Staff[],
       staffId: 'any',
+      staffChosen: false, // has the specialist sub-step been completed?
       closedDays: [] as number[],
       maxAdvance: 30,
       month: { y: new Date().getFullYear(), m: new Date().getMonth() },
       date: '' as string, // YYYY-MM-DD
-      slots: null as string[] | null,
+      slots: null as Slot[] | null,
       slotsLoading: false,
+      unavailable: [] as string[], // ISO dates that are fully booked/closed
+      availLoading: false,
       time: '',
+      timeLabel: '',
       customer: { name: '', phone: '', email: '' },
       submitting: false,
       error: '',
       result: null as { orderId: string } | null,
     };
+
+    // Monotonic request tokens: an async result is applied only if it is still
+    // the latest request of its kind (guards against out-of-order responses
+    // when the user changes date/month/service faster than the network).
+    let slotReq = 0;
+    let availReq = 0;
+    let svcReq = 0;
 
     const esc = (s: unknown) =>
       String(s ?? '').replace(/[&<>"']/g, (c) =>
@@ -97,6 +109,11 @@ const config = { locale, strings };
         day: 'numeric',
       });
     };
+    // A dedicated specialist step is shown only when the branch allows staff
+    // selection AND staff were actually returned (mirrors the plugin).
+    const needSpecialist = () => !!(st.branch?.staffSelect && st.staff.length > 0);
+    const initials = (name: string) =>
+      (name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('') || '★').toUpperCase();
 
     async function api(path: string, init?: RequestInit) {
       // The site is built with trailingSlash: 'always' — it applies to API
@@ -163,13 +180,59 @@ const config = { locale, strings };
           class="rounded-2xl border-2 ${st.branch?.id === b.id ? 'border-pink bg-pink-card' : 'border-pink-pale bg-white'} p-6 text-start transition-all hover:border-pink hover:shadow-md">
           <span class="block text-lg font-bold text-ink">${esc(b.name) || esc(T.stepBranch)}</span>
           ${b.address ? `<span class="mt-1 block text-sm text-black/50">${esc(b.address)}</span>` : ''}
+          <span class="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-brown-deep">
+            <span class="inline-block h-2 w-2 rounded-full bg-green-500" aria-hidden="true"></span>${esc(T.availableNow)}
+          </span>
         </button>`,
           )
           .join('') +
         `</div>`;
     }
 
+    function renderSpecialist() {
+      const avatar = (s: Staff) => `
+        <span class="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-pink-pale text-lg font-bold text-brown-deep">
+          ${esc(initials(s.name))}
+          ${
+            s.image
+              ? `<img src="${esc(s.image)}" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy" onerror="this.remove()" />`
+              : ''
+          }
+        </span>`;
+      const card = (dataId: string, name: string, inner: string, selected: boolean) => `
+        <button type="button" data-action="staff-card" data-id="${esc(dataId)}"
+          class="flex items-center gap-3 rounded-2xl border-2 ${selected ? 'border-pink bg-pink-card' : 'border-pink-pale bg-white'} p-4 text-start transition-all hover:border-pink hover:shadow-md">
+          ${inner}
+          <span class="min-w-0">
+            <span class="block truncate font-bold text-ink">${esc(name)}</span>
+            <span class="mt-0.5 block text-xs font-bold uppercase tracking-wide text-brown-deep/70">${esc(T.specialist)}</span>
+          </span>
+        </button>`;
+      const noPref = `
+        <button type="button" data-action="staff-card" data-id="any"
+          class="flex items-center gap-3 rounded-2xl border-2 ${st.staffId === 'any' && st.staffChosen ? 'border-pink bg-pink-card' : 'border-pink-pale bg-white'} p-4 text-start transition-all hover:border-pink hover:shadow-md">
+          <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-pink-pale text-2xl text-brown-deep" aria-hidden="true">★</span>
+          <span class="min-w-0">
+            <span class="block truncate font-bold text-ink">${esc(T.noPreference)}</span>
+            <span class="mt-0.5 block text-xs text-black/50">${esc(T.selectSpecialistHint)}</span>
+          </span>
+        </button>`;
+      body.innerHTML =
+        errorBox() +
+        heading(T.selectSpecialist) +
+        `<p class="-mt-4 mb-6 text-center text-sm text-black/50">${esc(T.selectSpecialistHint)}</p>` +
+        `<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">` +
+        st.staff
+          .map((s) => card(s.id, s.name, avatar(s), st.staffId === s.id && st.staffChosen))
+          .join('') +
+        noPref +
+        `</div>` +
+        `<div class="mt-8 text-center">${backBtn('back-to-services', T.backToService)}</div>`;
+    }
+
     function renderServices() {
+      // Specialist sub-step lives under the "Service" step (keeps 5 stable dots).
+      if (st.service && needSpecialist() && !st.staffChosen) return renderSpecialist();
       let inner: string;
       if (!st.category) {
         inner =
@@ -238,13 +301,24 @@ const config = { locale, strings };
         const d = new Date(st.month.y, st.month.m, day);
         const iso = ymd(d);
         const disabled = d < today || d > max || st.closedDays.includes(d.getDay());
+        const soldOut = !disabled && st.unavailable.includes(iso);
         const selected = st.date === iso;
-        cells += disabled
-          ? `<span class="flex h-9 items-center justify-center rounded-lg text-sm text-black/25">${day}</span>`
-          : `<button type="button" data-action="date" data-date="${iso}"
+        if (disabled) {
+          cells += `<span class="flex h-9 items-center justify-center rounded-lg text-sm text-black/25">${day}</span>`;
+        } else if (st.availLoading) {
+          // availability still being checked — not selectable yet
+          cells += `<span aria-disabled="true"
+              class="flex h-9 cursor-progress items-center justify-center rounded-lg bg-pink-card/40 text-sm text-black/30 animate-pulse">${day}</span>`;
+        } else if (soldOut) {
+          // pre-checked and genuinely full/closed — struck out, not clickable
+          cells += `<span title="${esc(T.noSlot)}"
+              class="relative flex h-9 items-center justify-center rounded-lg text-sm text-black/30 line-through decoration-pink/60">${day}</span>`;
+        } else {
+          cells += `<button type="button" data-action="date" data-date="${iso}"
               class="flex h-9 items-center justify-center rounded-lg text-sm font-bold transition-colors ${
                 selected ? 'bg-pink text-white' : 'bg-pink-card text-ink hover:bg-pink-pale'
               }">${day}</button>`;
+        }
       }
 
       const canPrev = new Date(st.month.y, st.month.m + 1, 0) > today;
@@ -257,7 +331,14 @@ const config = { locale, strings };
           <button type="button" data-action="month" data-dir="1" ${canNext ? '' : 'disabled'}
             class="rounded-full px-3 py-1 font-bold text-pink disabled:opacity-25" aria-label="next">&rsaquo;</button>
         </div>
-        <div class="grid grid-cols-7 gap-1 text-center" dir="ltr">${head}${cells}</div>`;
+        <div class="grid grid-cols-7 gap-1 text-center" dir="ltr">${head}${cells}</div>
+        ${
+          st.availLoading
+            ? `<p class="mt-3 text-center text-xs text-black/50">${esc(T.checkingAvailability)}</p>`
+            : st.unavailable.length
+              ? `<p class="mt-3 text-center text-xs text-black/40"><span class="line-through decoration-pink/60">00</span> = ${esc(T.noSlot)}</p>`
+              : ''
+        }`;
     }
 
     function slotsHtml() {
@@ -270,13 +351,13 @@ const config = { locale, strings };
         `<div class="grid max-h-64 grid-cols-2 gap-2 overflow-y-auto sm:grid-cols-3">` +
         st.slots
           .map(
-            (t) => `
-        <button type="button" data-action="slot" data-time="${esc(t)}"
+            (s) => `
+        <button type="button" data-action="slot" data-time="${esc(s.value)}" data-label="${esc(s.label)}"
           class="rounded-xl border-2 px-2 py-2 text-sm font-bold transition-colors ${
-            st.time === t
+            st.time === s.value
               ? 'border-brown-deep bg-brown-deep text-white'
               : 'border-pink-pale bg-white text-ink hover:border-brown-deep'
-          }">${esc(fmtTime(t))}</button>`,
+          }">${esc(fmtTime(s.label))}</button>`,
           )
           .join('') +
         `</div>`
@@ -284,25 +365,19 @@ const config = { locale, strings };
     }
 
     function renderDateTime() {
-      const staffSelect =
-        st.branch?.staffSelect && st.staff.length
-          ? `<label class="mb-4 block">
-              <span class="mb-1 block text-sm font-bold text-ink">${esc(T.specialist)}</span>
-              <select data-action="staff" class="w-full rounded-xl border-2 border-pink-pale bg-white p-3">
-                <option value="any" ${st.staffId === 'any' ? 'selected' : ''}>${esc(T.noPreference)}</option>
-                ${st.staff
-                  .map(
-                    (s) =>
-                      `<option value="${esc(s.id)}" ${st.staffId === s.id ? 'selected' : ''}>${esc(s.name)}</option>`,
-                  )
-                  .join('')}
-              </select>
-            </label>`
+      const chosen =
+        needSpecialist()
+          ? st.staffId === 'any'
+            ? T.noPreference
+            : st.staff.find((s) => s.id === st.staffId)?.name || T.noPreference
           : '';
+      const staffLine = chosen
+        ? `<p class="-mt-4 mb-6 text-center text-sm text-black/50">${esc(T.specialist)}: <span class="font-bold text-ink">${esc(chosen)}</span></p>`
+        : '';
       body.innerHTML =
         heading(T.pickDate) +
         errorBox() +
-        staffSelect +
+        staffLine +
         `<div class="grid gap-6 md:grid-cols-2">
           <div class="rounded-2xl bg-pink-card/60 p-4">${calendarHtml()}</div>
           <div>
@@ -362,7 +437,7 @@ const config = { locale, strings };
           ${row(T.branch, esc(st.branch?.name || ''))}
           ${row(T.service, esc(st.service?.name || ''))}
           ${row(T.specialist, esc(staffName))}
-          ${row(T.dateTime, `${esc(fmtDate(st.date))}<br/><span dir="ltr">${esc(fmtTime(st.time))}</span>`)}
+          ${row(T.dateTime, `${esc(fmtDate(st.date))}<br/><span dir="ltr">${esc(fmtTime(st.timeLabel || st.time))}</span>`)}
           ${row(T.customer, `${esc(st.customer.name)}<br/><span dir="ltr">${esc(st.customer.phone)}</span>`)}
           ${row(T.total, esc(money(st.service?.price || 0)))}
         </div>
@@ -413,9 +488,11 @@ const config = { locale, strings };
 
     async function loadSlots() {
       if (!st.date || !st.branch || !st.service) return;
+      const my = ++slotReq;
       st.slotsLoading = true;
       st.slots = null;
       st.time = '';
+      st.timeLabel = '';
       render();
       try {
         const q = new URLSearchParams({
@@ -426,18 +503,49 @@ const config = { locale, strings };
           duration: String(st.service.duration || ''),
         });
         const data = await api(`/slots?${q}`);
+        if (my !== slotReq) return; // superseded by a newer date/slot request
         st.slots = data.slots;
       } catch {
+        if (my !== slotReq) return;
         st.slots = [];
       }
       st.slotsLoading = false;
       render();
     }
 
+    // Smart-calendar pre-check for the visible month (strikes out full/closed days).
+    async function loadAvailability() {
+      if (!st.branch || !st.service) return;
+      const my = ++availReq;
+      st.availLoading = true;
+      st.unavailable = [];
+      if (st.step === 3) render();
+      try {
+        const q = new URLSearchParams({
+          branch: st.branch.id,
+          service: st.service.id,
+          staff: st.staffId,
+          duration: String(st.service.duration || ''),
+          month: `${st.month.y}-${pad(st.month.m + 1)}`,
+        });
+        const data = await api(`/availability?${q}`);
+        if (my !== availReq) return; // superseded by a newer month/staff request
+        st.unavailable = Array.isArray(data.unavailable) ? data.unavailable : [];
+      } catch {
+        if (my !== availReq) return;
+        st.unavailable = []; // on failure leave all days clickable
+      }
+      st.availLoading = false;
+      if (st.step === 3) render();
+    }
+
     async function selectBranch(b: Branch) {
       st.branch = b;
       st.category = null;
       st.service = null;
+      st.staff = [];
+      st.staffId = 'any';
+      st.staffChosen = false;
       st.error = '';
       body.innerHTML = loadingBox();
       try {
@@ -459,27 +567,61 @@ const config = { locale, strings };
     }
 
     async function selectService(s: Service) {
+      const my = ++svcReq;
       st.service = s;
       st.staff = [];
       st.staffId = 'any';
+      st.staffChosen = false;
       st.date = '';
       st.slots = null;
       st.time = '';
+      st.timeLabel = '';
+      st.unavailable = [];
       st.error = '';
       st.month = { y: new Date().getFullYear(), m: new Date().getMonth() };
-      st.step = 3;
-      render();
+
+      // Fetch the specialist list first; if the branch supports staff selection
+      // and any are returned, show the dedicated specialist sub-step. Otherwise
+      // jump straight to date/time.
       if (st.branch?.staffSelect) {
+        st.step = 2;
+        body.innerHTML = loadingBox();
         try {
           const data = await api(
             `/staff?branch=${encodeURIComponent(st.branch.id)}&service=${encodeURIComponent(s.id)}`,
           );
-          st.staff = data.staff;
-          if (st.step === 3) render();
+          if (my !== svcReq) return; // a different service was picked meanwhile
+          st.staff = Array.isArray(data.staff) ? data.staff : [];
         } catch {
-          /* staff list is optional — "no preference" still works */
+          if (my !== svcReq) return;
+          st.staff = []; // staff list is optional — fall through to no-preference
         }
       }
+
+      if (my !== svcReq) return;
+      if (needSpecialist()) {
+        render(); // → specialist sub-step (step 2)
+      } else {
+        st.staffChosen = true; // no specialist choice to make
+        st.step = 3;
+        st.availLoading = true; // lock the calendar before the first paint
+        render();
+        loadAvailability();
+      }
+    }
+
+    function chooseStaff(id: string) {
+      st.staffId = id || 'any';
+      st.staffChosen = true;
+      st.error = '';
+      st.date = '';
+      st.slots = null;
+      st.time = '';
+      st.timeLabel = '';
+      st.step = 3;
+      st.availLoading = true; // lock the calendar before the first paint
+      render();
+      loadAvailability();
     }
 
     async function submitBooking() {
@@ -528,19 +670,38 @@ const config = { locale, strings };
         case 'service':
           if (st.category) selectService(st.category.services[i]);
           break;
+        case 'staff-card':
+          chooseStaff(btn.dataset.id || 'any');
+          break;
+        case 'back-to-services':
+          st.service = null;
+          st.staff = [];
+          st.staffId = 'any';
+          st.staffChosen = false;
+          st.error = '';
+          render();
+          break;
         case 'month': {
           const dir = Number(btn.dataset.dir);
           const m = st.month.m + dir;
           st.month = { y: st.month.y + Math.floor(m / 12), m: ((m % 12) + 12) % 12 };
+          st.date = '';
+          st.slots = null;
+          st.time = '';
+          st.timeLabel = '';
+          if (st.step === 3) st.availLoading = true; // lock while re-checking the new month
           render();
+          if (st.step === 3) loadAvailability();
           break;
         }
         case 'date':
+          if (st.availLoading) break; // ignore day clicks while checking availability
           st.date = btn.dataset.date!;
           loadSlots();
           break;
         case 'slot':
           st.time = btn.dataset.time!;
+          st.timeLabel = btn.dataset.label || btn.dataset.time || '';
           render();
           break;
         case 'to-details':
@@ -557,27 +718,40 @@ const config = { locale, strings };
           st.result = null;
           st.category = null;
           st.service = null;
+          st.staff = [];
+          st.staffId = 'any';
+          st.staffChosen = false;
           st.date = '';
           st.slots = null;
           st.time = '';
+          st.timeLabel = '';
+          st.unavailable = [];
           st.error = '';
           st.step = st.branches.length > 1 ? 1 : 2;
           render();
           break;
         case 'back':
           st.error = '';
-          if (st.step === 2) st.step = 1;
-          else if (st.step > 2) st.step -= 1;
+          if (st.step === 2) {
+            // From the specialist sub-step, go back to the service list;
+            // from the service/category list, go back to the branch step.
+            if (st.service && needSpecialist() && !st.staffChosen) {
+              st.service = null;
+            } else if (st.category) {
+              st.category = null;
+            } else {
+              st.step = 1;
+            }
+          } else if (st.step === 3) {
+            // Back into the specialist sub-step if there is one, else the service list.
+            st.step = 2;
+            if (needSpecialist()) st.staffChosen = false;
+            else st.service = null;
+          } else if (st.step > 3) {
+            st.step -= 1;
+          }
           render();
           break;
-      }
-    });
-
-    widget.addEventListener('change', (ev) => {
-      const sel = ev.target as HTMLSelectElement;
-      if (sel.matches('[data-action="staff"]')) {
-        st.staffId = sel.value;
-        if (st.date) loadSlots();
       }
     });
 

@@ -1,9 +1,11 @@
 /**
  * GET /api/salonist/slots?branch=&service=&date=YYYY-MM-DD[&staff=][&duration=]
- * → { ok, slots: ["10:00 AM", …] }   (empty array = fully booked / closed)
+ * → { ok, slots: [{ value: "08:00:00", label: "08:00 AM" }, …] }
+ *   (empty array = fully booked / closed)
  *
- * The CRM answers with a pre-rendered HTML radio list; we parse the radio
- * values server-side and hand the widget clean JSON (ANALYSIS.md §4).
+ * The CRM answers with a pre-rendered HTML radio list; we parse each radio's
+ * `value` (submitted back at booking time) AND its visible label server-side
+ * and hand the widget clean JSON (ANALYSIS.md §4).
  */
 import type { APIRoute } from 'astro';
 import { errorResponse, fetchSlots, json, requireDomainId, toCrmDate } from '../../../lib/salonist';
