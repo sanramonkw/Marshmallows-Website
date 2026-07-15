@@ -91,11 +91,14 @@ export function fixMojibake(input: unknown): string {
 }
 
 export function getDomainId(): string {
+  // .trim() guards against a stray space in the env value (e.g.
+  // `SALONIST_DOMAIN_ID= 20582`) — the CRM matches a space-padded id to only
+  // the sub-branches and silently drops the root location.
   return (
     import.meta.env.SALONIST_DOMAIN_ID ||
     process.env.SALONIST_DOMAIN_ID ||
     ''
-  );
+  ).trim();
 }
 
 export class SalonistError extends Error {
