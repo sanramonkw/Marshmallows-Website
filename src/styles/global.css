@@ -19,15 +19,20 @@
   font-display: swap;
 }
 /* GE SS TV's TTF is missing some Latin glyphs (e.g. "y" — "Salmiya" rendered
-   "Salmi a"). Scope it to Arabic script + digits/punctuation so Latin text
-   falls back to Century Gothic. */
+   "Salmi a"). Scope it to Arabic script + punctuation so Latin text falls back
+   to Century Gothic.
+   NOTE: ASCII digits (U+0030-0039) are deliberately NOT claimed here — GE SS TV's
+   Western-digit glyphs are broken ("1"→"I", "7"→"V", so "17:00" showed "IV:00"
+   on Arabic pages). Letting them fall back to Century Gothic renders them
+   correctly. Arabic-Indic digits (U+0660-0669, produced by toLocaleString('ar')
+   for dates) stay in the U+0600-06FF range below and still render via GE SS TV. */
 @font-face {
   font-family: "GE SS TV";
   src: url("../assets/fonts/ge-sstv-medium.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
 }
 @font-face {
   font-family: "GE SS TV";
@@ -35,7 +40,7 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0030-0039, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+0020-002C, U+002E-002F, U+003A-0040, U+060C, U+061B, U+061F;
 }
 
 /* ------------------------------------------------------------------ */
