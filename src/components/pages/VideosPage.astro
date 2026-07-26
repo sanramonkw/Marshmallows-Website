@@ -23,13 +23,8 @@ const t = useTranslations(locale);
   <PageHero title={t('nav.videos')} />
   <section class="py-14">
     <div class="mx-auto max-w-4xl space-y-10 px-4">
-      <div class="card-pop tilt-c overflow-hidden p-2" data-reveal>
-        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
-          <source src={withBase('/videos/Marshmallows-Nails-Spa.mp4')} type="video/mp4" />
-        </video>
-      </div>
       <div class="card-pop tilt-b overflow-hidden p-2" data-reveal>
-        <video controls playsinline preload="metadata" class="w-full rounded-2xl">
+        <video muted autoplay loop playsinline preload="metadata" class="w-full rounded-2xl">
           <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
         </video>
       </div>

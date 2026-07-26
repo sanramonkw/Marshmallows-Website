@@ -97,7 +97,7 @@ const moodboard = galleryImages.slice(0, 4);
         <div class="card-pop tilt-a overflow-hidden p-2">
           <img src={withBase('/images/IMG_2921.jpg')} alt={t('home.aboutTitle')} loading="lazy" class="w-full rounded-2xl" />
         </div>
-        <div class="card-pop tilt-d absolute -bottom-10 -end-2 hidden w-40 overflow-hidden p-1.5 md:block" aria-hidden="true">
+        <div class="card-pop tilt-d absolute -bottom-10 -end-2 hidden w-40 overflow-hidden p-1.5 md:block pointer-events-none" aria-hidden="true">
           <img src={withBase('/images/IMG_2920.jpg')} alt="" loading="lazy" class="w-full rounded-xl" />
         </div>
       </div>
@@ -144,7 +144,7 @@ const moodboard = galleryImages.slice(0, 4);
         <div class="md:col-span-2" data-reveal>
           <ServiceCard
             href={pathFor('homeService', locale)}
-            image="/images/IMG_4401.jpg"
+            image="/images/homeservice.jpg"
             title={t('nav.homeService')}
             tilt="b"
           />

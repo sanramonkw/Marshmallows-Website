@@ -43,5 +43,5 @@ export const galleryImages = [
   '/images/IMG_2921.jpg',
   '/images/IMG_2920.jpg',
   '/images/IMG_4592.jpg',
-  '/images/IMG_4401.jpg',
+  '/images/homeservice.jpg',
 ];

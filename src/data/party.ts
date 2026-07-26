@@ -196,7 +196,7 @@ export const partyPackages: Record<'ar' | 'en', PartyPackage[]> = {
     ],
     "suitable": "مناسب حتى 8 أشخاص (حد أقصى ساعتين)",
     "prices": [
-      "السعر: غير محدد"
+      "150 دينار"
     ],
     "extras": [
       {
@@ -391,7 +391,7 @@ export const partyPackages: Record<'ar' | 'en', PartyPackage[]> = {
     ],
     "suitable": "Suitable for 8 Girls max (2 HRS)",
     "prices": [
-      "Price: Not listed"
+      "150 KD"
     ],
     "extras": [
       {
