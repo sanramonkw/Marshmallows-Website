@@ -25,6 +25,7 @@ export const ui = {
     'cta.book': 'حجز موعد',
     'footer.branchAgaila': 'فرع - Agaila',
     'footer.branchSalmiya': 'فرع - Salmiya',
+    'footer.branchSugarcoat': 'فرع - Mansouriya',
     'footer.getInTouch': 'تواصل معنا',
     'footer.findOnGoogle': 'ابحث عن الفرع على جوجل',
     'footer.rights':
@@ -123,6 +124,7 @@ export const ui = {
     'cta.book': 'Book now',
     'footer.branchAgaila': 'Branch - Agaila',
     'footer.branchSalmiya': 'Branch - Salmiya',
+    'footer.branchSugarcoat': 'Branch - Mansouriya',
     'footer.getInTouch': 'Get in Touch',
     'footer.findOnGoogle': 'Branch On Google',
     'footer.rights':
@@ -214,18 +216,30 @@ export const business = {
   whatsapp: 'https://api.whatsapp.com/send/?phone=96522462646',
   email: 'info@marshmallows.co',
   instagram: 'https://www.instagram.com/marshmallows_kwt/',
+  tiktok: 'https://www.tiktok.com/@marshmallows_kwt',
+  sugarcoatInstagram: 'https://www.instagram.com/sugarcoat_kwt/',
+  sugarcoatTiktok: 'https://www.tiktok.com/@sugarcoat_kwt',
   branches: [
     {
       id: 'agaila',
+      labelKey: 'footer.branchAgaila',
       mapUrl: 'https://maps.app.goo.gl/twbxrtxmAKioHQNg7',
       lines: ['Sama Mall', 'First Floor'],
       locality: { ar: 'العقيلة', en: 'Al Eqaila' },
     },
     {
       id: 'salmiya',
+      labelKey: 'footer.branchSalmiya',
       mapUrl: 'https://maps.app.goo.gl/ZnFvkNcKmTwh4KwZ8',
       lines: ['Salem Al-Mubarak Street – Symphony Mall', 'Mezzanine – Shop No. 12'],
       locality: { ar: 'السالمية', en: 'Salmiya' },
+    },
+    {
+      id: 'sugarcoat',
+      labelKey: 'footer.branchSugarcoat',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Sugar+Coat+Al-Arabi+Mall+Al+Mansouriya+Kuwait',
+      lines: ['Sugar Coat', 'Al-Arabi Mall – First Floor', 'Shop No. 17'],
+      locality: { ar: 'المنصورية', en: 'Al Mansouriya' },
     },
   ],
 } as const;

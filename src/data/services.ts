@@ -196,6 +196,10 @@ export const salonService: Record<'ar' | 'en', PriceCategory[]> = {
           "price": "25 د.ك"
         },
         {
+          "name": "صيانة تركيب الأظافر",
+          "price": "15 د.ك"
+        },
+        {
           "name": "إزالة تركيب الأظافر",
           "price": "8 د.ك"
         },
@@ -596,6 +600,10 @@ export const salonService: Record<'ar' | 'en', PriceCategory[]> = {
         {
           "name": "Permanent nail extension",
           "price": "25 KD"
+        },
+        {
+          "name": "Nail extension maintenance",
+          "price": "15 KD"
         },
         {
           "name": "Nail extension removal",

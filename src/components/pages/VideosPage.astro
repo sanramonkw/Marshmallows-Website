@@ -24,9 +24,18 @@ const t = useTranslations(locale);
   <section class="py-14">
     <div class="mx-auto max-w-4xl space-y-10 px-4">
       <div class="card-pop tilt-b overflow-hidden p-2" data-reveal>
-        <video muted autoplay loop playsinline preload="metadata" class="w-full rounded-2xl">
-          <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
-        </video>
+        <div class="flex max-h-[560px] items-center justify-center rounded-2xl bg-pink-pale">
+          <video muted autoplay loop playsinline preload="metadata" class="h-full w-full rounded-2xl object-contain">
+            <source src={withBase('/videos/Marshmallows_video_21042026.mov')} type="video/mp4" />
+          </video>
+        </div>
+      </div>
+      <div class="card-pop tilt-c overflow-hidden p-2" data-reveal>
+        <div class="flex h-[60vh] max-h-[560px] items-center justify-center rounded-2xl bg-pink-pale">
+          <video muted autoplay loop playsinline preload="metadata" class="h-full w-full rounded-2xl object-contain">
+            <source src={withBase('/videos/IMG_1841.mp4')} type="video/mp4" />
+          </video>
+        </div>
       </div>
       <p class="text-center text-lg">
         <a href={business.instagram} rel="noopener" target="_blank" class="font-bold text-pink-deep underline underline-offset-4 hover:text-plum">

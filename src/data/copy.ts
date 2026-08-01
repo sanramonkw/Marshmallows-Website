@@ -17,12 +17,12 @@ export const aboutHair = {
   ar: [
     'صالون مارشملوز يهتم برغبتك في العناية بشعرك والظهور دائمًا بمظهر جديد يجذب انتباه الجميع حولك، من خلال تسريحة جديدة، أو قصة شعر عصرية، أو تغيير كامل بلون شعرك باستخدام أفضل أنواع الصبغات، كل ذلك بالإضافة إلى العناية بصحة شعرك وإشراقه باستخدام أفضل الأقنعة الطبيعية التي تمنح شعرك كل ما يحتاجه من تغذية وترطيب، بالإضافة إلى العلاجات الحديثة والآمنة لجميع أنواع الشعر.',
     'وقد قمنا بتوفير منتجات العناية بالأظافر والشعر المفضلة لديك التي يمكنك شراؤها والاستمتاع باستخدامها في أي وقت ومن أي مكان.',
-    'أسعار الصالون معقولة. لدينا ثلاث فروع في مناطق مختلفة من الكويت (السالمية، الشرق، والإجارة). لأننا نعتبر وقتك وجهدك؛ لدينا خدمات منزلية تصل في الوقت المناسب لك في أي منطقة دون تأخير، مع أفضل فريق وخدمة تجعلك تشعر كما لو كنت قد زرت الصالون بينما كنت في منزلك.',
+    'أسعار الصالون معقولة. لدينا ثلاث فروع في مناطق مختلفة من الكويت (السالمية، المنصورية، والإجارة). لأننا نعتبر وقتك وجهدك؛ لدينا خدمات منزلية تصل في الوقت المناسب لك في أي منطقة دون تأخير، مع أفضل فريق وخدمة تجعلك تشعر كما لو كنت قد زرت الصالون بينما كنت في منزلك.',
   ],
   en: [
     'Marshmallows Salon is concerned with your desire to take care of your hair and always appear with a new look that dazzles everyone around you, with a new hairstyle, a modern haircut, or a complete change of hair color using the best types of dyes, all this in addition to taking care of the health and radiance of your hair by using the best natural masks that give your hair all it needs. Nourishment and hydration, in addition to modern and safe treatments for all hair types.',
     'And we provided you with your favorite nail and hair care products that you can buy and enjoy using anytime and anywhere.',
-    'Salon prices are reasonable. We have three branches in different regions of Kuwait (Salmiya, Sharq, and Egaila). Because we consider your time and effort; We have home services that arrive at the right time for you in any area without delay, with the best team and service that makes you feel as if you visited the salon while you were at home.',
+    'Salon prices are reasonable. We have three branches in different regions of Kuwait (Salmiya, Mansouriya, and Egaila). Because we consider your time and effort; We have home services that arrive at the right time for you in any area without delay, with the best team and service that makes you feel as if you visited the salon while you were at home.',
   ],
 } as const;
 
@@ -39,9 +39,10 @@ export const aboutTeam = {
  * The older pink-walled interior shots (marshmallowskwt-*.webp) were removed at
  * the salon's request — the salon was refitted with grey/white walls. */
 export const galleryImages = [
+  '/images/IMG_5477.jpeg',
+  '/images/IMG_3148.jpeg',
+  '/images/IMG_3159.jpeg',
+  '/images/IMG_5139.jpeg',
+  '/images/IMG_5149.jpeg',
   ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.png`),
-  '/images/IMG_2921.jpg',
-  '/images/IMG_2920.jpg',
-  '/images/IMG_4592.jpg',
-  '/images/homeservice.jpg',
 ];
