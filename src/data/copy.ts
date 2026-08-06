@@ -44,3 +44,10 @@ export const galleryImages = [
   '/images/IMG_5149.jpeg',
   ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.webp`),
 ];
+
+/** Sugar Coat gallery — the salon manager's Sugar Coat photo set, kept separate
+ * from the Marshmallows gallery above (incl. IMG_5477/IMG_3148/IMG_3159). */
+export const sugarcoatGallery = Array.from(
+  { length: 39 },
+  (_, i) => `/images/sugarcoat/sugarcoat-${String(i + 1).padStart(2, '0')}.webp`,
+);

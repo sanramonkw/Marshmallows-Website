@@ -5,7 +5,7 @@ import GalleryGrid from '../../components/GalleryGrid.astro';
 import type { Locale } from '../../i18n/ui';
 import { ui } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/utils';
-import { galleryImages } from '../../data/copy';
+import { galleryImages, sugarcoatGallery } from '../../data/copy';
 
 interface Props {
   locale: Locale;
@@ -13,9 +13,13 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const images = galleryImages.map((src, i) => ({
+const mmImages = galleryImages.map((src, i) => ({
   src,
-  alt: `${t('site.name')} — ${t('nav.photos')} ${i + 1}`,
+  alt: `Marshmallows — ${t('nav.photos')} ${i + 1}`,
+}));
+const scImages = sugarcoatGallery.map((src, i) => ({
+  src,
+  alt: `Sugar Coat — ${t('nav.photos')} ${i + 1}`,
 }));
 ---
 
@@ -27,8 +31,32 @@ const images = galleryImages.map((src, i) => ({
 >
   <PageHero title={t('nav.photos')} />
   <section class="py-14">
-    <div class="mx-auto max-w-7xl px-4">
-      <GalleryGrid images={images} />
+    <div class="mx-auto max-w-7xl space-y-5 px-4">
+      <details class="card-pop group overflow-hidden open:pb-6" name="gallery-brand" open>
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-2xl font-bold text-plum transition-colors hover:bg-pink-card [&::-webkit-details-marker]:hidden sm:text-3xl">
+          <span>Marshmallows</span>
+          <span
+            aria-hidden="true"
+            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-plum bg-pink-light text-lg transition-transform group-open:rotate-45 motion-reduce:transition-none"
+          >+</span>
+        </summary>
+        <div class="border-t-2 border-plum px-6 pt-6">
+          <GalleryGrid images={mmImages} />
+        </div>
+      </details>
+
+      <details class="card-pop group overflow-hidden open:pb-6" name="gallery-brand">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-2xl font-bold text-plum transition-colors hover:bg-pink-card [&::-webkit-details-marker]:hidden sm:text-3xl">
+          <span>Sugar Coat</span>
+          <span
+            aria-hidden="true"
+            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-plum bg-pink-light text-lg transition-transform group-open:rotate-45 motion-reduce:transition-none"
+          >+</span>
+        </summary>
+        <div class="border-t-2 border-plum px-6 pt-6">
+          <GalleryGrid images={scImages} />
+        </div>
+      </details>
     </div>
   </section>
 </BaseLayout>
