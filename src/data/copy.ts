@@ -35,14 +35,12 @@ export const aboutTeam = {
   ],
 } as const;
 
-/** Gallery: nail-art photos + current (grey-walled) salon interiors.
+/** Gallery: Marshmallows nail-art photos only.
  * The older pink-walled interior shots (marshmallowskwt-*.webp) were removed at
- * the salon's request — the salon was refitted with grey/white walls. */
+ * the salon's request. IMG_5477/IMG_3148/IMG_3159 were also removed — the salon
+ * manager flagged them as Sugar Coat photos that don't belong in this gallery. */
 export const galleryImages = [
-  '/images/IMG_5477.jpeg',
-  '/images/IMG_3148.jpeg',
-  '/images/IMG_3159.jpeg',
   '/images/IMG_5139.jpeg',
   '/images/IMG_5149.jpeg',
-  ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.png`),
+  ...Array.from({ length: 12 }, (_, i) => `/images/marshmellows${i + 1}.webp`),
 ];
