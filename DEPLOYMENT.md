@@ -148,7 +148,12 @@ since WhatsApp is the salon's primary contact channel anyway.
 - [ ] DNS: point `marshmallows.co` at the new host. The old WordPress shared
       host intermittently served *other tenants' sites* on this domain — verify
       the old origin is fully retired after cutover.
-- [ ] 301 redirects for legacy WordPress URLs (list + rationale in `CLAUDE.md`:
+- [ ] 301 redirects for legacy WordPress URLs — see `deploy/nginx-redirects.conf`
+      in this repo for the safe pattern and the two things **not** to do on this
+      site (no trailing-slash redirect: it breaks the booking POST; no
+      `error_page 404`: this site's own 404 already works, verified 2026-08-07).
+      Completing it needs the 33-slugs-per-locale list from Search Console.
+      (list + rationale in `CLAUDE.md`:
       66 service-CPT URLs → the three price-list pages, old booking page ids).
 - [ ] robots.txt + `/sitemap-index.xml` reachable; submit to Google Search
       Console. hreflang ar/en is in the page heads.
