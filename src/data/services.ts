@@ -855,14 +855,6 @@ export const homeService: Record<'ar' | 'en', PriceCategory[]> = {
           "price": "22 د.ك"
         },
         {
-          "name": "عناية سريعة لليدين",
-          "price": "5 د.ك"
-        },
-        {
-          "name": "عناية سريعة للقدمين",
-          "price": "5 د.ك"
-        },
-        {
           "name": "طلاء أظافر فقط",
           "price": "2 د.ك"
         },
@@ -1254,14 +1246,6 @@ export const homeService: Record<'ar' | 'en', PriceCategory[]> = {
         {
           "name": "Collagen mani pedi",
           "price": "22 KD"
-        },
-        {
-          "name": "Quick fix hand",
-          "price": "5 KD"
-        },
-        {
-          "name": "Quick fix feet",
-          "price": "5 KD"
         },
         {
           "name": "Nail polish only",
